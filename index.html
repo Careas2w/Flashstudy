@@ -2357,42 +2357,85 @@
       normalAudioBtn.classList.toggle("active", rate === 1.0);
     }
 
+    const voicePreferenceCache = new Map();
+
+    function getSpeechSettings(lang){
+      const normalized = String(lang || "").toLowerCase();
+      const isKorean = normalized.startsWith("ko");
+      const isSlow = audioRate !== 1.0;
+      if(isKorean){
+        return {
+          rate: isSlow ? 0.78 : 0.9,
+          pitch: isSlow ? 1.01 : 1.04,
+          volume: 1
+        };
+      }
+      return {
+        rate: isSlow ? 0.82 : 0.96,
+        pitch: 1,
+        volume: 1
+      };
+    }
+
     function pickPreferredVoice(lang){
       const voices = speechSynthesis.getVoices() || [];
       const normalizedLang = String(lang || "").toLowerCase();
+      if(!voices.length || !normalizedLang) return null;
+      if(voicePreferenceCache.has(normalizedLang)) return voicePreferenceCache.get(normalizedLang);
+
+      const exactCandidates = voices.filter(v => (v.lang || "").toLowerCase() === normalizedLang);
       const langPrefix = normalizedLang.slice(0,2);
-      const candidates = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith(langPrefix));
+      const fallbackCandidates = voices.filter(v => (v.lang || "").toLowerCase().startsWith(langPrefix));
+      const candidates = exactCandidates.length ? exactCandidates : fallbackCandidates;
       if(!candidates.length) return null;
 
-      const preferredTerms = ["google", "microsoft", "natural", "enhanced", "premium", "neural", "online", "samsung", "apple", "eloquence", "cloud", "female", "high quality"];
-      const avoidTerms = ["compact", "edded", "espeak", "festival", "robot"];
+      const preferredTerms = ["enhanced", "premium", "natural", "neural", "siri", "apple", "online", "high quality", "hq", "female", "woman", "google", "microsoft", "samsung"];
+      const avoidTerms = ["compact", "default", "espeak", "festival", "robot", "legacy"];
       const scoreVoice = (voice) => {
-        const name = `${voice.name || ""} ${voice.voiceURI || ""}`.toLowerCase();
+        const label = `${voice.name || ""} ${voice.voiceURI || ""}`.toLowerCase();
         let score = 0;
-        if((voice.lang || "").toLowerCase() === normalizedLang) score += 12;
-        if(voice.default) score += 8;
-        preferredTerms.forEach(term => { if(name.includes(term)) score += 4; });
-        avoidTerms.forEach(term => { if(name.includes(term)) score -= 6; });
-        if(name.includes("female") || name.includes("woman")) score += 1;
+        if((voice.lang || "").toLowerCase() === normalizedLang) score += 30;
+        if(voice.default) score += 4;
+        preferredTerms.forEach(term => { if(label.includes(term)) score += 7; });
+        avoidTerms.forEach(term => { if(label.includes(term)) score -= 10; });
+        if(normalizedLang.startsWith("ko")){
+          if(label.includes("yuna") || label.includes("sora")) score += 3;
+        }
         return score;
       };
 
-      return candidates.sort((a,b) => scoreVoice(b) - scoreVoice(a))[0] || null;
+      const chosen = candidates.slice().sort((a,b) => scoreVoice(b) - scoreVoice(a))[0] || null;
+      if(chosen) voicePreferenceCache.set(normalizedLang, chosen);
+      return chosen;
     }
 
-    function speak(text, lang){
+    async function waitForVoices(){
+      if(!("speechSynthesis" in window)) return [];
+      let voices = speechSynthesis.getVoices() || [];
+      if(voices.length) return voices;
+      for(let i = 0; i < 8; i++){
+        await new Promise(resolve => setTimeout(resolve, 150));
+        voices = speechSynthesis.getVoices() || [];
+        if(voices.length) return voices;
+      }
+      return voices;
+    }
+
+    async function speak(text, lang){
       const clean = String(text || "").trim();
       if(!clean) return;
       if(!("speechSynthesis" in window)){
         alert("Tu navegador no soporta síntesis de voz.");
         return;
       }
+      await waitForVoices();
       speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(clean);
       u.lang = lang;
-      u.rate = audioRate;
-      u.pitch = lang === "ko-KR" ? 1.02 : 1;
-      u.volume = 1;
+      const settings = getSpeechSettings(lang);
+      u.rate = settings.rate;
+      u.pitch = settings.pitch;
+      u.volume = settings.volume;
       const preferred = pickPreferredVoice(lang);
       if(preferred) u.voice = preferred;
       speechSynthesis.speak(u);

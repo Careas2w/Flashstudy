@@ -28,3 +28,8 @@ La URL tendrá este formato:
 
 ## Nota
 El botón **Actualizar web** sigue disponible dentro de la barra principal de controles de la app.
+
+## Mejora de audio en iPad
+- Selección automática de la mejor voz disponible para `ko-KR` y `es-ES`, priorizando voces naturales/enhanced/premium si Safari las expone.
+- Ajuste fino de velocidad y tono para que el coreano suene menos robótico en iPad.
+- Carga diferida de voces para Safari/iPadOS, que a menudo no las entrega inmediatamente al abrir la app.
