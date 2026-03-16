@@ -59,10 +59,10 @@
       --write-font-size:30px;
       --write-input-size:22px;
       --write-font-weight:800;
-      --quiz-font-size:22px;
+      --quiz-font-size:28px;
       --quiz-option-size:18px;
       --quiz-font-weight:800;
-      --mix-font-size:16px;
+      --mix-font-size:20px;
       --mix-font-weight:700;
     }
 
@@ -73,15 +73,15 @@
       --line:#d9e1f2;
       --text:#1f2937;
       --muted:#6b7280;
-      --primary:#4f46e5;
-      --primary-2:#6366f1;
-      --primary-soft:#e0e7ff;
+      --primary:#2563eb;
+      --primary-2:#3b82f6;
+      --primary-soft:#dbeafe;
       --danger:#dc2626;
       --notes:#fff8e7;
       --notes-line:#e7d6a5;
       --chip:#ffffff;
       --chip-border:#cfd8ea;
-      --chip-active:#4caf50;
+      --chip-active:#2563eb;
       --chip-active-text:#ffffff;
       --shadow:0 8px 24px rgba(15,23,42,.08);
       --overlay:rgba(15,23,42,.62);
@@ -1063,6 +1063,42 @@
       margin-bottom:22px;
     }
 
+    .quiz-definition-row{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .quiz-inline-play{
+      min-width:48px;
+      height:48px;
+      border-radius:14px;
+      border:1px solid var(--quiz-line);
+      background:var(--quiz-card);
+      color:var(--quiz-text);
+      font-size:22px;
+      cursor:pointer;
+    }
+
+    .quiz-nav-arrows{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      margin:10px 0 18px;
+    }
+
+    .quiz-nav-arrows .study-nav-arrow{
+      position:static;
+      transform:none;
+      width:58px;
+      height:52px;
+      background:var(--quiz-card);
+      border-color:var(--quiz-line);
+      color:var(--quiz-text);
+      backdrop-filter:none;
+    }
+
     .quiz-prompt{
       font-size:14px;
       color:var(--quiz-muted);
@@ -1259,6 +1295,7 @@
       .write-prompt{ font-size:30px; }
       .write-input{ font-size:22px; }
       .quiz-definition{ font-size:22px; }
+      .quiz-nav-arrows .study-nav-arrow{ width:52px; height:48px; }
       .quiz-option{ font-size:18px; }
       .mix-card{ min-height:96px; font-size:16px; }
     }
@@ -1787,6 +1824,7 @@
           <div class="mode-style-box">
             <button class="small-btn" id="writeDirectionBtn">ES → KO</button>
             <button class="small-btn" id="writePlayBtn">🔊 Audio</button>
+            <button class="small-btn" id="writeShuffleBtn">🔀 Barajar</button>
             <button class="small-btn" id="writeBoldBtn">Negrita: No</button>
             <button class="small-btn" id="writeFontDownBtn">A−</button>
             <button class="small-btn" id="writeFontUpBtn">A+</button>
@@ -1830,6 +1868,7 @@
         <div class="quiz-meta">
           <div class="mode-style-box">
             <button class="small-btn" id="quizDirectionBtn">ES → KO</button>
+            <button class="small-btn" id="quizShuffleBtn">🔀 Barajar</button>
             <button class="small-btn" id="quizBoldBtn">Negrita: No</button>
             <button class="small-btn" id="quizFontDownBtn">A−</button>
             <button class="small-btn" id="quizFontUpBtn">A+</button>
@@ -1846,7 +1885,15 @@
 
       <div class="quiz-wording">
         <div class="quiz-prompt">Definición</div>
-        <div class="quiz-definition" id="quizDefinition">—</div>
+        <div class="quiz-definition-row">
+          <div class="quiz-definition" id="quizDefinition">—</div>
+          <button class="quiz-inline-play" id="quizInlineSpeakBtn" title="Reproducir pista">🔊</button>
+        </div>
+      </div>
+
+      <div class="quiz-nav-arrows">
+        <button class="study-nav-arrow left" id="quizArrowPrev" aria-label="Pregunta anterior">&lt;</button>
+        <button class="study-nav-arrow right" id="quizArrowNext" aria-label="Pregunta siguiente">&gt;</button>
       </div>
 
       <div class="quiz-subtitle">Selecciona una respuesta</div>
@@ -1872,6 +1919,7 @@
         </div>
         <div class="study-group">
           <div class="mode-style-box">
+            <button class="small-btn" id="mixShuffleBtn">🔀 Barajar</button>
             <button class="small-btn" id="mixBoldBtn">Negrita: No</button>
             <button class="small-btn" id="mixFontDownBtn">A−</button>
             <button class="small-btn" id="mixFontUpBtn">A+</button>
@@ -1971,8 +2019,8 @@
     let tableStyle = { fontSize: 13, bold: true };
     let flashStyle = { fontSize: 62, bold: false };
     let writeStyle = { fontSize: 30, bold: false };
-    let quizStyle = { fontSize: 22, bold: false };
-    let mixStyle = { fontSize: 20, bold: false };
+    let quizStyle = { fontSize: 28, bold: false };
+    let mixStyle = { fontSize: 22, bold: false };
     let studyFrontMode = "ko";
     let writeDirection = "es-to-ko";
     let quizDirection = "es-to-ko";
@@ -2091,6 +2139,7 @@
     const writeStarBtn = document.getElementById("writeStarBtn");
     const writeDirectionBtn = document.getElementById("writeDirectionBtn");
     const writePlayBtn = document.getElementById("writePlayBtn");
+    const writeShuffleBtn = document.getElementById("writeShuffleBtn");
     const writeBoldBtn = document.getElementById("writeBoldBtn");
     const writeFontDownBtn = document.getElementById("writeFontDownBtn");
     const writeFontUpBtn = document.getElementById("writeFontUpBtn");
@@ -2105,6 +2154,10 @@
     const quizSpeakBtn = document.getElementById("quizSpeakBtn");
     const quizStarBtn = document.getElementById("quizStarBtn");
     const quizDirectionBtn = document.getElementById("quizDirectionBtn");
+    const quizShuffleBtn = document.getElementById("quizShuffleBtn");
+    const quizInlineSpeakBtn = document.getElementById("quizInlineSpeakBtn");
+    const quizArrowPrev = document.getElementById("quizArrowPrev");
+    const quizArrowNext = document.getElementById("quizArrowNext");
     const quizBoldBtn = document.getElementById("quizBoldBtn");
     const quizFontDownBtn = document.getElementById("quizFontDownBtn");
     const quizFontUpBtn = document.getElementById("quizFontUpBtn");
@@ -2117,6 +2170,7 @@
     const mixGrid = document.getElementById("mixGrid");
     const mixStatus = document.getElementById("mixStatus");
     const mixStarBtn = document.getElementById("mixStarBtn");
+    const mixShuffleBtn = document.getElementById("mixShuffleBtn");
     const mixBoldBtn = document.getElementById("mixBoldBtn");
     const mixFontDownBtn = document.getElementById("mixFontDownBtn");
     const mixFontUpBtn = document.getElementById("mixFontUpBtn");
@@ -2200,7 +2254,7 @@
       const paletteThemes = {
         default: {
           dark:{bg:'#0f1020',panel:'#171a2d',panel2:'#1d2240',line:'#313a63',text:'#eef1ff',muted:'#aeb6db',notes:'#231f3d',notesLine:'#4d4677',chip:'#1f2544',chipBorder:'#47527f',chipActive:'#7c3aed',chipActiveText:'#ffffff',shadow:'0 10px 30px rgba(0,0,0,.35)',overlay:'rgba(4,5,16,.84)',quizBg:'#11163a',quizCard:'#2e3a63',quizLine:'#5a6893',quizText:'#f4f6ff',quizMuted:'#aeb9e6',progressBg:'#2a2f57',primary:'#8b5cf6',primary2:'#a78bfa',primarySoft:'#282251',progress:'#8b5cf6'},
-          light:{bg:'#f5f7fb',panel:'#ffffff',panel2:'#eef2ff',line:'#d9e1f2',text:'#1f2937',muted:'#6b7280',notes:'#fff8e7',notesLine:'#e7d6a5',chip:'#ffffff',chipBorder:'#cfd8ea',chipActive:'#4caf50',chipActiveText:'#ffffff',shadow:'0 8px 24px rgba(15,23,42,.08)',overlay:'rgba(15,23,42,.62)',quizBg:'#2f3b63',quizCard:'#34406a',quizLine:'#586992',quizText:'#f2f4ff',quizMuted:'#b9c2e2',progressBg:'#dbe4ff',primary:'#4f46e5',primary2:'#6366f1',primarySoft:'#e0e7ff',progress:'#4f46e5'}
+          light:{bg:'#f5f7fb',panel:'#ffffff',panel2:'#eaf2ff',line:'#d6e3fb',text:'#1f2937',muted:'#6b7280',notes:'#fff8e7',notesLine:'#e7d6a5',chip:'#ffffff',chipBorder:'#cfd8ea',chipActive:'#2563eb',chipActiveText:'#ffffff',shadow:'0 8px 24px rgba(15,23,42,.08)',overlay:'rgba(15,23,42,.62)',quizBg:'#244377',quizCard:'#325892',quizLine:'#5f81ba',quizText:'#f2f6ff',quizMuted:'#c3d3f1',progressBg:'#dbeafe',primary:'#2563eb',primary2:'#3b82f6',primarySoft:'#dbeafe',progress:'#2563eb'}
         },
         ocean: {
           dark:{bg:'#061723',panel:'#0b2232',panel2:'#0f3047',line:'#1f5372',text:'#e7f8ff',muted:'#9cc8db',notes:'#0d2a3c',notesLine:'#2c6583',chip:'#12344c',chipBorder:'#2a6887',chipActive:'#0ea5e9',chipActiveText:'#ffffff',shadow:'0 10px 30px rgba(0,28,48,.35)',overlay:'rgba(3,16,24,.82)',quizBg:'#0b2740',quizCard:'#15405d',quizLine:'#3d7598',quizText:'#f1fbff',quizMuted:'#b4d9eb',progressBg:'#15364a',primary:'#0ea5e9',primary2:'#38bdf8',primarySoft:'#12364b',progress:'#0ea5e9'},
@@ -2961,6 +3015,9 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       const saved = localStorage.getItem(STORAGE_THEME);
       if(saved === "light"){
         document.body.classList.add("light");
+      }else{
+        document.body.classList.remove("light");
+        if(!saved) localStorage.setItem(STORAGE_THEME, "dark");
       }
       themeBtn.textContent = document.body.classList.contains("light") ? "🌙" : "☀";
     }
@@ -3348,6 +3405,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         speak(writeDirection === "es-to-ko" ? row.coreano : row.español, writeDirection === "es-to-ko" ? "ko-KR" : "es-ES");
       });
     }
+    if(writeShuffleBtn){ writeShuffleBtn.addEventListener("click", shuffleWriteDeck); }
     if(writeBoldBtn){ writeBoldBtn.addEventListener("click", () => { writeStyle.bold = !writeStyle.bold; applyWriteStyle(); }); }
     if(writeFontDownBtn){ writeFontDownBtn.addEventListener("click", () => { writeStyle.fontSize = clamp(writeStyle.fontSize - 2, 20, 56); applyWriteStyle(); }); }
     if(writeFontUpBtn){ writeFontUpBtn.addEventListener("click", () => { writeStyle.fontSize = clamp(writeStyle.fontSize + 2, 20, 56); applyWriteStyle(); }); }
@@ -3357,6 +3415,22 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     function buildQuizDeck(){
       quizData = getRowsFromSource(currentPracticeSource);
       if(quizIndex >= quizData.length) quizIndex = Math.max(0, quizData.length - 1);
+    }
+
+    function shuffleWriteDeck(){
+      if(!writeData.length) return;
+      writeData = shuffleArray(writeData);
+      writeIndex = 0;
+      writeAnswered = new Map();
+      renderWriteCard();
+    }
+
+    function shuffleQuizDeck(){
+      if(!quizData.length) return;
+      quizData = shuffleArray(quizData);
+      quizIndex = 0;
+      quizAnsweredMap = new Map();
+      renderQuizCard();
     }
 
     function openQuizMode(source = null, modeType = "multiple"){
@@ -3400,6 +3474,14 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         quizNextBtn.disabled = true;
         quizPrevBtn.style.opacity = ".5";
         quizNextBtn.style.opacity = ".5";
+        if(quizArrowPrev){
+          quizArrowPrev.disabled = true;
+          quizArrowPrev.style.opacity = ".45";
+        }
+        if(quizArrowNext){
+          quizArrowNext.disabled = true;
+          quizArrowNext.style.opacity = ".45";
+        }
         quizNextBtn.textContent = "Siguiente →";
         updateProgress(quizProgressFill, quizProgressText, 0, 0);
         return;
@@ -3411,13 +3493,16 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
 
       const esToKo = quizDirection === "es-to-ko";
       const isListenMode = quizModeType === "listen";
-      if(quizPromptLabel) quizPromptLabel.textContent = isListenMode ? "Escucha" : (esToKo ? "Definición" : "Palabra en coreano");
+      if(quizPromptLabel) quizPromptLabel.textContent = isListenMode ? "Escuchar" : (esToKo ? "Definición" : "Palabra en coreano");
       if(quizDirectionBtn){
         quizDirectionBtn.style.display = isListenMode ? "none" : "inline-flex";
         quizDirectionBtn.textContent = esToKo ? "ES → KO" : "KO → ES";
         quizDirectionBtn.classList.toggle("active", !esToKo);
       }
-      quizDefinition.textContent = isListenMode ? "Pulsa 🔊 para escuchar la palabra" : (esToKo ? row.español : row.coreano);
+      if(quizInlineSpeakBtn){
+        quizInlineSpeakBtn.style.display = isListenMode ? "inline-flex" : "none";
+      }
+      quizDefinition.textContent = isListenMode ? "Escucha y elige la opción correcta" : (esToKo ? row.español : row.coreano);
       quizCounter.textContent = `${quizIndex + 1} de ${quizData.length}`;
       quizStarBtn.textContent = starredWords.has(row.id) ? "⭐" : "☆";
       updateProgress(quizProgressFill, quizProgressText, quizIndex, quizData.length);
@@ -3452,17 +3537,28 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       quizNextBtn.disabled = false;
       quizPrevBtn.style.opacity = quizPrevBtn.disabled ? ".5" : "1";
       quizNextBtn.style.opacity = "1";
+      if(quizArrowPrev){
+        quizArrowPrev.disabled = quizPrevBtn.disabled;
+        quizArrowPrev.style.opacity = quizPrevBtn.disabled ? ".45" : "1";
+      }
+      if(quizArrowNext){
+        quizArrowNext.disabled = false;
+        quizArrowNext.style.opacity = "1";
+      }
       quizNextBtn.textContent = quizIndex >= quizData.length - 1 ? "✅ Finalizar" : "Siguiente →";
     }
 
-    quizSpeakBtn.addEventListener("click", () => {
+    function playQuizPrompt(){
       const row = quizData[quizIndex];
       if(!row) return;
       const isListenMode = quizModeType === "listen";
       const esToKo = quizDirection === "es-to-ko";
       if(isListenMode) speak(row.coreano, "ko-KR");
       else speak(esToKo ? row.español : row.coreano, esToKo ? "es-ES" : "ko-KR");
-    });
+    }
+
+    quizSpeakBtn.addEventListener("click", playQuizPrompt);
+    if(quizInlineSpeakBtn) quizInlineSpeakBtn.addEventListener("click", playQuizPrompt);
 
     quizStarBtn.addEventListener("click", () => {
       const row = quizData[quizIndex];
@@ -3471,6 +3567,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     });
 
     if(quizDirectionBtn){ quizDirectionBtn.addEventListener("click", () => { quizDirection = quizDirection === "es-to-ko" ? "ko-to-es" : "es-to-ko"; renderQuizCard(); }); }
+    if(quizShuffleBtn){ quizShuffleBtn.addEventListener("click", shuffleQuizDeck); }
     if(quizBoldBtn){ quizBoldBtn.addEventListener("click", () => { quizStyle.bold = !quizStyle.bold; applyQuizStyle(); }); }
     if(quizFontDownBtn){ quizFontDownBtn.addEventListener("click", () => { quizStyle.fontSize = clamp(quizStyle.fontSize - 2, 18, 42); applyQuizStyle(); }); }
     if(quizFontUpBtn){ quizFontUpBtn.addEventListener("click", () => { quizStyle.fontSize = clamp(quizStyle.fontSize + 2, 18, 42); applyQuizStyle(); }); }
@@ -3480,6 +3577,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       quizIndex--;
       renderQuizCard();
     });
+    if(quizArrowPrev) quizArrowPrev.addEventListener("click", () => quizPrevBtn.click());
 
     function finishQuizMode(){
       const total = quizData.length || 0;
@@ -3498,6 +3596,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       quizIndex++;
       renderQuizCard();
     });
+    if(quizArrowNext) quizArrowNext.addEventListener("click", () => quizNextBtn.click());
 
     closeQuizBtn.addEventListener("click", closeQuizMode);
 
@@ -3626,6 +3725,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     if(mixBoldBtn){ mixBoldBtn.addEventListener("click", () => { mixStyle.bold = !mixStyle.bold; applyMixStyle(); renderMixGrid(); }); }
     if(mixFontDownBtn){ mixFontDownBtn.addEventListener("click", () => { mixStyle.fontSize = clamp(mixStyle.fontSize - 1, 14, 28); applyMixStyle(); renderMixGrid(); }); }
     if(mixFontUpBtn){ mixFontUpBtn.addEventListener("click", () => { mixStyle.fontSize = clamp(mixStyle.fontSize + 1, 14, 28); applyMixStyle(); renderMixGrid(); }); }
+    if(mixShuffleBtn){ mixShuffleBtn.addEventListener("click", startMix); }
     mixResetBtn.addEventListener("click", startMix);
     closeMixBtn.addEventListener("click", closeMixMode);
 
