@@ -55,7 +55,7 @@
       --table-ko-weight:800;
       --study-font-size:62px;
       --study-back-size:44px;
-      --study-font-weight:800;
+      --study-font-weight:500;
       --write-font-size:30px;
       --write-input-size:22px;
       --write-font-weight:800;
@@ -1630,14 +1630,9 @@
         <div>
           <div class="hero-eyebrow">한국어 말</div>
           <h1>Korean is fun</h1>
-          <p>Tabla editable, modos de estudio, filtros por topic y unit y práctica multiplataforma.</p>
+          
         </div>
-        <div class="hero-pills">
-          <span class="hero-pill">PC</span>
-          <span class="hero-pill">Móvil</span>
-          <span class="hero-pill">iPad</span>
-          <span class="hero-pill">PWA</span>
-        </div>
+        
       </div>
 
       <div class="top-actions">
@@ -1649,6 +1644,7 @@
           <button class="mode-btn" id="flashcardsBtn">📚 Flashcards</button>
           <button class="mode-btn" id="writeBtn">✍ Escritura</button>
           <button class="mode-btn" id="quizBtn">🧩 Multiple</button>
+          <button class="mode-btn" id="listenBtn">👂 Escuchar</button>
           <button class="mode-btn" id="mixBtn">🔗 Pairs</button>
 
           <div class="dropdown" id="wrongPracticeDropdown">
@@ -1657,6 +1653,7 @@
               <button class="dropdown-item" data-practice-list="wrong" data-mode="flashcards">Flashcards</button>
                             <button class="dropdown-item" data-practice-list="wrong" data-mode="write">Escritura</button>
               <button class="dropdown-item" data-practice-list="wrong" data-mode="quiz">Multiple</button>
+              <button class="dropdown-item" data-practice-list="wrong" data-mode="listen">Escuchar</button>
               <button class="dropdown-item" data-practice-list="wrong" data-mode="mix">Pairs</button>
             </div>
           </div>
@@ -1669,6 +1666,7 @@
               <button class="dropdown-item" data-practice-list="star" data-mode="flashcards">Flashcards</button>
                             <button class="dropdown-item" data-practice-list="star" data-mode="write">Escritura</button>
               <button class="dropdown-item" data-practice-list="star" data-mode="quiz">Multiple</button>
+              <button class="dropdown-item" data-practice-list="star" data-mode="listen">Escuchar</button>
               <button class="dropdown-item" data-practice-list="star" data-mode="mix">Pairs</button>
             </div>
           </div>
@@ -1708,7 +1706,7 @@
         <div class="study-group">
           <div class="style-box">
             <span class="style-label">Texto</span>
-            <button class="small-btn" id="flashBoldBtn">Negrita: Sí</button>
+            <button class="small-btn" id="flashBoldBtn">Negrita: No</button>
             <button class="small-btn" id="flashFontDownBtn">A−</button>
             <button class="small-btn" id="flashFontUpBtn">A+</button>
             <span class="style-label" id="flashFontValue">62 px</span>
@@ -1789,7 +1787,7 @@
           <div class="mode-style-box">
             <button class="small-btn" id="writeDirectionBtn">ES → KO</button>
             <button class="small-btn" id="writePlayBtn">🔊 Audio</button>
-            <button class="small-btn" id="writeBoldBtn">Negrita: Sí</button>
+            <button class="small-btn" id="writeBoldBtn">Negrita: No</button>
             <button class="small-btn" id="writeFontDownBtn">A−</button>
             <button class="small-btn" id="writeFontUpBtn">A+</button>
           </div>
@@ -1832,7 +1830,7 @@
         <div class="quiz-meta">
           <div class="mode-style-box">
             <button class="small-btn" id="quizDirectionBtn">ES → KO</button>
-            <button class="small-btn" id="quizBoldBtn">Negrita: Sí</button>
+            <button class="small-btn" id="quizBoldBtn">Negrita: No</button>
             <button class="small-btn" id="quizFontDownBtn">A−</button>
             <button class="small-btn" id="quizFontUpBtn">A+</button>
           </div>
@@ -1874,7 +1872,7 @@
         </div>
         <div class="study-group">
           <div class="mode-style-box">
-            <button class="small-btn" id="mixBoldBtn">Negrita: Sí</button>
+            <button class="small-btn" id="mixBoldBtn">Negrita: No</button>
             <button class="small-btn" id="mixFontDownBtn">A−</button>
             <button class="small-btn" id="mixFontUpBtn">A+</button>
           </div>
@@ -1907,6 +1905,7 @@
         <button class="small-btn" id="listPracticeFlashBtn">Practicar en flashcards</button>
                 <button class="small-btn" id="listPracticeWriteBtn">Practicar en escritura</button>
         <button class="small-btn" id="listPracticeQuizBtn">Practicar en Multiple</button>
+        <button class="small-btn" id="listPracticeListenBtn">Practicar en Escuchar</button>
         <button class="small-btn" id="listPracticeMixBtn">Practicar en Pairs</button>
         <button class="small-btn" id="listClearBtn">Vaciar lista</button>
       </div>
@@ -1960,7 +1959,7 @@
     const STORAGE_STAR = "flashcards-star-ids-v3";
     const STORAGE_WRONG = "flashcards-wrong-ids-v3";
     const STORAGE_TABLE_STYLE = "flashcards-table-style-v1";
-    const STORAGE_FLASH_STYLE = "flashcards-study-style-v1";
+    const STORAGE_FLASH_STYLE = "flashcards-study-style-v2";
     const STORAGE_PALETTE = "flashcards-theme-palette-v1";
 
     let allData = [];
@@ -1970,10 +1969,10 @@
     let audioRate = 1.0;
     let currentEditRowId = null;
     let tableStyle = { fontSize: 13, bold: true };
-    let flashStyle = { fontSize: 62, bold: true };
-    let writeStyle = { fontSize: 30, bold: true };
-    let quizStyle = { fontSize: 22, bold: true };
-    let mixStyle = { fontSize: 16, bold: true };
+    let flashStyle = { fontSize: 62, bold: false };
+    let writeStyle = { fontSize: 30, bold: false };
+    let quizStyle = { fontSize: 22, bold: false };
+    let mixStyle = { fontSize: 20, bold: false };
     let studyFrontMode = "ko";
     let writeDirection = "es-to-ko";
     let quizDirection = "es-to-ko";
@@ -1994,6 +1993,7 @@
     let quizData = [];
     let quizIndex = 0;
     let quizAnswered = false;
+    let quizModeType = "multiple";
 
     let mixData = [];
     let mixTiles = [];
@@ -2038,6 +2038,7 @@
     const flashcardsBtn = document.getElementById("flashcardsBtn");
     const writeBtn = document.getElementById("writeBtn");
     const quizBtn = document.getElementById("quizBtn");
+    const listenBtn = document.getElementById("listenBtn");
     const mixBtn = document.getElementById("mixBtn");
 
     const wrongPracticeDropdown = document.getElementById("wrongPracticeDropdown");
@@ -2131,6 +2132,7 @@
     const listPracticeFlashBtn = document.getElementById("listPracticeFlashBtn");
     const listPracticeWriteBtn = document.getElementById("listPracticeWriteBtn");
     const listPracticeQuizBtn = document.getElementById("listPracticeQuizBtn");
+    const listPracticeListenBtn = document.getElementById("listPracticeListenBtn");
     const listPracticeMixBtn = document.getElementById("listPracticeMixBtn");
     const listClearBtn = document.getElementById("listClearBtn");
 
@@ -2228,31 +2230,32 @@
       const selected = paletteThemes[name] || paletteThemes.default;
       const mode = document.body.classList.contains('light') ? 'light' : 'dark';
       const palette = selected[mode];
-      const root = document.documentElement;
-      root.style.setProperty('--bg', palette.bg);
-      root.style.setProperty('--panel', palette.panel);
-      root.style.setProperty('--panel-2', palette.panel2);
-      root.style.setProperty('--line', palette.line);
-      root.style.setProperty('--text', palette.text);
-      root.style.setProperty('--muted', palette.muted);
-      root.style.setProperty('--notes', palette.notes);
-      root.style.setProperty('--notes-line', palette.notesLine);
-      root.style.setProperty('--chip', palette.chip);
-      root.style.setProperty('--chip-border', palette.chipBorder);
-      root.style.setProperty('--chip-active', palette.chipActive);
-      root.style.setProperty('--chip-active-text', palette.chipActiveText);
-      root.style.setProperty('--shadow', palette.shadow);
-      root.style.setProperty('--overlay', palette.overlay);
-      root.style.setProperty('--quiz-bg', palette.quizBg);
-      root.style.setProperty('--quiz-card', palette.quizCard);
-      root.style.setProperty('--quiz-line', palette.quizLine);
-      root.style.setProperty('--quiz-text', palette.quizText);
-      root.style.setProperty('--quiz-muted', palette.quizMuted);
-      root.style.setProperty('--progress-bg', palette.progressBg);
-      root.style.setProperty('--primary', palette.primary);
-      root.style.setProperty('--primary-2', palette.primary2);
-      root.style.setProperty('--primary-soft', palette.primarySoft);
-      root.style.setProperty('--progress-fill', palette.progress);
+      [document.documentElement, document.body].forEach(root => {
+        root.style.setProperty('--bg', palette.bg);
+        root.style.setProperty('--panel', palette.panel);
+        root.style.setProperty('--panel-2', palette.panel2);
+        root.style.setProperty('--line', palette.line);
+        root.style.setProperty('--text', palette.text);
+        root.style.setProperty('--muted', palette.muted);
+        root.style.setProperty('--notes', palette.notes);
+        root.style.setProperty('--notes-line', palette.notesLine);
+        root.style.setProperty('--chip', palette.chip);
+        root.style.setProperty('--chip-border', palette.chipBorder);
+        root.style.setProperty('--chip-active', palette.chipActive);
+        root.style.setProperty('--chip-active-text', palette.chipActiveText);
+        root.style.setProperty('--shadow', palette.shadow);
+        root.style.setProperty('--overlay', palette.overlay);
+        root.style.setProperty('--quiz-bg', palette.quizBg);
+        root.style.setProperty('--quiz-card', palette.quizCard);
+        root.style.setProperty('--quiz-line', palette.quizLine);
+        root.style.setProperty('--quiz-text', palette.quizText);
+        root.style.setProperty('--quiz-muted', palette.quizMuted);
+        root.style.setProperty('--progress-bg', palette.progressBg);
+        root.style.setProperty('--primary', palette.primary);
+        root.style.setProperty('--primary-2', palette.primary2);
+        root.style.setProperty('--primary-soft', palette.primarySoft);
+        root.style.setProperty('--progress-fill', palette.progress);
+      });
       localStorage.setItem(STORAGE_PALETTE, paletteThemes[name] ? name : 'default');
       document.querySelectorAll('[data-theme-palette]').forEach(btn => btn.classList.toggle('active', btn.dataset.themePalette === (paletteThemes[name] ? name : 'default')));
     }
@@ -2336,7 +2339,7 @@
         const rawFlash = JSON.parse(localStorage.getItem(STORAGE_FLASH_STYLE) || "null");
         if(rawFlash && typeof rawFlash === "object"){
           flashStyle.fontSize = clamp(Number(rawFlash.fontSize) || 62, 28, 90);
-          flashStyle.bold = rawFlash.bold !== false;
+          flashStyle.bold = !!rawFlash.bold;
         }
       }catch{}
     }
@@ -3356,8 +3359,9 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       if(quizIndex >= quizData.length) quizIndex = Math.max(0, quizData.length - 1);
     }
 
-    function openQuizMode(source = null){
+    function openQuizMode(source = null, modeType = "multiple"){
       currentPracticeSource = source;
+      quizModeType = modeType;
       quizIndex = 0;
       quizAnsweredMap = new Map();
       buildQuizDeck();
@@ -3369,13 +3373,19 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       renderQuizCard();
     }
 
+    function openListenMode(source = null){
+      openQuizMode(source, "listen");
+    }
+
     function closeQuizMode(){
       quizOverlay.classList.remove("open");
       currentPracticeSource = null;
+      quizModeType = "multiple";
+      if(quizDirectionBtn) quizDirectionBtn.style.display = "";
     }
 
     function getQuizOptions(correctRow){
-      const pool = getRowsFromSource(currentPracticeSource).filter(r => r.id !== correctRow.id && r.coreano);
+      const pool = getRowsFromSource(currentPracticeSource).filter(r => r.id !== correctRow.id && (quizModeType === "listen" ? r.español : r.coreano));
       const shuffled = shuffleArray(pool).slice(0, 3);
       return shuffleArray([correctRow, ...shuffled]);
     }
@@ -3400,19 +3410,21 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       const options = getQuizOptions(row);
 
       const esToKo = quizDirection === "es-to-ko";
-      if(quizPromptLabel) quizPromptLabel.textContent = esToKo ? "Definición" : "Palabra en coreano";
+      const isListenMode = quizModeType === "listen";
+      if(quizPromptLabel) quizPromptLabel.textContent = isListenMode ? "Escucha" : (esToKo ? "Definición" : "Palabra en coreano");
       if(quizDirectionBtn){
+        quizDirectionBtn.style.display = isListenMode ? "none" : "inline-flex";
         quizDirectionBtn.textContent = esToKo ? "ES → KO" : "KO → ES";
         quizDirectionBtn.classList.toggle("active", !esToKo);
       }
-      quizDefinition.textContent = esToKo ? row.español : row.coreano;
+      quizDefinition.textContent = isListenMode ? "Pulsa 🔊 para escuchar la palabra" : (esToKo ? row.español : row.coreano);
       quizCounter.textContent = `${quizIndex + 1} de ${quizData.length}`;
       quizStarBtn.textContent = starredWords.has(row.id) ? "⭐" : "☆";
       updateProgress(quizProgressFill, quizProgressText, quizIndex, quizData.length);
 
       quizOptions.innerHTML = options.map(opt => `
         <button class="quiz-option" data-id="${opt.id}" data-correct="${opt.id === row.id ? "1" : "0"}">
-          ${escapeHtml(esToKo ? opt.coreano : opt.español)}
+          ${escapeHtml(isListenMode ? opt.español : (esToKo ? opt.coreano : opt.español))}
         </button>
       `).join("");
 
@@ -3446,8 +3458,10 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     quizSpeakBtn.addEventListener("click", () => {
       const row = quizData[quizIndex];
       if(!row) return;
+      const isListenMode = quizModeType === "listen";
       const esToKo = quizDirection === "es-to-ko";
-      speak(esToKo ? row.español : row.coreano, esToKo ? "es-ES" : "ko-KR");
+      if(isListenMode) speak(row.coreano, "ko-KR");
+      else speak(esToKo ? row.español : row.coreano, esToKo ? "es-ES" : "ko-KR");
     });
 
     quizStarBtn.addEventListener("click", () => {
@@ -3472,7 +3486,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       const correct = [...quizAnsweredMap.values()].filter(Boolean).length;
       const percent = total ? Math.round((correct / total) * 100) : 0;
       closeQuizMode();
-      showCelebration("Multiple", percent);
+      showCelebration(quizModeType === "listen" ? "Escuchar" : "Multiple", percent);
     }
 
     quizNextBtn.addEventListener("click", () => {
@@ -3668,6 +3682,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       if(mode === "flashcards") openStudyMode(currentListType, "flashcards");
       if(mode === "write") openWriteMode(currentListType);
       if(mode === "quiz") openQuizMode(currentListType);
+      if(mode === "listen") openListenMode(currentListType);
       if(mode === "mix") openMixMode(currentListType);
     }
 
@@ -3718,6 +3733,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     flashcardsBtn.addEventListener("click", () => openStudyMode(null, "flashcards"));
     writeBtn.addEventListener("click", () => openWriteMode());
     quizBtn.addEventListener("click", () => openQuizMode());
+    listenBtn.addEventListener("click", () => openListenMode());
     mixBtn.addEventListener("click", () => openMixMode());
 
     wrongPracticeBtn.addEventListener("click", () => toggleDropdown(wrongPracticeDropdown));
@@ -3738,6 +3754,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         if(mode === "flashcards") openStudyMode(listType, "flashcards");
         if(mode === "write") openWriteMode(listType);
         if(mode === "quiz") openQuizMode(listType);
+        if(mode === "listen") openListenMode(listType);
         if(mode === "mix") openMixMode(listType);
       });
     });
@@ -3769,6 +3786,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     listPracticeFlashBtn.addEventListener("click", () => practiceFromList("flashcards"));
     listPracticeWriteBtn.addEventListener("click", () => practiceFromList("write"));
     listPracticeQuizBtn.addEventListener("click", () => practiceFromList("quiz"));
+    listPracticeListenBtn.addEventListener("click", () => practiceFromList("listen"));
     listPracticeMixBtn.addEventListener("click", () => practiceFromList("mix"));
 
     closeEditBtn.addEventListener("click", closeEditRow);
