@@ -55,15 +55,7 @@
       --table-ko-weight:800;
       --study-font-size:62px;
       --study-back-size:44px;
-      --study-font-weight:500;
-      --write-font-size:30px;
-      --write-input-size:22px;
-      --write-font-weight:800;
-      --quiz-font-size:28px;
-      --quiz-option-size:18px;
-      --quiz-font-weight:800;
-      --mix-font-size:20px;
-      --mix-font-weight:700;
+      --study-font-weight:800;
     }
 
     body.light{
@@ -73,15 +65,15 @@
       --line:#d9e1f2;
       --text:#1f2937;
       --muted:#6b7280;
-      --primary:#2563eb;
-      --primary-2:#3b82f6;
-      --primary-soft:#dbeafe;
+      --primary:#4f46e5;
+      --primary-2:#6366f1;
+      --primary-soft:#e0e7ff;
       --danger:#dc2626;
       --notes:#fff8e7;
       --notes-line:#e7d6a5;
       --chip:#ffffff;
       --chip-border:#cfd8ea;
-      --chip-active:#2563eb;
+      --chip-active:#4caf50;
       --chip-active-text:#ffffff;
       --shadow:0 8px 24px rgba(15,23,42,.08);
       --overlay:rgba(15,23,42,.62);
@@ -1063,42 +1055,6 @@
       margin-bottom:22px;
     }
 
-    .quiz-definition-row{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-
-    .quiz-inline-play{
-      min-width:48px;
-      height:48px;
-      border-radius:14px;
-      border:1px solid var(--quiz-line);
-      background:var(--quiz-card);
-      color:var(--quiz-text);
-      font-size:22px;
-      cursor:pointer;
-    }
-
-    .quiz-nav-arrows{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      margin:10px 0 18px;
-    }
-
-    .quiz-nav-arrows .study-nav-arrow{
-      position:static;
-      transform:none;
-      width:58px;
-      height:52px;
-      background:var(--quiz-card);
-      border-color:var(--quiz-line);
-      color:var(--quiz-text);
-      backdrop-filter:none;
-    }
-
     .quiz-prompt{
       font-size:14px;
       color:var(--quiz-muted);
@@ -1295,7 +1251,6 @@
       .write-prompt{ font-size:30px; }
       .write-input{ font-size:22px; }
       .quiz-definition{ font-size:22px; }
-      .quiz-nav-arrows .study-nav-arrow{ width:52px; height:48px; }
       .quiz-option{ font-size:18px; }
       .mix-card{ min-height:96px; font-size:16px; }
     }
@@ -1603,27 +1558,16 @@
       .hero-pill{ padding:7px 10px; }
     }
 
-
-    .mode-style-box{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-right:8px;}
-    .mode-style-box .small-btn{font-size:11px;padding:7px 10px;}
-    .write-prompt{ font-size:var(--write-font-size) !important; font-weight:var(--write-font-weight) !important; }
-    .write-input{ font-size:var(--write-input-size) !important; font-weight:var(--write-font-weight) !important; }
-    .quiz-definition{ font-size:var(--quiz-font-size) !important; font-weight:var(--quiz-font-weight) !important; }
-    .quiz-option{ font-size:var(--quiz-option-size) !important; font-weight:var(--quiz-font-weight) !important; }
-    .mix-card{ font-size:var(--mix-font-size) !important; font-weight:var(--mix-font-weight) !important; }
-    .study-face .action-btn.ghost.active, .small-btn.active{ outline:2px solid color-mix(in oklab, var(--primary) 80%, white 20%); }
-
   </style>
 </head>
 <body>
   <div class="layout">
     <aside class="sidebar">
       <div class="sidebar-top">
-        <div class="brand-wrap"><div class="brand-badge">🇰🇷</div><div><div class="title">Flashcards Coreano</div><div class="brand-subtitle">한국어 말</div></div></div>
+        <div class="brand-wrap"><div class="brand-badge">한</div><div><div class="title">Flashcards Coreano</div><div class="brand-subtitle">Studio de estudio multiplataforma</div></div></div>
         <div class="study-group">
           <button class="icon-btn" id="paletteBtn" title="Cambiar colores">🎨</button>
           <button class="icon-btn" id="themeBtn" title="Cambiar tema">☀</button>
-          <button class="icon-btn" id="refreshAppBtn" type="button" title="Actualizar la web">🔄</button>
         </div>
       </div>
 
@@ -1639,6 +1583,7 @@
         <button class="small-btn" id="clearFilterBtn" title="Quitar filtros">Quitar filtros</button>
       </div>
 
+      <div class="app-note">Sube tu Excel, filtra por unit y topic, y practica desde cualquier dispositivo.</div>
 
       <div class="search-box">
         <input class="search-input" id="searchInput" type="text" placeholder="Buscar..." />
@@ -1665,11 +1610,17 @@
     <main class="main">
       <div class="hero-banner">
         <div>
-          <div class="hero-eyebrow">한국어 말</div>
-          <h1>Korean is fun</h1>
-          
+          <div class="hero-eyebrow">Aprendizaje inteligente</div>
+          <h1>Tu cuaderno digital de vocabulario coreano</h1>
+          <p>Todo en una sola app: tabla editable, audio, listas estrella, falladas y modos de estudio sin perder datos.</p>
         </div>
-        
+        <div class="hero-pills">
+          <span class="hero-pill">PC</span>
+          <span class="hero-pill">Móvil</span>
+          <span class="hero-pill">iPad</span>
+          <span class="hero-pill">PWA</span>
+          <button class="hero-update-btn" id="refreshAppBtn" type="button" title="Actualizar la web">🔄 Actualizar web</button>
+        </div>
       </div>
 
       <div class="top-actions">
@@ -1743,14 +1694,12 @@
         <div class="study-group">
           <div class="style-box">
             <span class="style-label">Texto</span>
-            <button class="small-btn" id="flashBoldBtn">Negrita: No</button>
+            <button class="small-btn" id="flashBoldBtn">Negrita: Sí</button>
             <button class="small-btn" id="flashFontDownBtn">A−</button>
             <button class="small-btn" id="flashFontUpBtn">A+</button>
             <span class="style-label" id="flashFontValue">62 px</span>
           </div>
           <button class="action-btn ghost" id="studyOnlyStarBtn">Practicar ⭐</button>
-          <button class="action-btn ghost" id="studyFaceToggleBtn">KO → ES</button>
-          <button class="action-btn ghost" id="studyEditBtn">✏️ Editar</button>
           <button class="action-btn ghost" id="studyShuffleBtn">🔀 Barajar</button>
           <button class="icon-btn" id="closeStudyBtn">✕</button>
         </div>
@@ -1771,7 +1720,8 @@
               <div class="study-word" id="studyFrontText">—</div>
             </div>
             <div class="card-actions">
-              <button class="action-btn" id="studyPlayFront">🔊 Reproducir</button>
+              <button class="action-btn" id="studyPlayFront">🔊 Normal</button>
+              <button class="action-btn secondary" id="studyPlayFrontSlow">🐢 Lento</button>
               <button class="action-btn secondary" id="studyFlipBtn">Girar</button>
               <button class="action-btn ghost" id="studyStarBtn">☆</button>
             </div>
@@ -1782,7 +1732,8 @@
               <div class="study-word backtext" id="studyBackText">—</div>
             </div>
             <div class="card-actions">
-              <button class="action-btn" id="studyPlayBack">🔊 Reproducir</button>
+              <button class="action-btn" id="studyPlayBack">🔊 Normal</button>
+              <button class="action-btn secondary" id="studyPlayBackSlow">🐢 Lento</button>
               <button class="action-btn secondary" id="studyFlipBtnBack">Girar</button>
               <button class="action-btn ghost" id="studyStarBtnBack">☆</button>
             </div>
@@ -1821,14 +1772,6 @@
           <div class="modal-stats" id="writeStats">0 / 0</div>
         </div>
         <div class="study-group">
-          <div class="mode-style-box">
-            <button class="small-btn" id="writeDirectionBtn">ES → KO</button>
-            <button class="small-btn" id="writePlayBtn">🔊 Audio</button>
-            <button class="small-btn" id="writeShuffleBtn">🔀 Barajar</button>
-            <button class="small-btn" id="writeBoldBtn">Negrita: No</button>
-            <button class="small-btn" id="writeFontDownBtn">A−</button>
-            <button class="small-btn" id="writeFontUpBtn">A+</button>
-          </div>
           <button class="icon-btn" id="writeStarBtn">☆</button>
           <button class="icon-btn" id="closeWriteBtn">✕</button>
         </div>
@@ -1839,11 +1782,15 @@
         <div class="progress-text" id="writeProgressText">0%</div>
       </div>
 
-      <div class="write-card">
-        <div class="write-label" id="writeLabel">Escribe en coreano</div>
-        <div class="write-prompt" id="writePrompt">—</div>
-        <input class="write-input" id="writeInput" autocomplete="off" placeholder="Escribe aquí en coreano" />
-        <div class="write-result" id="writeResult"></div>
+      <div class="study-card-shell">
+        <button class="study-nav-arrow left" id="writeArrowPrev" aria-label="Anterior escritura">&lt;</button>
+        <div class="write-card">
+          <div class="write-label">Escribe en coreano</div>
+          <div class="write-prompt" id="writePrompt">—</div>
+          <input class="write-input" id="writeInput" autocomplete="off" placeholder="Escribe aquí en coreano" />
+          <div class="write-result" id="writeResult"></div>
+        </div>
+        <button class="study-nav-arrow right" id="writeArrowNext" aria-label="Siguiente escritura">&gt;</button>
       </div>
 
       <div class="study-bottom">
@@ -1861,18 +1808,12 @@
     <div class="quiz-shell">
       <div class="quiz-top">
         <div class="quiz-meta">
-          <span id="quizPromptLabel">Definición</span>
-          <button class="icon-btn" id="quizSpeakBtn" title="Reproducir pista">🔊</button>
+          <span id="quizHeaderLabel">Definición</span>
+          <button class="icon-btn" id="quizSpeakBtn" title="Reproducir normal">🔊</button>
+          <button class="icon-btn" id="quizSpeakSlowBtn" title="Reproducir lento">🐢</button>
           <button class="icon-btn" id="quizStarBtn" title="Marcada">☆</button>
         </div>
         <div class="quiz-meta">
-          <div class="mode-style-box">
-            <button class="small-btn" id="quizDirectionBtn">ES → KO</button>
-            <button class="small-btn" id="quizShuffleBtn">🔀 Barajar</button>
-            <button class="small-btn" id="quizBoldBtn">Negrita: No</button>
-            <button class="small-btn" id="quizFontDownBtn">A−</button>
-            <button class="small-btn" id="quizFontUpBtn">A+</button>
-          </div>
           <span id="quizCounter">0 de 0</span>
           <button class="icon-btn" id="closeQuizBtn">✕</button>
         </div>
@@ -1887,7 +1828,8 @@
         <div class="quiz-prompt">Definición</div>
         <div class="quiz-definition-row">
           <div class="quiz-definition" id="quizDefinition">—</div>
-          <button class="quiz-inline-play" id="quizInlineSpeakBtn" title="Reproducir pista">🔊</button>
+          <button class="quiz-inline-play" id="quizInlineSpeakBtn" title="Reproducir normal">🔊</button>
+          <button class="quiz-inline-play" id="quizInlineSpeakSlowBtn" title="Reproducir lento">🐢</button>
         </div>
       </div>
 
@@ -1918,12 +1860,6 @@
           <span id="mixStatus">0 / 0 parejas</span>
         </div>
         <div class="study-group">
-          <div class="mode-style-box">
-            <button class="small-btn" id="mixShuffleBtn">🔀 Barajar</button>
-            <button class="small-btn" id="mixBoldBtn">Negrita: No</button>
-            <button class="small-btn" id="mixFontDownBtn">A−</button>
-            <button class="small-btn" id="mixFontUpBtn">A+</button>
-          </div>
           <button class="quiz-btn" id="mixResetBtn">Reiniciar</button>
           <button class="icon-btn" id="closeMixBtn">✕</button>
         </div>
@@ -1992,13 +1928,11 @@
   <div class="theme-popover" id="themePopover">
     <div class="nav-head-title">Temas de color</div>
     <div class="theme-swatches">
-      <button class="theme-swatch active" data-theme-palette="default" title="Predeterminado"><span style="background:linear-gradient(135deg,#8b5cf6 0 50%,#f5f7fb 50% 100%)"></span></button>
-      <button class="theme-swatch" data-theme-palette="ocean" title="Océano"><span style="background:linear-gradient(135deg,#0ea5e9 0 50%,#eef8ff 50% 100%)"></span></button>
-      <button class="theme-swatch" data-theme-palette="forest" title="Bosque"><span style="background:linear-gradient(135deg,#22c55e 0 50%,#f3fbf5 50% 100%)"></span></button>
-      <button class="theme-swatch" data-theme-palette="sunset" title="Atardecer"><span style="background:linear-gradient(135deg,#f97316 0 50%,#fff6f0 50% 100%)"></span></button>
-      <button class="theme-swatch" data-theme-palette="rose" title="Rose"><span style="background:linear-gradient(135deg,#ec4899 0 50%,#fff5fb 50% 100%)"></span></button>
-      <button class="theme-swatch" data-theme-palette="lavender" title="Lavanda"><span style="background:linear-gradient(135deg,#7c3aed 0 50%,#f7f3ff 50% 100%)"></span></button>
-      <button class="theme-swatch" data-theme-palette="mint" title="Mint"><span style="background:linear-gradient(135deg,#14b8a6 0 50%,#f0fdfa 50% 100%)"></span></button>
+      <button class="theme-swatch active" data-theme-palette="default" title="Predeterminado"><span style="background:linear-gradient(135deg,#8b5cf6,#0f1020)"></span></button>
+      <button class="theme-swatch" data-theme-palette="ocean" title="Océano"><span style="background:linear-gradient(135deg,#0ea5e9,#082f49)"></span></button>
+      <button class="theme-swatch" data-theme-palette="forest" title="Bosque"><span style="background:linear-gradient(135deg,#22c55e,#052e16)"></span></button>
+      <button class="theme-swatch" data-theme-palette="sunset" title="Atardecer"><span style="background:linear-gradient(135deg,#f97316,#7c2d12)"></span></button>
+      <button class="theme-swatch" data-theme-palette="rose" title="Rose"><span style="background:linear-gradient(135deg,#ec4899,#4a044e)"></span></button>
     </div>
   </div>
 
@@ -2007,7 +1941,7 @@
     const STORAGE_STAR = "flashcards-star-ids-v3";
     const STORAGE_WRONG = "flashcards-wrong-ids-v3";
     const STORAGE_TABLE_STYLE = "flashcards-table-style-v1";
-    const STORAGE_FLASH_STYLE = "flashcards-study-style-v2";
+    const STORAGE_FLASH_STYLE = "flashcards-study-style-v1";
     const STORAGE_PALETTE = "flashcards-theme-palette-v1";
 
     let allData = [];
@@ -2017,13 +1951,7 @@
     let audioRate = 1.0;
     let currentEditRowId = null;
     let tableStyle = { fontSize: 13, bold: true };
-    let flashStyle = { fontSize: 62, bold: false };
-    let writeStyle = { fontSize: 30, bold: false };
-    let quizStyle = { fontSize: 28, bold: false };
-    let mixStyle = { fontSize: 22, bold: false };
-    let studyFrontMode = "ko";
-    let writeDirection = "es-to-ko";
-    let quizDirection = "es-to-ko";
+    let flashStyle = { fontSize: 62, bold: true };
 
     let starredWords = new Set(loadIdSet(STORAGE_STAR));
     let wrongWords = new Set(loadIdSet(STORAGE_WRONG));
@@ -2113,7 +2041,9 @@
     const studyPron = document.getElementById("studyPron");
     const studyNotes = document.getElementById("studyNotes");
     const studyPlayFront = document.getElementById("studyPlayFront");
+    const studyPlayFrontSlow = document.getElementById("studyPlayFrontSlow");
     const studyPlayBack = document.getElementById("studyPlayBack");
+    const studyPlayBackSlow = document.getElementById("studyPlayBackSlow");
     const studyFlipBtn = document.getElementById("studyFlipBtn");
     const studyFlipBtnBack = document.getElementById("studyFlipBtnBack");
     const studyPrevBtn = document.getElementById("studyPrevBtn");
@@ -2122,45 +2052,35 @@
     const studyStarBtnBack = document.getElementById("studyStarBtnBack");
     const studyOnlyStarBtn = document.getElementById("studyOnlyStarBtn");
     const studyShuffleBtn = document.getElementById("studyShuffleBtn");
-    const studyFaceToggleBtn = document.getElementById("studyFaceToggleBtn");
-    const studyEditBtn = document.getElementById("studyEditBtn");
     const closeStudyBtn = document.getElementById("closeStudyBtn");
     const studyProgressFill = document.getElementById("studyProgressFill");
     const studyProgressText = document.getElementById("studyProgressText");
 
     const writeStats = document.getElementById("writeStats");
-    const writeLabel = document.getElementById("writeLabel");
     const writePrompt = document.getElementById("writePrompt");
     const writeInput = document.getElementById("writeInput");
     const writeResult = document.getElementById("writeResult");
     const writePrevBtn = document.getElementById("writePrevBtn");
     const writeNextBtn = document.getElementById("writeNextBtn");
+    const writeArrowPrev = document.getElementById("writeArrowPrev");
+    const writeArrowNext = document.getElementById("writeArrowNext");
     const checkWriteBtn = document.getElementById("checkWriteBtn");
     const writeStarBtn = document.getElementById("writeStarBtn");
-    const writeDirectionBtn = document.getElementById("writeDirectionBtn");
-    const writePlayBtn = document.getElementById("writePlayBtn");
-    const writeShuffleBtn = document.getElementById("writeShuffleBtn");
-    const writeBoldBtn = document.getElementById("writeBoldBtn");
-    const writeFontDownBtn = document.getElementById("writeFontDownBtn");
-    const writeFontUpBtn = document.getElementById("writeFontUpBtn");
     const closeWriteBtn = document.getElementById("closeWriteBtn");
     const writeProgressFill = document.getElementById("writeProgressFill");
     const writeProgressText = document.getElementById("writeProgressText");
 
     const quizCounter = document.getElementById("quizCounter");
-    const quizPromptLabel = document.getElementById("quizPromptLabel");
+    const quizHeaderLabel = document.getElementById("quizHeaderLabel");
     const quizDefinition = document.getElementById("quizDefinition");
     const quizOptions = document.getElementById("quizOptions");
     const quizSpeakBtn = document.getElementById("quizSpeakBtn");
-    const quizStarBtn = document.getElementById("quizStarBtn");
-    const quizDirectionBtn = document.getElementById("quizDirectionBtn");
-    const quizShuffleBtn = document.getElementById("quizShuffleBtn");
+    const quizSpeakSlowBtn = document.getElementById("quizSpeakSlowBtn");
     const quizInlineSpeakBtn = document.getElementById("quizInlineSpeakBtn");
+    const quizInlineSpeakSlowBtn = document.getElementById("quizInlineSpeakSlowBtn");
+    const quizStarBtn = document.getElementById("quizStarBtn");
     const quizArrowPrev = document.getElementById("quizArrowPrev");
     const quizArrowNext = document.getElementById("quizArrowNext");
-    const quizBoldBtn = document.getElementById("quizBoldBtn");
-    const quizFontDownBtn = document.getElementById("quizFontDownBtn");
-    const quizFontUpBtn = document.getElementById("quizFontUpBtn");
     const quizPrevBtn = document.getElementById("quizPrevBtn");
     const quizNextBtn = document.getElementById("quizNextBtn");
     const closeQuizBtn = document.getElementById("closeQuizBtn");
@@ -2170,10 +2090,6 @@
     const mixGrid = document.getElementById("mixGrid");
     const mixStatus = document.getElementById("mixStatus");
     const mixStarBtn = document.getElementById("mixStarBtn");
-    const mixShuffleBtn = document.getElementById("mixShuffleBtn");
-    const mixBoldBtn = document.getElementById("mixBoldBtn");
-    const mixFontDownBtn = document.getElementById("mixFontDownBtn");
-    const mixFontUpBtn = document.getElementById("mixFontUpBtn");
     const mixResetBtn = document.getElementById("mixResetBtn");
     const closeMixBtn = document.getElementById("closeMixBtn");
     const mixProgressFill = document.getElementById("mixProgressFill");
@@ -2226,9 +2142,6 @@
     setAudioRate(1.0);
     applyTableStyle();
     applyFlashStyle();
-    applyWriteStyle();
-    applyQuizStyle();
-    applyMixStyle();
 
 
     function isRowEdited(row){
@@ -2240,9 +2153,9 @@
     }
 
     function getEditableHeaders(){
-      const headers = getOrderedHeaders(getDisplayHeaders());
+      const headers = getDisplayHeaders();
       if(headers.length) return headers;
-      return ["coreano","español","Pronunciación","Notas","topic","unit"];
+      return ["coreano","español","Notas","Pronunciación","topic","unit"];
     }
 
     function applySavedPalette(){
@@ -2254,7 +2167,7 @@
       const paletteThemes = {
         default: {
           dark:{bg:'#0f1020',panel:'#171a2d',panel2:'#1d2240',line:'#313a63',text:'#eef1ff',muted:'#aeb6db',notes:'#231f3d',notesLine:'#4d4677',chip:'#1f2544',chipBorder:'#47527f',chipActive:'#7c3aed',chipActiveText:'#ffffff',shadow:'0 10px 30px rgba(0,0,0,.35)',overlay:'rgba(4,5,16,.84)',quizBg:'#11163a',quizCard:'#2e3a63',quizLine:'#5a6893',quizText:'#f4f6ff',quizMuted:'#aeb9e6',progressBg:'#2a2f57',primary:'#8b5cf6',primary2:'#a78bfa',primarySoft:'#282251',progress:'#8b5cf6'},
-          light:{bg:'#f5f7fb',panel:'#ffffff',panel2:'#eaf2ff',line:'#d6e3fb',text:'#1f2937',muted:'#6b7280',notes:'#fff8e7',notesLine:'#e7d6a5',chip:'#ffffff',chipBorder:'#cfd8ea',chipActive:'#2563eb',chipActiveText:'#ffffff',shadow:'0 8px 24px rgba(15,23,42,.08)',overlay:'rgba(15,23,42,.62)',quizBg:'#244377',quizCard:'#325892',quizLine:'#5f81ba',quizText:'#f2f6ff',quizMuted:'#c3d3f1',progressBg:'#dbeafe',primary:'#2563eb',primary2:'#3b82f6',primarySoft:'#dbeafe',progress:'#2563eb'}
+          light:{bg:'#f5f7fb',panel:'#ffffff',panel2:'#eef2ff',line:'#d9e1f2',text:'#1f2937',muted:'#6b7280',notes:'#fff8e7',notesLine:'#e7d6a5',chip:'#ffffff',chipBorder:'#cfd8ea',chipActive:'#4caf50',chipActiveText:'#ffffff',shadow:'0 8px 24px rgba(15,23,42,.08)',overlay:'rgba(15,23,42,.62)',quizBg:'#2f3b63',quizCard:'#34406a',quizLine:'#586992',quizText:'#f2f4ff',quizMuted:'#b9c2e2',progressBg:'#dbe4ff',primary:'#4f46e5',primary2:'#6366f1',primarySoft:'#e0e7ff',progress:'#4f46e5'}
         },
         ocean: {
           dark:{bg:'#061723',panel:'#0b2232',panel2:'#0f3047',line:'#1f5372',text:'#e7f8ff',muted:'#9cc8db',notes:'#0d2a3c',notesLine:'#2c6583',chip:'#12344c',chipBorder:'#2a6887',chipActive:'#0ea5e9',chipActiveText:'#ffffff',shadow:'0 10px 30px rgba(0,28,48,.35)',overlay:'rgba(3,16,24,.82)',quizBg:'#0b2740',quizCard:'#15405d',quizLine:'#3d7598',quizText:'#f1fbff',quizMuted:'#b4d9eb',progressBg:'#15364a',primary:'#0ea5e9',primary2:'#38bdf8',primarySoft:'#12364b',progress:'#0ea5e9'},
@@ -2271,45 +2184,36 @@
         rose: {
           dark:{bg:'#20101f',panel:'#31182e',panel2:'#43203f',line:'#7a4371',text:'#fff0fb',muted:'#ddb2d4',notes:'#3a1833',notesLine:'#945486',chip:'#4a2450',chipBorder:'#9854a0',chipActive:'#ec4899',chipActiveText:'#ffffff',shadow:'0 10px 30px rgba(43,7,34,.35)',overlay:'rgba(20,5,18,.82)',quizBg:'#45183c',quizCard:'#5d2451',quizLine:'#9a5d90',quizText:'#fff4fd',quizMuted:'#efcfe9',progressBg:'#532247',primary:'#ec4899',primary2:'#f472b6',primarySoft:'#40203a',progress:'#ec4899'},
           light:{bg:'#fff5fb',panel:'#ffffff',panel2:'#ffe4f3',line:'#efc8df',text:'#4b1f3f',muted:'#8e6680',notes:'#fff7fb',notesLine:'#edd0e1',chip:'#ffffff',chipBorder:'#f0d7e8',chipActive:'#db2777',chipActiveText:'#ffffff',shadow:'0 8px 24px rgba(114,20,76,.10)',overlay:'rgba(88,20,72,.55)',quizBg:'#a03b79',quizCard:'#bb4b8c',quizLine:'#d58ab5',quizText:'#fff6fc',quizMuted:'#f1d8e9',progressBg:'#ffe0f0',primary:'#db2777',primary2:'#ec4899',primarySoft:'#ffe0f0',progress:'#db2777'}
-        },
-        lavender: {
-          dark:{bg:'#18112b',panel:'#25193f',panel2:'#312154',line:'#65539d',text:'#f3eeff',muted:'#c4b8ea',notes:'#2f2148',notesLine:'#7a67b0',chip:'#33244f',chipBorder:'#7c6ab3',chipActive:'#8b5cf6',chipActiveText:'#ffffff',shadow:'0 10px 30px rgba(34,15,60,.35)',overlay:'rgba(20,10,34,.82)',quizBg:'#2d1f4a',quizCard:'#432d68',quizLine:'#74629c',quizText:'#f8f4ff',quizMuted:'#ddd5f3',progressBg:'#3c2b61',primary:'#8b5cf6',primary2:'#c4b5fd',primarySoft:'#2a1d43',progress:'#8b5cf6'},
-          light:{bg:'#f7f3ff',panel:'#ffffff',panel2:'#efe7ff',line:'#d8cdf7',text:'#34205f',muted:'#75679c',notes:'#fbf8ff',notesLine:'#e2d8fa',chip:'#ffffff',chipBorder:'#e4dbf8',chipActive:'#7c3aed',chipActiveText:'#ffffff',shadow:'0 8px 24px rgba(63,38,120,.10)',overlay:'rgba(64,38,120,.52)',quizBg:'#6d56b3',quizCard:'#7f67c5',quizLine:'#a796dc',quizText:'#faf8ff',quizMuted:'#e2ddf6',progressBg:'#e8e0ff',primary:'#7c3aed',primary2:'#8b5cf6',primarySoft:'#efe7ff',progress:'#7c3aed'}
-        },
-        mint: {
-          dark:{bg:'#0d1a1a',panel:'#143030',panel2:'#184040',line:'#2f7770',text:'#ebfffc',muted:'#a9d6cf',notes:'#173636',notesLine:'#3b8e86',chip:'#1b4544',chipBorder:'#4c9e95',chipActive:'#14b8a6',chipActiveText:'#ffffff',shadow:'0 10px 30px rgba(3,34,34,.35)',overlay:'rgba(3,22,22,.82)',quizBg:'#164746',quizCard:'#21625f',quizLine:'#4d9a92',quizText:'#f2fffd',quizMuted:'#c7e6e2',progressBg:'#1e5654',primary:'#14b8a6',primary2:'#2dd4bf',primarySoft:'#15403f',progress:'#14b8a6'},
-          light:{bg:'#f0fdfa',panel:'#ffffff',panel2:'#dff9f3',line:'#bee9e0',text:'#18423d',muted:'#5e817b',notes:'#f6fffc',notesLine:'#d4f1ea',chip:'#ffffff',chipBorder:'#d4eee8',chipActive:'#0f766e',chipActiveText:'#ffffff',shadow:'0 8px 24px rgba(17,89,82,.10)',overlay:'rgba(12,93,86,.52)',quizBg:'#2e7d76',quizCard:'#3f968e',quizLine:'#73b9b2',quizText:'#f6fffe',quizMuted:'#d6f0ed',progressBg:'#d7f6f1',primary:'#0f766e',primary2:'#14b8a6',primarySoft:'#dff9f3',progress:'#0f766e'}
         }
       };
       const selected = paletteThemes[name] || paletteThemes.default;
       const mode = document.body.classList.contains('light') ? 'light' : 'dark';
       const palette = selected[mode];
-      [document.documentElement, document.body].forEach(root => {
-        root.style.setProperty('--bg', palette.bg);
-        root.style.setProperty('--panel', palette.panel);
-        root.style.setProperty('--panel-2', palette.panel2);
-        root.style.setProperty('--line', palette.line);
-        root.style.setProperty('--text', palette.text);
-        root.style.setProperty('--muted', palette.muted);
-        root.style.setProperty('--notes', palette.notes);
-        root.style.setProperty('--notes-line', palette.notesLine);
-        root.style.setProperty('--chip', palette.chip);
-        root.style.setProperty('--chip-border', palette.chipBorder);
-        root.style.setProperty('--chip-active', palette.chipActive);
-        root.style.setProperty('--chip-active-text', palette.chipActiveText);
-        root.style.setProperty('--shadow', palette.shadow);
-        root.style.setProperty('--overlay', palette.overlay);
-        root.style.setProperty('--quiz-bg', palette.quizBg);
-        root.style.setProperty('--quiz-card', palette.quizCard);
-        root.style.setProperty('--quiz-line', palette.quizLine);
-        root.style.setProperty('--quiz-text', palette.quizText);
-        root.style.setProperty('--quiz-muted', palette.quizMuted);
-        root.style.setProperty('--progress-bg', palette.progressBg);
-        root.style.setProperty('--primary', palette.primary);
-        root.style.setProperty('--primary-2', palette.primary2);
-        root.style.setProperty('--primary-soft', palette.primarySoft);
-        root.style.setProperty('--progress-fill', palette.progress);
-      });
+      const root = document.documentElement;
+      root.style.setProperty('--bg', palette.bg);
+      root.style.setProperty('--panel', palette.panel);
+      root.style.setProperty('--panel-2', palette.panel2);
+      root.style.setProperty('--line', palette.line);
+      root.style.setProperty('--text', palette.text);
+      root.style.setProperty('--muted', palette.muted);
+      root.style.setProperty('--notes', palette.notes);
+      root.style.setProperty('--notes-line', palette.notesLine);
+      root.style.setProperty('--chip', palette.chip);
+      root.style.setProperty('--chip-border', palette.chipBorder);
+      root.style.setProperty('--chip-active', palette.chipActive);
+      root.style.setProperty('--chip-active-text', palette.chipActiveText);
+      root.style.setProperty('--shadow', palette.shadow);
+      root.style.setProperty('--overlay', palette.overlay);
+      root.style.setProperty('--quiz-bg', palette.quizBg);
+      root.style.setProperty('--quiz-card', palette.quizCard);
+      root.style.setProperty('--quiz-line', palette.quizLine);
+      root.style.setProperty('--quiz-text', palette.quizText);
+      root.style.setProperty('--quiz-muted', palette.quizMuted);
+      root.style.setProperty('--progress-bg', palette.progressBg);
+      root.style.setProperty('--primary', palette.primary);
+      root.style.setProperty('--primary-2', palette.primary2);
+      root.style.setProperty('--primary-soft', palette.primarySoft);
+      root.style.setProperty('--progress-fill', palette.progress);
       localStorage.setItem(STORAGE_PALETTE, paletteThemes[name] ? name : 'default');
       document.querySelectorAll('[data-theme-palette]').forEach(btn => btn.classList.toggle('active', btn.dataset.themePalette === (paletteThemes[name] ? name : 'default')));
     }
@@ -2393,7 +2297,7 @@
         const rawFlash = JSON.parse(localStorage.getItem(STORAGE_FLASH_STYLE) || "null");
         if(rawFlash && typeof rawFlash === "object"){
           flashStyle.fontSize = clamp(Number(rawFlash.fontSize) || 62, 28, 90);
-          flashStyle.bold = !!rawFlash.bold;
+          flashStyle.bold = rawFlash.bold !== false;
         }
       }catch{}
     }
@@ -2425,37 +2329,6 @@
       if(flashBoldBtn) flashBoldBtn.textContent = `Negrita: ${flashStyle.bold ? "Sí" : "No"}`;
       if(flashFontValue) flashFontValue.textContent = `${flashStyle.fontSize} px`;
       saveStylePrefs();
-    }
-
-    function applyWriteStyle(){
-      const root = document.documentElement;
-      root.style.setProperty("--write-font-size", `${writeStyle.fontSize}px`);
-      root.style.setProperty("--write-input-size", `${Math.max(18, Math.round(writeStyle.fontSize * 0.73))}px`);
-      root.style.setProperty("--write-font-weight", writeStyle.bold ? "800" : "500");
-      if(writeBoldBtn) writeBoldBtn.textContent = `Negrita: ${writeStyle.bold ? "Sí" : "No"}`;
-    }
-
-    function applyQuizStyle(){
-      const root = document.documentElement;
-      root.style.setProperty("--quiz-font-size", `${quizStyle.fontSize}px`);
-      root.style.setProperty("--quiz-option-size", `${Math.max(16, Math.round(quizStyle.fontSize * 0.82))}px`);
-      root.style.setProperty("--quiz-font-weight", quizStyle.bold ? "800" : "500");
-      if(quizBoldBtn) quizBoldBtn.textContent = `Negrita: ${quizStyle.bold ? "Sí" : "No"}`;
-    }
-
-    function applyMixStyle(){
-      const root = document.documentElement;
-      root.style.setProperty("--mix-font-size", `${mixStyle.fontSize}px`);
-      root.style.setProperty("--mix-font-weight", mixStyle.bold ? "800" : "500");
-      if(mixBoldBtn) mixBoldBtn.textContent = `Negrita: ${mixStyle.bold ? "Sí" : "No"}`;
-    }
-
-    function getOrderedHeaders(headers){
-      const preferred = ["coreano","español","Pronunciación","Notas","topic","unit"];
-      const out = [];
-      preferred.forEach(h => { if(headers.includes(h)) out.push(h); });
-      headers.forEach(h => { if(!out.includes(h)) out.push(h); });
-      return out;
     }
 
     function escapeHtml(value){
@@ -2546,6 +2419,15 @@
       speechSynthesis.speak(u);
     }
 
+    function speakAtRate(text, lang, rate){
+      const previousRate = audioRate;
+      setAudioRate(rate);
+      speak(text, lang);
+      audioRate = previousRate;
+      slowAudioBtn.classList.toggle("active", previousRate !== 1.0);
+      normalAudioBtn.classList.toggle("active", previousRate === 1.0);
+    }
+
     function getFilteredData(){
       const q = searchInput.value.trim().toLowerCase();
       return allData.filter(row => {
@@ -2623,10 +2505,10 @@
     }
 
     function getDisplayHeaders(){
-      if(excelHeaders.length) return getOrderedHeaders(excelHeaders);
+      if(excelHeaders.length) return excelHeaders;
       const fromRows = new Set();
       allData.forEach(row => Object.keys(row._raw || {}).forEach(key => fromRows.add(key)));
-      return getOrderedHeaders([...fromRows]);
+      return [...fromRows];
     }
 
     function syncMappedFields(row){
@@ -2789,7 +2671,7 @@
 
         const headerSet = new Set();
         json.forEach(row => Object.keys(row).forEach(key => headerSet.add(key)));
-        const headers = getOrderedHeaders([...headerSet]);
+        const headers = [...headerSet];
         excelHeaders = headers.slice();
         detectedColumns = detectColumns(json, headers);
 
@@ -3015,9 +2897,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       const saved = localStorage.getItem(STORAGE_THEME);
       if(saved === "light"){
         document.body.classList.add("light");
-      }else{
-        document.body.classList.remove("light");
-        if(!saved) localStorage.setItem(STORAGE_THEME, "dark");
       }
       themeBtn.textContent = document.body.classList.contains("light") ? "🌙" : "☀";
     }
@@ -3143,9 +3022,8 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       if(row) studyVisited.add(row.id);
       studyInner.classList.remove("flip");
       updateStudyVisual(row);
-      const frontIsKo = studyFrontMode === "ko";
-      studyFrontText.textContent = frontIsKo ? (row.coreano || "—") : (row.español || "—");
-      studyBackText.textContent = frontIsKo ? (row.español || "—") : (row.coreano || "—");
+      studyFrontText.textContent = row.coreano || "—";
+      studyBackText.textContent = row.español || "—";
       studyPron.textContent = row.Pronunciación || "—";
       studyNotes.textContent = row.Notas || "—";
       studyStats.textContent = `${studyIndex + 1} / ${studyData.length}`;
@@ -3154,10 +3032,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       studyStarBtnBack.textContent = icon;
       studyOnlyStarBtn.classList.toggle("active", currentPracticeSource === "star");
       studyOnlyStarBtn.textContent = currentPracticeSource === "star" ? "Viendo ⭐" : "Practicar ⭐";
-      if(studyFaceToggleBtn){
-        studyFaceToggleBtn.textContent = frontIsKo ? "KO → ES" : "ES → KO";
-        studyFaceToggleBtn.classList.toggle("active", !frontIsKo);
-      }
       const isFirst = studyIndex === 0;
       const isLast = studyIndex === studyData.length - 1;
       studyPrevBtn.disabled = isFirst;
@@ -3194,16 +3068,20 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
 
     studyPlayFront.addEventListener("click", () => {
       const row = studyData[studyIndex];
-      if(!row) return;
-      const frontIsKo = studyFrontMode === "ko";
-      speak(frontIsKo ? row.coreano : row.español, frontIsKo ? "ko-KR" : "es-ES");
+      if(row) speakAtRate(row.coreano, "ko-KR", 1.0);
+    });
+    studyPlayFrontSlow.addEventListener("click", () => {
+      const row = studyData[studyIndex];
+      if(row) speakAtRate(row.coreano, "ko-KR", 0.65);
     });
 
     studyPlayBack.addEventListener("click", () => {
       const row = studyData[studyIndex];
-      if(!row) return;
-      const frontIsKo = studyFrontMode === "ko";
-      speak(frontIsKo ? row.español : row.coreano, frontIsKo ? "es-ES" : "ko-KR");
+      if(row) speakAtRate(row.español, "es-ES", 1.0);
+    });
+    studyPlayBackSlow.addEventListener("click", () => {
+      const row = studyData[studyIndex];
+      if(row) speakAtRate(row.español, "es-ES", 0.65);
     });
 
     studyFlipBtn.addEventListener("click", () => studyInner.classList.toggle("flip"));
@@ -3231,27 +3109,11 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
 
     studyShuffleBtn.addEventListener("click", () => {
       if(!studyData.length) return;
-      const currentId = studyData[studyIndex]?.id;
-      const shuffled = shuffleArray(studyData);
-      const changed = shuffled.some((row, index) => row.id !== studyData[index]?.id);
-      studyData = changed ? shuffled : shuffleArray(studyData.slice().reverse());
-      studyIndex = Math.max(0, studyData.findIndex(row => row.id === currentId));
-      if(studyIndex < 0) studyIndex = 0;
+      studyData = shuffleArray(studyData);
+      studyIndex = 0;
       renderStudyCard();
     });
 
-    if(studyFaceToggleBtn){
-      studyFaceToggleBtn.addEventListener("click", () => {
-        studyFrontMode = studyFrontMode === "ko" ? "es" : "ko";
-        renderStudyCard();
-      });
-    }
-    if(studyEditBtn){
-      studyEditBtn.addEventListener("click", () => {
-        const row = studyData[studyIndex];
-        if(row) openEditRow(row.id);
-      });
-    }
     closeStudyBtn.addEventListener("click", closeStudyMode);
     studyArrowPrev.addEventListener("click", prevStudyCard);
     studyArrowNext.addEventListener("click", nextStudyCard);
@@ -3304,6 +3166,8 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         writeStarBtn.textContent = "☆";
         writePrevBtn.disabled = true;
         writeNextBtn.disabled = true;
+        writeArrowPrev.disabled = true;
+        writeArrowNext.disabled = true;
         writePrevBtn.style.opacity = ".5";
         writeNextBtn.style.opacity = ".5";
         writeNextBtn.textContent = "Siguiente →";
@@ -3312,14 +3176,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       }
 
       const row = writeData[writeIndex];
-      const esToKo = writeDirection === "es-to-ko";
-      if(writeLabel) writeLabel.textContent = esToKo ? "Escribe en coreano" : "Escribe en español";
-      writePrompt.textContent = esToKo ? (row.español || "—") : (row.coreano || "—");
-      writeInput.placeholder = esToKo ? "Escribe aquí en coreano" : "Escribe aquí en español";
-      if(writeDirectionBtn){
-        writeDirectionBtn.textContent = esToKo ? "ES → KO" : "KO → ES";
-        writeDirectionBtn.classList.toggle("active", !esToKo);
-      }
+      writePrompt.textContent = row.español || "—";
       writeStats.textContent = `${writeIndex + 1} / ${writeData.length}`;
       writeInput.value = "";
       writeResult.textContent = "";
@@ -3327,6 +3184,8 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       writeStarBtn.textContent = starredWords.has(row.id) ? "⭐" : "☆";
       writePrevBtn.disabled = writeIndex === 0;
       writeNextBtn.disabled = false;
+      writeArrowPrev.disabled = writeIndex === 0;
+      writeArrowNext.disabled = false;
       writePrevBtn.style.opacity = writePrevBtn.disabled ? ".5" : "1";
       writeNextBtn.style.opacity = "1";
       writeNextBtn.textContent = writeIndex >= writeData.length - 1 ? "✅ Finalizar" : "Siguiente →";
@@ -3341,7 +3200,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       if(!writeData.length) return;
       const row = writeData[writeIndex];
       const answer = normalizeAnswer(writeInput.value);
-      const correct = normalizeAnswer(writeDirection === "es-to-ko" ? row.coreano : row.español);
+      const correct = normalizeAnswer(row.coreano);
       const ok = !!answer && answer === correct;
       writeAnswered.set(row.id, ok);
       if(ok){
@@ -3350,7 +3209,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         writeResult.className = "write-result good";
       }else{
         wrongWords.add(row.id);
-        writeResult.textContent = `❌ Incorrecto · Correcto: ${writeDirection === "es-to-ko" ? row.coreano : row.español}`;
+        writeResult.textContent = `❌ Incorrecto · Correcto: ${row.coreano}`;
         writeResult.className = "write-result bad";
       }
       persistLists();
@@ -3387,28 +3246,13 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     });
     writePrevBtn.addEventListener("click", prevWriteCard);
     writeNextBtn.addEventListener("click", nextWriteCard);
+    writeArrowPrev.addEventListener("click", prevWriteCard);
+    writeArrowNext.addEventListener("click", nextWriteCard);
     writeStarBtn.addEventListener("click", () => {
       const row = writeData[writeIndex];
       toggleStar(row);
       renderWriteCard();
     });
-    if(writeDirectionBtn){
-      writeDirectionBtn.addEventListener("click", () => {
-        writeDirection = writeDirection === "es-to-ko" ? "ko-to-es" : "es-to-ko";
-        renderWriteCard();
-      });
-    }
-    if(writePlayBtn){
-      writePlayBtn.addEventListener("click", () => {
-        const row = writeData[writeIndex];
-        if(!row) return;
-        speak(writeDirection === "es-to-ko" ? row.coreano : row.español, writeDirection === "es-to-ko" ? "ko-KR" : "es-ES");
-      });
-    }
-    if(writeShuffleBtn){ writeShuffleBtn.addEventListener("click", shuffleWriteDeck); }
-    if(writeBoldBtn){ writeBoldBtn.addEventListener("click", () => { writeStyle.bold = !writeStyle.bold; applyWriteStyle(); }); }
-    if(writeFontDownBtn){ writeFontDownBtn.addEventListener("click", () => { writeStyle.fontSize = clamp(writeStyle.fontSize - 2, 20, 56); applyWriteStyle(); }); }
-    if(writeFontUpBtn){ writeFontUpBtn.addEventListener("click", () => { writeStyle.fontSize = clamp(writeStyle.fontSize + 2, 20, 56); applyWriteStyle(); }); }
     closeWriteBtn.addEventListener("click", closeWriteMode);
 
     /* ---------- multiple ---------- */
@@ -3417,25 +3261,9 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       if(quizIndex >= quizData.length) quizIndex = Math.max(0, quizData.length - 1);
     }
 
-    function shuffleWriteDeck(){
-      if(!writeData.length) return;
-      writeData = shuffleArray(writeData);
-      writeIndex = 0;
-      writeAnswered = new Map();
-      renderWriteCard();
-    }
-
-    function shuffleQuizDeck(){
-      if(!quizData.length) return;
-      quizData = shuffleArray(quizData);
-      quizIndex = 0;
-      quizAnsweredMap = new Map();
-      renderQuizCard();
-    }
-
-    function openQuizMode(source = null, modeType = "multiple"){
+    function openQuizMode(source = null, mode = "multiple"){
       currentPracticeSource = source;
-      quizModeType = modeType;
+      quizModeType = mode;
       quizIndex = 0;
       quizAnsweredMap = new Map();
       buildQuizDeck();
@@ -3455,33 +3283,32 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       quizOverlay.classList.remove("open");
       currentPracticeSource = null;
       quizModeType = "multiple";
-      if(quizDirectionBtn) quizDirectionBtn.style.display = "";
     }
 
     function getQuizOptions(correctRow){
-      const pool = getRowsFromSource(currentPracticeSource).filter(r => r.id !== correctRow.id && (quizModeType === "listen" ? r.español : r.coreano));
+      const pool = getRowsFromSource(currentPracticeSource).filter(r => r.id !== correctRow.id && r.coreano);
       const shuffled = shuffleArray(pool).slice(0, 3);
       return shuffleArray([correctRow, ...shuffled]);
+    }
+
+    function playQuizPrompt(rate = 1.0){
+      const row = quizData[quizIndex];
+      if(row) speakAtRate(row.coreano, "ko-KR", rate);
     }
 
     function renderQuizCard(){
       buildQuizDeck();
       if(!quizData.length){
+        quizHeaderLabel.textContent = quizModeType === "listen" ? "Escuchar" : "Definición";
         quizDefinition.textContent = "No hay palabras";
         quizOptions.innerHTML = "";
         quizCounter.textContent = "0 de 0";
         quizPrevBtn.disabled = true;
         quizNextBtn.disabled = true;
+        quizArrowPrev.disabled = true;
+        quizArrowNext.disabled = true;
         quizPrevBtn.style.opacity = ".5";
         quizNextBtn.style.opacity = ".5";
-        if(quizArrowPrev){
-          quizArrowPrev.disabled = true;
-          quizArrowPrev.style.opacity = ".45";
-        }
-        if(quizArrowNext){
-          quizArrowNext.disabled = true;
-          quizArrowNext.style.opacity = ".45";
-        }
         quizNextBtn.textContent = "Siguiente →";
         updateProgress(quizProgressFill, quizProgressText, 0, 0);
         return;
@@ -3490,26 +3317,17 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       quizAnswered = false;
       const row = quizData[quizIndex];
       const options = getQuizOptions(row);
-
-      const esToKo = quizDirection === "es-to-ko";
       const isListenMode = quizModeType === "listen";
-      if(quizPromptLabel) quizPromptLabel.textContent = isListenMode ? "Escuchar" : (esToKo ? "Definición" : "Palabra en coreano");
-      if(quizDirectionBtn){
-        quizDirectionBtn.style.display = isListenMode ? "none" : "inline-flex";
-        quizDirectionBtn.textContent = esToKo ? "ES → KO" : "KO → ES";
-        quizDirectionBtn.classList.toggle("active", !esToKo);
-      }
-      if(quizInlineSpeakBtn){
-        quizInlineSpeakBtn.style.display = isListenMode ? "inline-flex" : "none";
-      }
-      quizDefinition.textContent = isListenMode ? "Escucha y elige la opción correcta" : (esToKo ? row.español : row.coreano);
+
+      quizHeaderLabel.textContent = isListenMode ? "Escuchar" : "Definición";
+      quizDefinition.textContent = isListenMode ? "Pulsa el audio y elige la opción correcta" : row.español;
       quizCounter.textContent = `${quizIndex + 1} de ${quizData.length}`;
       quizStarBtn.textContent = starredWords.has(row.id) ? "⭐" : "☆";
       updateProgress(quizProgressFill, quizProgressText, quizIndex, quizData.length);
 
       quizOptions.innerHTML = options.map(opt => `
         <button class="quiz-option" data-id="${opt.id}" data-correct="${opt.id === row.id ? "1" : "0"}">
-          ${escapeHtml(isListenMode ? opt.español : (esToKo ? opt.coreano : opt.español))}
+          ${escapeHtml(opt.coreano)}
         </button>
       `).join("");
 
@@ -3535,30 +3353,17 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
 
       quizPrevBtn.disabled = quizIndex === 0;
       quizNextBtn.disabled = false;
+      quizArrowPrev.disabled = quizIndex === 0;
+      quizArrowNext.disabled = false;
       quizPrevBtn.style.opacity = quizPrevBtn.disabled ? ".5" : "1";
       quizNextBtn.style.opacity = "1";
-      if(quizArrowPrev){
-        quizArrowPrev.disabled = quizPrevBtn.disabled;
-        quizArrowPrev.style.opacity = quizPrevBtn.disabled ? ".45" : "1";
-      }
-      if(quizArrowNext){
-        quizArrowNext.disabled = false;
-        quizArrowNext.style.opacity = "1";
-      }
       quizNextBtn.textContent = quizIndex >= quizData.length - 1 ? "✅ Finalizar" : "Siguiente →";
     }
 
-    function playQuizPrompt(){
-      const row = quizData[quizIndex];
-      if(!row) return;
-      const isListenMode = quizModeType === "listen";
-      const esToKo = quizDirection === "es-to-ko";
-      if(isListenMode) speak(row.coreano, "ko-KR");
-      else speak(esToKo ? row.español : row.coreano, esToKo ? "es-ES" : "ko-KR");
-    }
-
-    quizSpeakBtn.addEventListener("click", playQuizPrompt);
-    if(quizInlineSpeakBtn) quizInlineSpeakBtn.addEventListener("click", playQuizPrompt);
+    quizSpeakBtn.addEventListener("click", () => playQuizPrompt(1.0));
+    quizSpeakSlowBtn.addEventListener("click", () => playQuizPrompt(0.65));
+    quizInlineSpeakBtn.addEventListener("click", () => playQuizPrompt(1.0));
+    quizInlineSpeakSlowBtn.addEventListener("click", () => playQuizPrompt(0.65));
 
     quizStarBtn.addEventListener("click", () => {
       const row = quizData[quizIndex];
@@ -3566,25 +3371,24 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       renderQuizCard();
     });
 
-    if(quizDirectionBtn){ quizDirectionBtn.addEventListener("click", () => { quizDirection = quizDirection === "es-to-ko" ? "ko-to-es" : "es-to-ko"; renderQuizCard(); }); }
-    if(quizShuffleBtn){ quizShuffleBtn.addEventListener("click", shuffleQuizDeck); }
-    if(quizBoldBtn){ quizBoldBtn.addEventListener("click", () => { quizStyle.bold = !quizStyle.bold; applyQuizStyle(); }); }
-    if(quizFontDownBtn){ quizFontDownBtn.addEventListener("click", () => { quizStyle.fontSize = clamp(quizStyle.fontSize - 2, 18, 42); applyQuizStyle(); }); }
-    if(quizFontUpBtn){ quizFontUpBtn.addEventListener("click", () => { quizStyle.fontSize = clamp(quizStyle.fontSize + 2, 18, 42); applyQuizStyle(); }); }
-
     quizPrevBtn.addEventListener("click", () => {
       if(quizIndex === 0) return;
       quizIndex--;
       renderQuizCard();
     });
-    if(quizArrowPrev) quizArrowPrev.addEventListener("click", () => quizPrevBtn.click());
+    quizArrowPrev.addEventListener("click", () => {
+      if(quizIndex === 0) return;
+      quizIndex--;
+      renderQuizCard();
+    });
 
     function finishQuizMode(){
       const total = quizData.length || 0;
       const correct = [...quizAnsweredMap.values()].filter(Boolean).length;
       const percent = total ? Math.round((correct / total) * 100) : 0;
+      const modeLabel = quizModeType === "listen" ? "Escuchar" : "Multiple";
       closeQuizMode();
-      showCelebration(quizModeType === "listen" ? "Escuchar" : "Multiple", percent);
+      showCelebration(modeLabel, percent);
     }
 
     quizNextBtn.addEventListener("click", () => {
@@ -3596,7 +3400,15 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       quizIndex++;
       renderQuizCard();
     });
-    if(quizArrowNext) quizArrowNext.addEventListener("click", () => quizNextBtn.click());
+    quizArrowNext.addEventListener("click", () => {
+      if(!quizData.length) return;
+      if(quizIndex >= quizData.length - 1){
+        finishQuizMode();
+        return;
+      }
+      quizIndex++;
+      renderQuizCard();
+    });
 
     closeQuizBtn.addEventListener("click", closeQuizMode);
 
@@ -3722,10 +3534,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       renderMixGrid();
     });
 
-    if(mixBoldBtn){ mixBoldBtn.addEventListener("click", () => { mixStyle.bold = !mixStyle.bold; applyMixStyle(); renderMixGrid(); }); }
-    if(mixFontDownBtn){ mixFontDownBtn.addEventListener("click", () => { mixStyle.fontSize = clamp(mixStyle.fontSize - 1, 14, 28); applyMixStyle(); renderMixGrid(); }); }
-    if(mixFontUpBtn){ mixFontUpBtn.addEventListener("click", () => { mixStyle.fontSize = clamp(mixStyle.fontSize + 1, 14, 28); applyMixStyle(); renderMixGrid(); }); }
-    if(mixShuffleBtn){ mixShuffleBtn.addEventListener("click", startMix); }
     mixResetBtn.addEventListener("click", startMix);
     closeMixBtn.addEventListener("click", closeMixMode);
 

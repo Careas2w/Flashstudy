@@ -1,3 +1,27 @@
-# 한국어 말 · GitHub Pages
+# Flashcards Coreano - GitHub Pages
 
-Paquete listo para subir a GitHub Pages con las mejoras nuevas: limpieza del texto de portada, temas de color corregidos también en modo día, negrita desactivada por defecto en los modos de estudio, modo Escuchar, texto mayor en Pairs y ajustes visuales del panel de navegación.
+Este paquete está listo para subirlo a GitHub y publicarlo gratis con GitHub Pages.
+
+## Archivos
+- `index.html`: tu app principal
+- `manifest.webmanifest`: configuración para instalar la web en pantalla de inicio
+- `sw.js`: service worker para soporte PWA básico
+- `icons/`: iconos de la app
+- `.nojekyll`: evita procesado innecesario en GitHub Pages
+
+## Despliegue rápido
+1. Crea un repositorio nuevo en GitHub.
+2. Sube todos estos archivos tal como están.
+3. Ve a **Settings > Pages**.
+4. En **Build and deployment**, elige **Deploy from a branch**.
+5. En **Branch**, elige **main** y carpeta **/(root)**.
+6. Guarda.
+7. Espera 1-3 minutos hasta que GitHub publique tu web.
+
+Tu URL será parecida a:
+`https://TU_USUARIO.github.io/NOMBRE_DEL_REPO/`
+
+## Añadir a pantalla de inicio
+- iPhone/iPad (Safari): Compartir > Añadir a pantalla de inicio
+- Android (Chrome): menú > Instalar app o Añadir a pantalla principal
+- PC (Chrome/Edge): icono de instalar en la barra de direcciones o menú > Instalar app
