@@ -2528,6 +2528,23 @@
       return candidates.sort((a,b) => scoreVoice(b) - scoreVoice(a))[0] || null;
     }
 
+
+    function normalizeSpeechText(text, lang){
+      let clean = String(text ?? "").trim();
+      if(!clean) return "";
+      clean = clean
+        .replace(/\s*\(([^)]+)\)\s*/g, ", $1 ")
+        .replace(/\s*\[([^\]]+)\]\s*/g, ", $1 ")
+        .replace(/\s*[\/|]\s*/g, ", ")
+        .replace(/\s+/g, " ")
+        .replace(/\s+,/g, ",")
+        .trim();
+      if(lang === "ko-KR"){
+        clean = clean.replace(/,+/g, ", ");
+      }
+      return clean;
+    }
+
     function speak(text, lang){
       const clean = normalizeSpeechText(text, lang);
       if(!clean) return;
