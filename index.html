@@ -2017,12 +2017,14 @@
     const STORAGE_TABLE_STYLE = "flashcards-table-style-v1";
     const STORAGE_FLASH_STYLE = "flashcards-study-style-v2";
     const STORAGE_PALETTE = "flashcards-theme-palette-v1";
+    const STORAGE_AUDIO_MODE = "flashcards-audio-mode-v2";
+    const STORAGE_VOICE_PREFS = "flashcards-voice-prefs-v2";
 
     let allData = [];
     let excelHeaders = [];
     let selectedTopics = new Set();
     let collapsedUnits = new Set();
-    let audioRate = 1.0;
+    let audioRate = loadStoredAudioRate();
     let currentEditRowId = null;
     let tableStyle = { fontSize: 13, bold: true };
     let flashStyle = { fontSize: 62, bold: false };
@@ -2513,47 +2515,143 @@
       return copy;
     }
 
+    const voiceChoiceCache = loadVoiceChoiceCache();
+    let voiceWarmupDone = false;
+
+    function loadStoredAudioRate(){
+      const saved = Number(localStorage.getItem(STORAGE_AUDIO_MODE));
+      if(saved && Number.isFinite(saved)) return saved;
+      return 0.92;
+    }
+
+    function persistAudioRate(){
+      localStorage.setItem(STORAGE_AUDIO_MODE, String(audioRate));
+    }
+
+    function loadVoiceChoiceCache(){
+      try{
+        return JSON.parse(localStorage.getItem(STORAGE_VOICE_PREFS) || "{}");
+      }catch(_err){
+        return {};
+      }
+    }
+
+    function persistVoiceChoiceCache(){
+      localStorage.setItem(STORAGE_VOICE_PREFS, JSON.stringify(voiceChoiceCache));
+    }
+
+    function normalizeSpeechText(text, lang){
+      let clean = String(text || "").trim();
+      if(!clean) return "";
+      clean = clean
+        .replace(/[\u200B-\u200D\uFEFF]/g, "")
+        .replace(/[|/]+/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      if(lang === "ko-KR"){
+        clean = clean
+          .replace(/\((.*?)\)/g, " ")
+          .replace(/\[(.*?)\]/g, " ")
+          .replace(/~/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
+      }
+      return clean;
+    }
+
+    function getAudioProfile(lang, requestedRate = null){
+      const isSlowMode = (requestedRate ?? audioRate) < 0.85;
+      if(lang === "ko-KR"){
+        return {
+          rate: requestedRate ?? (isSlowMode ? 0.72 : 0.92),
+          pitch: isSlowMode ? 0.98 : 1.03
+        };
+      }
+      return {
+        rate: requestedRate ?? (isSlowMode ? 0.8 : 0.98),
+        pitch: 1
+      };
+    }
+
     function setAudioRate(rate){
       audioRate = rate;
-      slowAudioBtn.classList.toggle("active", rate !== 1.0);
-      normalAudioBtn.classList.toggle("active", rate === 1.0);
+      persistAudioRate();
+      slowAudioBtn.classList.toggle("active", rate < 0.85);
+      normalAudioBtn.classList.toggle("active", rate >= 0.85);
+    }
+
+    function loadVoicesWithRetry(attempt = 0){
+      if(!("speechSynthesis" in window)) return [];
+      const voices = speechSynthesis.getVoices() || [];
+      if(voices.length || attempt >= 8) return voices;
+      setTimeout(() => loadVoicesWithRetry(attempt + 1), 150 + attempt * 80);
+      return voices;
+    }
+
+    function warmupVoiceEngine(){
+      if(voiceWarmupDone || !("speechSynthesis" in window)) return;
+      voiceWarmupDone = true;
+      loadVoicesWithRetry();
+      try{
+        const utterance = new SpeechSynthesisUtterance(" ");
+        utterance.volume = 0;
+        utterance.rate = 1;
+        speechSynthesis.speak(utterance);
+        speechSynthesis.cancel();
+      }catch(_err){}
     }
 
     function pickPreferredVoice(lang){
-      const voices = speechSynthesis.getVoices() || [];
+      const voices = loadVoicesWithRetry();
       const normalizedLang = String(lang || "").toLowerCase();
       const langPrefix = normalizedLang.slice(0,2);
       const candidates = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith(langPrefix));
       if(!candidates.length) return null;
 
-      const preferredTerms = ["google", "microsoft", "natural", "enhanced", "premium", "neural", "online", "samsung", "apple", "eloquence", "cloud", "female", "high quality"];
-      const avoidTerms = ["compact", "edded", "espeak", "festival", "robot"];
+      const cachedName = voiceChoiceCache[normalizedLang];
+      if(cachedName){
+        const cachedVoice = candidates.find(v => (v.name || "") === cachedName);
+        if(cachedVoice) return cachedVoice;
+      }
+
+      const preferredTerms = ["google", "microsoft", "natural", "enhanced", "premium", "neural", "online", "samsung", "apple", "eloquence", "cloud", "female", "high quality", "siri", "superior"];
+      const avoidTerms = ["compact", "espeak", "festival", "robot", "legacy", "classic"];
       const scoreVoice = (voice) => {
         const name = `${voice.name || ""} ${voice.voiceURI || ""}`.toLowerCase();
         let score = 0;
-        if((voice.lang || "").toLowerCase() === normalizedLang) score += 12;
+        if((voice.lang || "").toLowerCase() === normalizedLang) score += 14;
+        if((voice.lang || "").toLowerCase().startsWith(langPrefix)) score += 4;
         if(voice.default) score += 8;
-        preferredTerms.forEach(term => { if(name.includes(term)) score += 4; });
-        avoidTerms.forEach(term => { if(name.includes(term)) score -= 6; });
+        preferredTerms.forEach(term => { if(name.includes(term)) score += 5; });
+        avoidTerms.forEach(term => { if(name.includes(term)) score -= 7; });
         if(name.includes("female") || name.includes("woman")) score += 1;
+        if(name.includes("ko-kr")) score += 2;
         return score;
       };
 
-      return candidates.sort((a,b) => scoreVoice(b) - scoreVoice(a))[0] || null;
+      const chosen = candidates.slice().sort((a,b) => scoreVoice(b) - scoreVoice(a))[0] || null;
+      if(chosen){
+        voiceChoiceCache[normalizedLang] = chosen.name || "";
+        persistVoiceChoiceCache();
+      }
+      return chosen;
     }
 
     function speak(text, lang, rateOverride = null){
-      const clean = String(text || "").trim();
+      const clean = normalizeSpeechText(text, lang);
       if(!clean) return;
       if(!("speechSynthesis" in window)){
         alert("Tu navegador no soporta síntesis de voz.");
         return;
       }
+      warmupVoiceEngine();
       speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(clean);
       u.lang = lang;
-      u.rate = rateOverride ?? audioRate;
-      u.pitch = lang === "ko-KR" ? 1.02 : 1;
+      const profile = getAudioProfile(lang, rateOverride);
+      u.rate = profile.rate;
+      u.pitch = profile.pitch;
       u.volume = 1;
       const preferred = pickPreferredVoice(lang);
       if(preferred) u.voice = preferred;
@@ -3874,8 +3972,8 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     addRowBtn.addEventListener("click", openAddRow);
     downloadEditedBtn.addEventListener("click", () => exportRowsToExcel(getFilteredData(), "excel_editado_resaltado.xlsx", true));
 
-    slowAudioBtn.addEventListener("click", () => setAudioRate(0.65));
-    normalAudioBtn.addEventListener("click", () => setAudioRate(1.0));
+    slowAudioBtn.addEventListener("click", () => setAudioRate(0.72));
+    normalAudioBtn.addEventListener("click", () => setAudioRate(0.92));
 
     flashcardsBtn.addEventListener("click", () => openStudyMode(null, "flashcards"));
     writeBtn.addEventListener("click", () => openWriteMode());
@@ -3996,8 +4094,14 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       }
     });
     if("speechSynthesis" in window){
-      speechSynthesis.getVoices();
-      speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+      setAudioRate(audioRate);
+      loadVoicesWithRetry();
+      speechSynthesis.onvoiceschanged = () => {
+        loadVoicesWithRetry();
+      };
+      ["pointerdown","touchstart","keydown"].forEach(evt => {
+        window.addEventListener(evt, warmupVoiceEngine, { once:true, passive:true });
+      });
     }
 
     async function refreshAppNow(){
