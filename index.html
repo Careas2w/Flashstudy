@@ -1771,8 +1771,7 @@
               <div class="study-word" id="studyFrontText">—</div>
             </div>
             <div class="card-actions">
-              <button class="action-btn" id="studyPlayFront">🔊 Normal</button>
-              <button class="action-btn secondary" id="studyPlayFrontSlow">🐢 Lento</button>
+              <button class="action-btn" id="studyPlayFront">🔊 Reproducir</button>
               <button class="action-btn secondary" id="studyFlipBtn">Girar</button>
               <button class="action-btn ghost" id="studyStarBtn">☆</button>
             </div>
@@ -1783,8 +1782,7 @@
               <div class="study-word backtext" id="studyBackText">—</div>
             </div>
             <div class="card-actions">
-              <button class="action-btn" id="studyPlayBack">🔊 Normal</button>
-              <button class="action-btn secondary" id="studyPlayBackSlow">🐢 Lento</button>
+              <button class="action-btn" id="studyPlayBack">🔊 Reproducir</button>
               <button class="action-btn secondary" id="studyFlipBtnBack">Girar</button>
               <button class="action-btn ghost" id="studyStarBtnBack">☆</button>
             </div>
@@ -1841,15 +1839,11 @@
         <div class="progress-text" id="writeProgressText">0%</div>
       </div>
 
-      <div class="study-card-shell">
-        <button class="study-nav-arrow left" id="writeArrowPrev" aria-label="Palabra anterior">&lt;</button>
-        <div class="write-card">
-          <div class="write-label" id="writeLabel">Escribe en coreano</div>
-          <div class="write-prompt" id="writePrompt">—</div>
-          <input class="write-input" id="writeInput" autocomplete="off" placeholder="Escribe aquí en coreano" />
-          <div class="write-result" id="writeResult"></div>
-        </div>
-        <button class="study-nav-arrow right" id="writeArrowNext" aria-label="Siguiente palabra">&gt;</button>
+      <div class="write-card">
+        <div class="write-label" id="writeLabel">Escribe en coreano</div>
+        <div class="write-prompt" id="writePrompt">—</div>
+        <input class="write-input" id="writeInput" autocomplete="off" placeholder="Escribe aquí en coreano" />
+        <div class="write-result" id="writeResult"></div>
       </div>
 
       <div class="study-bottom">
@@ -1868,8 +1862,7 @@
       <div class="quiz-top">
         <div class="quiz-meta">
           <span id="quizPromptLabel">Definición</span>
-          <button class="icon-btn" id="quizSpeakBtn" title="Reproducir normal">🔊</button>
-          <button class="icon-btn" id="quizSpeakSlowBtn" title="Reproducir lento">🐢</button>
+          <button class="icon-btn" id="quizSpeakBtn" title="Reproducir pista">🔊</button>
           <button class="icon-btn" id="quizStarBtn" title="Marcada">☆</button>
         </div>
         <div class="quiz-meta">
@@ -1894,8 +1887,7 @@
         <div class="quiz-prompt">Definición</div>
         <div class="quiz-definition-row">
           <div class="quiz-definition" id="quizDefinition">—</div>
-          <button class="quiz-inline-play" id="quizInlineSpeakBtn" title="Reproducir normal">🔊</button>
-          <button class="quiz-inline-play" id="quizInlineSpeakSlowBtn" title="Reproducir lento">🐢</button>
+          <button class="quiz-inline-play" id="quizInlineSpeakBtn" title="Reproducir pista">🔊</button>
         </div>
       </div>
 
@@ -2017,14 +2009,12 @@
     const STORAGE_TABLE_STYLE = "flashcards-table-style-v1";
     const STORAGE_FLASH_STYLE = "flashcards-study-style-v2";
     const STORAGE_PALETTE = "flashcards-theme-palette-v1";
-    const STORAGE_AUDIO_MODE = "flashcards-audio-mode-v2";
-    const STORAGE_VOICE_PREFS = "flashcards-voice-prefs-v2";
 
     let allData = [];
     let excelHeaders = [];
     let selectedTopics = new Set();
     let collapsedUnits = new Set();
-    let audioRate = loadStoredAudioRate();
+    let audioRate = 1.0;
     let currentEditRowId = null;
     let tableStyle = { fontSize: 13, bold: true };
     let flashStyle = { fontSize: 62, bold: false };
@@ -2123,9 +2113,7 @@
     const studyPron = document.getElementById("studyPron");
     const studyNotes = document.getElementById("studyNotes");
     const studyPlayFront = document.getElementById("studyPlayFront");
-    const studyPlayFrontSlow = document.getElementById("studyPlayFrontSlow");
     const studyPlayBack = document.getElementById("studyPlayBack");
-    const studyPlayBackSlow = document.getElementById("studyPlayBackSlow");
     const studyFlipBtn = document.getElementById("studyFlipBtn");
     const studyFlipBtnBack = document.getElementById("studyFlipBtnBack");
     const studyPrevBtn = document.getElementById("studyPrevBtn");
@@ -2147,8 +2135,6 @@
     const writeResult = document.getElementById("writeResult");
     const writePrevBtn = document.getElementById("writePrevBtn");
     const writeNextBtn = document.getElementById("writeNextBtn");
-    const writeArrowPrev = document.getElementById("writeArrowPrev");
-    const writeArrowNext = document.getElementById("writeArrowNext");
     const checkWriteBtn = document.getElementById("checkWriteBtn");
     const writeStarBtn = document.getElementById("writeStarBtn");
     const writeDirectionBtn = document.getElementById("writeDirectionBtn");
@@ -2166,12 +2152,10 @@
     const quizDefinition = document.getElementById("quizDefinition");
     const quizOptions = document.getElementById("quizOptions");
     const quizSpeakBtn = document.getElementById("quizSpeakBtn");
-    const quizSpeakSlowBtn = document.getElementById("quizSpeakSlowBtn");
     const quizStarBtn = document.getElementById("quizStarBtn");
     const quizDirectionBtn = document.getElementById("quizDirectionBtn");
     const quizShuffleBtn = document.getElementById("quizShuffleBtn");
     const quizInlineSpeakBtn = document.getElementById("quizInlineSpeakBtn");
-    const quizInlineSpeakSlowBtn = document.getElementById("quizInlineSpeakSlowBtn");
     const quizArrowPrev = document.getElementById("quizArrowPrev");
     const quizArrowNext = document.getElementById("quizArrowNext");
     const quizBoldBtn = document.getElementById("quizBoldBtn");
@@ -2515,143 +2499,47 @@
       return copy;
     }
 
-    const voiceChoiceCache = loadVoiceChoiceCache();
-    let voiceWarmupDone = false;
-
-    function loadStoredAudioRate(){
-      const saved = Number(localStorage.getItem(STORAGE_AUDIO_MODE));
-      if(saved && Number.isFinite(saved)) return saved;
-      return 0.92;
-    }
-
-    function persistAudioRate(){
-      localStorage.setItem(STORAGE_AUDIO_MODE, String(audioRate));
-    }
-
-    function loadVoiceChoiceCache(){
-      try{
-        return JSON.parse(localStorage.getItem(STORAGE_VOICE_PREFS) || "{}");
-      }catch(_err){
-        return {};
-      }
-    }
-
-    function persistVoiceChoiceCache(){
-      localStorage.setItem(STORAGE_VOICE_PREFS, JSON.stringify(voiceChoiceCache));
-    }
-
-    function normalizeSpeechText(text, lang){
-      let clean = String(text || "").trim();
-      if(!clean) return "";
-      clean = clean
-        .replace(/[\u200B-\u200D\uFEFF]/g, "")
-        .replace(/[|/]+/g, " ")
-        .replace(/\s+/g, " ")
-        .trim();
-
-      if(lang === "ko-KR"){
-        clean = clean
-          .replace(/\((.*?)\)/g, " ")
-          .replace(/\[(.*?)\]/g, " ")
-          .replace(/~/g, " ")
-          .replace(/\s+/g, " ")
-          .trim();
-      }
-      return clean;
-    }
-
-    function getAudioProfile(lang, requestedRate = null){
-      const isSlowMode = (requestedRate ?? audioRate) < 0.85;
-      if(lang === "ko-KR"){
-        return {
-          rate: requestedRate ?? (isSlowMode ? 0.72 : 0.92),
-          pitch: isSlowMode ? 0.98 : 1.03
-        };
-      }
-      return {
-        rate: requestedRate ?? (isSlowMode ? 0.8 : 0.98),
-        pitch: 1
-      };
-    }
-
     function setAudioRate(rate){
       audioRate = rate;
-      persistAudioRate();
-      slowAudioBtn.classList.toggle("active", rate < 0.85);
-      normalAudioBtn.classList.toggle("active", rate >= 0.85);
-    }
-
-    function loadVoicesWithRetry(attempt = 0){
-      if(!("speechSynthesis" in window)) return [];
-      const voices = speechSynthesis.getVoices() || [];
-      if(voices.length || attempt >= 8) return voices;
-      setTimeout(() => loadVoicesWithRetry(attempt + 1), 150 + attempt * 80);
-      return voices;
-    }
-
-    function warmupVoiceEngine(){
-      if(voiceWarmupDone || !("speechSynthesis" in window)) return;
-      voiceWarmupDone = true;
-      loadVoicesWithRetry();
-      try{
-        const utterance = new SpeechSynthesisUtterance(" ");
-        utterance.volume = 0;
-        utterance.rate = 1;
-        speechSynthesis.speak(utterance);
-        speechSynthesis.cancel();
-      }catch(_err){}
+      slowAudioBtn.classList.toggle("active", rate !== 1.0);
+      normalAudioBtn.classList.toggle("active", rate === 1.0);
     }
 
     function pickPreferredVoice(lang){
-      const voices = loadVoicesWithRetry();
+      const voices = speechSynthesis.getVoices() || [];
       const normalizedLang = String(lang || "").toLowerCase();
       const langPrefix = normalizedLang.slice(0,2);
       const candidates = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith(langPrefix));
       if(!candidates.length) return null;
 
-      const cachedName = voiceChoiceCache[normalizedLang];
-      if(cachedName){
-        const cachedVoice = candidates.find(v => (v.name || "") === cachedName);
-        if(cachedVoice) return cachedVoice;
-      }
-
-      const preferredTerms = ["google", "microsoft", "natural", "enhanced", "premium", "neural", "online", "samsung", "apple", "eloquence", "cloud", "female", "high quality", "siri", "superior"];
-      const avoidTerms = ["compact", "espeak", "festival", "robot", "legacy", "classic"];
+      const preferredTerms = ["google", "microsoft", "natural", "enhanced", "premium", "neural", "online", "samsung", "apple", "eloquence", "cloud", "female", "high quality"];
+      const avoidTerms = ["compact", "edded", "espeak", "festival", "robot"];
       const scoreVoice = (voice) => {
         const name = `${voice.name || ""} ${voice.voiceURI || ""}`.toLowerCase();
         let score = 0;
-        if((voice.lang || "").toLowerCase() === normalizedLang) score += 14;
-        if((voice.lang || "").toLowerCase().startsWith(langPrefix)) score += 4;
+        if((voice.lang || "").toLowerCase() === normalizedLang) score += 12;
         if(voice.default) score += 8;
-        preferredTerms.forEach(term => { if(name.includes(term)) score += 5; });
-        avoidTerms.forEach(term => { if(name.includes(term)) score -= 7; });
+        preferredTerms.forEach(term => { if(name.includes(term)) score += 4; });
+        avoidTerms.forEach(term => { if(name.includes(term)) score -= 6; });
         if(name.includes("female") || name.includes("woman")) score += 1;
-        if(name.includes("ko-kr")) score += 2;
         return score;
       };
 
-      const chosen = candidates.slice().sort((a,b) => scoreVoice(b) - scoreVoice(a))[0] || null;
-      if(chosen){
-        voiceChoiceCache[normalizedLang] = chosen.name || "";
-        persistVoiceChoiceCache();
-      }
-      return chosen;
+      return candidates.sort((a,b) => scoreVoice(b) - scoreVoice(a))[0] || null;
     }
 
-    function speak(text, lang, rateOverride = null){
+    function speak(text, lang){
       const clean = normalizeSpeechText(text, lang);
       if(!clean) return;
       if(!("speechSynthesis" in window)){
         alert("Tu navegador no soporta síntesis de voz.");
         return;
       }
-      warmupVoiceEngine();
       speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(clean);
       u.lang = lang;
-      const profile = getAudioProfile(lang, rateOverride);
-      u.rate = profile.rate;
-      u.pitch = profile.pitch;
+      u.rate = audioRate;
+      u.pitch = lang === "ko-KR" ? 1.02 : 1;
       u.volume = 1;
       const preferred = pickPreferredVoice(lang);
       if(preferred) u.voice = preferred;
@@ -3311,30 +3199,12 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       speak(frontIsKo ? row.coreano : row.español, frontIsKo ? "ko-KR" : "es-ES");
     });
 
-    if(studyPlayFrontSlow){
-      studyPlayFrontSlow.addEventListener("click", () => {
-        const row = studyData[studyIndex];
-        if(!row) return;
-        const frontIsKo = studyFrontMode === "ko";
-        speak(frontIsKo ? row.coreano : row.español, frontIsKo ? "ko-KR" : "es-ES", 0.65);
-      });
-    }
-
     studyPlayBack.addEventListener("click", () => {
       const row = studyData[studyIndex];
       if(!row) return;
       const frontIsKo = studyFrontMode === "ko";
       speak(frontIsKo ? row.español : row.coreano, frontIsKo ? "es-ES" : "ko-KR");
     });
-
-    if(studyPlayBackSlow){
-      studyPlayBackSlow.addEventListener("click", () => {
-        const row = studyData[studyIndex];
-        if(!row) return;
-        const frontIsKo = studyFrontMode === "ko";
-        speak(frontIsKo ? row.español : row.coreano, frontIsKo ? "es-ES" : "ko-KR", 0.65);
-      });
-    }
 
     studyFlipBtn.addEventListener("click", () => studyInner.classList.toggle("flip"));
     studyFlipBtnBack.addEventListener("click", () => studyInner.classList.toggle("flip"));
@@ -3434,12 +3304,8 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         writeStarBtn.textContent = "☆";
         writePrevBtn.disabled = true;
         writeNextBtn.disabled = true;
-        if(writeArrowPrev) writeArrowPrev.disabled = true;
-        if(writeArrowNext) writeArrowNext.disabled = true;
         writePrevBtn.style.opacity = ".5";
         writeNextBtn.style.opacity = ".5";
-        if(writeArrowPrev) writeArrowPrev.style.opacity = ".45";
-        if(writeArrowNext) writeArrowNext.style.opacity = ".45";
         writeNextBtn.textContent = "Siguiente →";
         updateProgress(writeProgressFill, writeProgressText, 0, 0);
         return;
@@ -3461,12 +3327,8 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       writeStarBtn.textContent = starredWords.has(row.id) ? "⭐" : "☆";
       writePrevBtn.disabled = writeIndex === 0;
       writeNextBtn.disabled = false;
-      if(writeArrowPrev) writeArrowPrev.disabled = writePrevBtn.disabled;
-      if(writeArrowNext) writeArrowNext.disabled = false;
       writePrevBtn.style.opacity = writePrevBtn.disabled ? ".5" : "1";
       writeNextBtn.style.opacity = "1";
-      if(writeArrowPrev) writeArrowPrev.style.opacity = writePrevBtn.disabled ? ".45" : "1";
-      if(writeArrowNext) writeArrowNext.style.opacity = "1";
       writeNextBtn.textContent = writeIndex >= writeData.length - 1 ? "✅ Finalizar" : "Siguiente →";
       updateProgress(writeProgressFill, writeProgressText, writeIndex, writeData.length);
     }
@@ -3525,8 +3387,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     });
     writePrevBtn.addEventListener("click", prevWriteCard);
     writeNextBtn.addEventListener("click", nextWriteCard);
-    if(writeArrowPrev) writeArrowPrev.addEventListener("click", prevWriteCard);
-    if(writeArrowNext) writeArrowNext.addEventListener("click", nextWriteCard);
     writeStarBtn.addEventListener("click", () => {
       const row = writeData[writeIndex];
       toggleStar(row);
@@ -3640,10 +3500,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         quizDirectionBtn.classList.toggle("active", !esToKo);
       }
       if(quizInlineSpeakBtn){
-        quizInlineSpeakBtn.style.display = isListenMode ? "inline-flex" : "inline-flex";
-      }
-      if(quizInlineSpeakSlowBtn){
-        quizInlineSpeakSlowBtn.style.display = isListenMode ? "inline-flex" : "inline-flex";
+        quizInlineSpeakBtn.style.display = isListenMode ? "inline-flex" : "none";
       }
       quizDefinition.textContent = isListenMode ? "Escucha y elige la opción correcta" : (esToKo ? row.español : row.coreano);
       quizCounter.textContent = `${quizIndex + 1} de ${quizData.length}`;
@@ -3691,19 +3548,17 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       quizNextBtn.textContent = quizIndex >= quizData.length - 1 ? "✅ Finalizar" : "Siguiente →";
     }
 
-    function playQuizPrompt(rateOverride = null){
+    function playQuizPrompt(){
       const row = quizData[quizIndex];
       if(!row) return;
       const isListenMode = quizModeType === "listen";
       const esToKo = quizDirection === "es-to-ko";
-      if(isListenMode) speak(row.coreano, "ko-KR", rateOverride);
-      else speak(esToKo ? row.español : row.coreano, esToKo ? "es-ES" : "ko-KR", rateOverride);
+      if(isListenMode) speak(row.coreano, "ko-KR");
+      else speak(esToKo ? row.español : row.coreano, esToKo ? "es-ES" : "ko-KR");
     }
 
-    quizSpeakBtn.addEventListener("click", () => playQuizPrompt());
-    if(quizSpeakSlowBtn) quizSpeakSlowBtn.addEventListener("click", () => playQuizPrompt(0.65));
-    if(quizInlineSpeakBtn) quizInlineSpeakBtn.addEventListener("click", () => playQuizPrompt());
-    if(quizInlineSpeakSlowBtn) quizInlineSpeakSlowBtn.addEventListener("click", () => playQuizPrompt(0.65));
+    quizSpeakBtn.addEventListener("click", playQuizPrompt);
+    if(quizInlineSpeakBtn) quizInlineSpeakBtn.addEventListener("click", playQuizPrompt);
 
     quizStarBtn.addEventListener("click", () => {
       const row = quizData[quizIndex];
@@ -3972,8 +3827,8 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     addRowBtn.addEventListener("click", openAddRow);
     downloadEditedBtn.addEventListener("click", () => exportRowsToExcel(getFilteredData(), "excel_editado_resaltado.xlsx", true));
 
-    slowAudioBtn.addEventListener("click", () => setAudioRate(0.72));
-    normalAudioBtn.addEventListener("click", () => setAudioRate(0.92));
+    slowAudioBtn.addEventListener("click", () => setAudioRate(0.65));
+    normalAudioBtn.addEventListener("click", () => setAudioRate(1.0));
 
     flashcardsBtn.addEventListener("click", () => openStudyMode(null, "flashcards"));
     writeBtn.addEventListener("click", () => openWriteMode());
@@ -4094,14 +3949,8 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       }
     });
     if("speechSynthesis" in window){
-      setAudioRate(audioRate);
-      loadVoicesWithRetry();
-      speechSynthesis.onvoiceschanged = () => {
-        loadVoicesWithRetry();
-      };
-      ["pointerdown","touchstart","keydown"].forEach(evt => {
-        window.addEventListener(evt, warmupVoiceEngine, { once:true, passive:true });
-      });
+      speechSynthesis.getVoices();
+      speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
     }
 
     async function refreshAppNow(){
