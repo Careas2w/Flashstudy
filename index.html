@@ -64,8 +64,6 @@
       --quiz-font-weight:800;
       --mix-font-size:20px;
       --mix-font-weight:700;
-      --mosaic-grid-min:260px;
-      --mosaic-card-min-height:var(--mosaic-card-min-height,220px);
     }
 
     body.light{
@@ -1615,119 +1613,6 @@
     .mix-card{ font-size:var(--mix-font-size) !important; font-weight:var(--mix-font-weight) !important; }
     .study-face .action-btn.ghost.active, .small-btn.active{ outline:2px solid color-mix(in oklab, var(--primary) 80%, white 20%); }
 
-  
-    .hangul-body{padding-top:10px;}
-    .hangul-scroll{max-height:360px; overflow:auto;}
-    .hangul-table td,.hangul-table th{font-size:12px; vertical-align:middle;}
-    .hangul-play-cell{width:54px; text-align:center;}
-    .mosaic-shell{
-      width:min(1220px,100%);
-      max-height:min(88vh,900px);
-      overflow:auto;
-      background:var(--panel);
-      border:1px solid var(--line);
-      border-radius:24px;
-      box-shadow:var(--shadow);
-      padding:18px;
-    }
-    .mosaic-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(var(--mosaic-grid-min,260px),1fr));
-      gap:16px;
-      margin-top:12px;
-    }
-    .mosaic-card{
-      position:relative;
-      background:linear-gradient(180deg, color-mix(in oklab, var(--panel) 95%, white 5%) 0%, color-mix(in oklab, var(--panel-2) 35%, var(--panel) 65%) 100%);
-      border:1px solid var(--line);
-      border-radius:20px;
-      box-shadow:var(--shadow);
-      padding:16px 16px 12px;
-      cursor:pointer;
-      min-height:220px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .mosaic-card:hover{transform:translateY(-1px);}
-    .mosaic-edit-btn{
-      position:absolute;
-      top:10px; right:10px;
-      border:none; border-radius:10px;
-      background:var(--panel-2); color:var(--text); border:1px solid var(--line);
-      padding:6px 9px; cursor:pointer;
-    }
-    .mosaic-primary{
-      font-size:var(--mosaic-primary-size, 34px);
-      font-weight:var(--mosaic-font-weight, 500);
-      line-height:1.08;
-      margin-top:10px;
-      word-break:break-word;
-    }
-    .mosaic-secondary{
-      font-size:calc(var(--mosaic-primary-size, 34px) * .48);
-      font-weight:var(--mosaic-font-weight, 500);
-      line-height:1.15;
-      color:var(--muted);
-      word-break:break-word;
-    }
-    .mosaic-mini{
-      margin-top:auto;
-      display:grid;
-      gap:8px;
-    }
-    .mosaic-mini-box{
-      background:var(--panel-2);
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:8px 10px;
-    }
-    .mosaic-mini-label{
-      font-size:10px;
-      text-transform:uppercase;
-      letter-spacing:.05em;
-      color:var(--muted);
-      font-weight:800;
-      margin-bottom:4px;
-    }
-    .mosaic-mini-text{
-      font-size:12px;
-      line-height:1.2;
-      word-break:break-word;
-      white-space:pre-wrap;
-    }
-
-  
-    .turtle-rate{
-      width:92px;
-      accent-color:var(--primary);
-      vertical-align:middle;
-    }
-    .mosaic-card{
-      justify-content:center;
-      align-items:center;
-      text-align:center;
-    }
-    .mosaic-primary,
-    .mosaic-secondary{
-      width:100%;
-      text-align:center;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-    .mosaic-star-btn{
-      position:absolute;
-      top:10px; left:10px;
-      border:none; border-radius:10px;
-      background:var(--panel-2); color:var(--text); border:1px solid var(--line);
-      padding:6px 9px; cursor:pointer;
-    }
-    .mosaic-mini{
-      width:100%;
-      margin-top:12px;
-    }
-
   </style>
 </head>
 <body>
@@ -1758,76 +1643,6 @@
       <div class="search-box">
         <input class="search-input" id="searchInput" type="text" placeholder="Buscar..." />
       </div>
-
-      
-<details class="dict-card dict-collapsible" id="hangulCard">
-  <summary class="dict-summary">
-    <div class="nav-head-title">한글</div>
-    <span class="dict-toggle-icon">⌄</span>
-  </summary>
-  <div class="dict-body hangul-body">
-    <div class="table-scroll hangul-scroll">
-      <table class="vocab-table hangul-table">
-        <thead>
-          <tr>
-            <th>🔊</th>
-            <th>Letra</th>
-            <th>Sonido</th>
-            <th>Nombre letra</th>
-            <th>Badchim 받침</th>
-            <th>Al inicio de una palabra</th>
-            <th>Notas</th>
-            <th>Nombre coreano</th>
-          </tr>
-        </thead>
-        <tbody>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="기역" >🔊</button></td><td class="hangul-cell">ㄱ</td><td class="hangul-cell">/g-k/ poco aire (entre medias de la g y k)</td><td class="hangul-cell">/kiiok/</td><td class="hangul-cell">Igual pero sin soltar aire: /g/        </td><td class="hangul-cell">/k/  </td><td class="hangul-cell"></td><td class="hangul-cell">기역</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="키읔" >🔊</button></td><td class="hangul-cell">ㅋ</td><td class="hangul-cell">/k/ mucho aire (&quot;key, &quot;kind&quot; inglés)</td><td class="hangul-cell">/kii_/</td><td class="hangul-cell" rowspan="2">Igual pero sin soltar aire: /k/  </td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">키읔</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="쌍기역" >🔊</button></td><td class="hangul-cell">ㄲ</td><td class="hangul-cell">/kk/ sin aire (español) </td><td class="hangul-cell">/ssang gi-yeok/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">쌍기역</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="디귿" >🔊</button></td><td class="hangul-cell">ㄷ</td><td class="hangul-cell">/d-t/ poco aire (entre medias de la d y t)</td><td class="hangul-cell">/tig_t/</td><td class="hangul-cell" rowspan="2">Igual pero sin soltar aire: /d/</td><td class="hangul-cell">/t/  </td><td class="hangul-cell"></td><td class="hangul-cell">디귿</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="티읕" >🔊</button></td><td class="hangul-cell">ㅌ</td><td class="hangul-cell">/t/ mucho aire (&quot;time&quot; inglés)</td><td class="hangul-cell">/ti_t/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">티읕</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="쌍디귿" >🔊</button></td><td class="hangul-cell">ㄸ</td><td class="hangul-cell">/tt/ sin aire (español) </td><td class="hangul-cell">/ssang di-g_t/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">쌍디귿</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="비읍" >🔊</button></td><td class="hangul-cell">ㅂ</td><td class="hangul-cell">/b-p/ poco aire (entre medias de la b y p)</td><td class="hangul-cell">/pi_b/</td><td class="hangul-cell" rowspan="2">Igual pero sin soltar aire: /b/</td><td class="hangul-cell">/p/</td><td class="hangul-cell"></td><td class="hangul-cell">비읍</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="피읖" >🔊</button></td><td class="hangul-cell">ㅍ</td><td class="hangul-cell">/p/ mucho aire (&quot;pound&quot; inglés)</td><td class="hangul-cell">/pi_p/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">피읖</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="쌍비읍" >🔊</button></td><td class="hangul-cell">ㅃ</td><td class="hangul-cell">/pp/ sin aire (español) </td><td class="hangul-cell">/ssang bi_p/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">쌍비읍</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="지읒" >🔊</button></td><td class="hangul-cell">ㅈ</td><td class="hangul-cell">/y/ poco aire (&quot;juice&quot; inglés)</td><td class="hangul-cell">/ji_t/</td><td class="hangul-cell" rowspan="3">Igual pero sin soltar aire: /d/</td><td class="hangul-cell">/Ch/</td><td class="hangul-cell"></td><td class="hangul-cell">지읒</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="치읓" >🔊</button></td><td class="hangul-cell">ㅊ</td><td class="hangul-cell">/Ch/ mucho aire (&quot;chocolate&quot; inglés)</td><td class="hangul-cell">/chi_t/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">치읓</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="쌍지읒" >🔊</button></td><td class="hangul-cell">ㅉ</td><td class="hangul-cell">/chch/ o /jj/ sin aire (no existe en español) </td><td class="hangul-cell">/ssang ji_t/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">쌍지읒</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="시옷" >🔊</button></td><td class="hangul-cell">ㅅ</td><td class="hangul-cell">/s/ poco aire (&quot;sad&quot; inglés)*</td><td class="hangul-cell">/shiot/</td><td class="hangul-cell" rowspan="2">Igual pero sin soltar aire: /d/</td><td class="hangul-cell" rowspan="2"></td><td class="hangul-cell" rowspan="2">(*) Para los sonidos que contienen por &quot;i&quot;, ㅅ se pronuncia /sh/: 시 /shi/   새 /she/  세 /she/  쉬 /shi/   샤 /shia/   셔 /shio/   슈 /shiㅡ/   쇼 /shio/ </td><td class="hangul-cell">시옷</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="쌍시옷" >🔊</button></td><td class="hangul-cell">ㅆ</td><td class="hangul-cell">/ss/ sin aire (español)* </td><td class="hangul-cell">/ssang shi-ot/</td><td class="hangul-cell">쌍시옷</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="니은" >🔊</button></td><td class="hangul-cell">ㄴ</td><td class="hangul-cell">/n/ (n de &quot;nariz&quot; del español)</td><td class="hangul-cell">/ni_n/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">니은</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="리을" >🔊</button></td><td class="hangul-cell">ㄹ</td><td class="hangul-cell">/L/ (entre medias de la r y L)</td><td class="hangul-cell">/li_l/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">리을</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="미음" >🔊</button></td><td class="hangul-cell">ㅁ</td><td class="hangul-cell">/m/ (español)</td><td class="hangul-cell">/mi_m/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">미음</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="Ꝋ" >🔊</button></td><td class="hangul-cell">ㅇ</td><td class="hangul-cell">a) Ꝋ</td><td class="hangul-cell">x</td><td class="hangul-cell">Ꝋ</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">Ꝋ</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="이응 " >🔊</button></td><td class="hangul-cell">ㅇ</td><td class="hangul-cell">b) /ng/ si batchim o conosonate inicial</td><td class="hangul-cell">/i_ng/</td><td class="hangul-cell">/ng/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">이응 </td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="히읗" >🔊</button></td><td class="hangul-cell">ㅎ</td><td class="hangul-cell">/h/ inglés o /j/  (&quot;harry Potter&quot;)</td><td class="hangul-cell"> /hi_h/</td><td class="hangul-cell">Igual pero sin soltar aire: /d/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">히읗</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅏ" >🔊</button></td><td class="hangul-cell">ㅏ</td><td class="hangul-cell">/a/ (español)</td><td class="hangul-cell">/a/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅏ</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅓ" >🔊</button></td><td class="hangul-cell">ㅓ</td><td class="hangul-cell">/eo/ o /ᴧ/ (&quot;oh, oh&quot;, &quot;London&quot; inglés) se ebre mucho la boca</td><td class="hangul-cell">/eo/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅓ</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅗ " >🔊</button></td><td class="hangul-cell">ㅗ </td><td class="hangul-cell">/o/ (español)                           se cierran un poco los labios</td><td class="hangul-cell">/o/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅗ </td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅜ" >🔊</button></td><td class="hangul-cell">ㅜ</td><td class="hangul-cell">/u/ (español)                                 se cierran un poco los labios</td><td class="hangul-cell">/u/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅜ</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅡ" >🔊</button></td><td class="hangul-cell">ㅡ</td><td class="hangul-cell">/ɯ/ asquito</td><td class="hangul-cell">/eu/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅡ</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅣ" >🔊</button></td><td class="hangul-cell">ㅣ</td><td class="hangul-cell">/i/ (español)</td><td class="hangul-cell">/i/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅣ</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅑ" >🔊</button></td><td class="hangul-cell">ㅑ</td><td class="hangul-cell">/ia/</td><td class="hangul-cell">/ya/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅑ</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅕ" >🔊</button></td><td class="hangul-cell">ㅕ</td><td class="hangul-cell">/iᴧ/</td><td class="hangul-cell">/yeo/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅕ</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅛ" >🔊</button></td><td class="hangul-cell">ㅛ</td><td class="hangul-cell">/io/</td><td class="hangul-cell">/yo/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅛ</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅠ" >🔊</button></td><td class="hangul-cell">ㅠ</td><td class="hangul-cell">/iu/</td><td class="hangul-cell">/yu/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅠ</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅐ " >🔊</button></td><td class="hangul-cell">ㅐ </td><td class="hangul-cell" rowspan="2">/e/ (español)</td><td class="hangul-cell">/e/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅐ </td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅔ" >🔊</button></td><td class="hangul-cell">ㅔ</td><td class="hangul-cell">/ae/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅔ</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅒ" >🔊</button></td><td class="hangul-cell">ㅒ</td><td class="hangul-cell" rowspan="2">/ye/</td><td class="hangul-cell">/yae/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅒ</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅖ" >🔊</button></td><td class="hangul-cell">ㅖ</td><td class="hangul-cell">/ye/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅖ</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅘ" >🔊</button></td><td class="hangul-cell">ㅘ</td><td class="hangul-cell">/wa/</td><td class="hangul-cell">/wa/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅘ</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅙ" >🔊</button></td><td class="hangul-cell">ㅙ</td><td class="hangul-cell" rowspan="2">/we/</td><td class="hangul-cell">/wae/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅙ</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅚ" >🔊</button></td><td class="hangul-cell">ㅚ</td><td class="hangul-cell">/oe/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅚ</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅞ" >🔊</button></td><td class="hangul-cell">ㅞ</td><td class="hangul-cell">/ue/</td><td class="hangul-cell">/we/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅞ</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅝ" >🔊</button></td><td class="hangul-cell">ㅝ</td><td class="hangul-cell">/wo/</td><td class="hangul-cell">/weo/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅝ</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅟ" >🔊</button></td><td class="hangul-cell">ㅟ</td><td class="hangul-cell">/wi/</td><td class="hangul-cell">/wi/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅟ</td></tr>
-<tr><td class="hangul-play-cell"><button class="table-icon-btn hangul-audio-btn" data-hangul-audio="ㅢ" >🔊</button></td><td class="hangul-cell">ㅢ</td><td class="hangul-cell">/ɯi/</td><td class="hangul-cell">/ui/</td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell"></td><td class="hangul-cell">ㅢ</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</details>
-
 
       <details class="dict-card dict-collapsible" id="dictCard">
         <summary class="dict-summary">
@@ -1862,13 +1677,11 @@
 
         <div class="audio-controls">
           <button class="mode-btn" id="slowAudioBtn">🐢 Lento</button>
-          <input type="range" class="turtle-rate" id="globalSlowRateSlider" min="0.35" max="0.9" step="0.02" value="0.65" title="Velocidad tortuga general">
           <button class="mode-btn active" id="normalAudioBtn">▶ Normal</button>
           <button class="mode-btn" id="flashcardsBtn">📚 Flashcards</button>
           <button class="mode-btn" id="writeBtn">✍ Escritura</button>
           <button class="mode-btn" id="quizBtn">🧩 Multiple</button>
           <button class="mode-btn" id="listenBtn">👂 Escuchar</button>
-          <button class="mode-btn" id="mosaicBtn">🧱 Mosaico</button>
           <button class="mode-btn" id="mixBtn">🔗 Pairs</button>
 
           <div class="dropdown" id="wrongPracticeDropdown">
@@ -1878,7 +1691,6 @@
                             <button class="dropdown-item" data-practice-list="wrong" data-mode="write">Escritura</button>
               <button class="dropdown-item" data-practice-list="wrong" data-mode="quiz">Multiple</button>
               <button class="dropdown-item" data-practice-list="wrong" data-mode="listen">Escuchar</button>
-              <button class="dropdown-item" data-practice-list="wrong" data-mode="mosaic">Mosaico</button>
               <button class="dropdown-item" data-practice-list="wrong" data-mode="mix">Pairs</button>
             </div>
           </div>
@@ -1892,7 +1704,6 @@
                             <button class="dropdown-item" data-practice-list="star" data-mode="write">Escritura</button>
               <button class="dropdown-item" data-practice-list="star" data-mode="quiz">Multiple</button>
               <button class="dropdown-item" data-practice-list="star" data-mode="listen">Escuchar</button>
-              <button class="dropdown-item" data-practice-list="star" data-mode="mosaic">Mosaico</button>
               <button class="dropdown-item" data-practice-list="star" data-mode="mix">Pairs</button>
             </div>
           </div>
@@ -1961,6 +1772,7 @@
             </div>
             <div class="card-actions">
               <button class="action-btn" id="studyPlayFront">🔊 Reproducir</button>
+              <button class="action-btn ghost" id="studyPlayFrontSlow">🐢 Tortuga</button>
               <button class="action-btn secondary" id="studyFlipBtn">Girar</button>
               <button class="action-btn ghost" id="studyStarBtn">☆</button>
             </div>
@@ -1972,6 +1784,7 @@
             </div>
             <div class="card-actions">
               <button class="action-btn" id="studyPlayBack">🔊 Reproducir</button>
+              <button class="action-btn ghost" id="studyPlayBackSlow">🐢 Tortuga</button>
               <button class="action-btn secondary" id="studyFlipBtnBack">Girar</button>
               <button class="action-btn ghost" id="studyStarBtnBack">☆</button>
             </div>
@@ -2013,8 +1826,6 @@
           <div class="mode-style-box">
             <button class="small-btn" id="writeDirectionBtn">ES → KO</button>
             <button class="small-btn" id="writePlayBtn">🔊 Audio</button>
-            <button class="small-btn" id="writePlaySlowBtn">🐢 Lento</button>
-            <input type="range" class="turtle-rate" id="writeSlowRateSlider" min="0.4" max="0.9" step="0.02" value="0.62" title="Velocidad tortuga">
             <button class="small-btn" id="writeShuffleBtn">🔀 Barajar</button>
             <button class="small-btn" id="writeBoldBtn">Negrita: No</button>
             <button class="small-btn" id="writeFontDownBtn">A−</button>
@@ -2058,9 +1869,6 @@
         </div>
         <div class="quiz-meta">
           <div class="mode-style-box">
-            <button class="small-btn active" id="quizNormalBtn">🔊 Normal</button>
-            <button class="small-btn" id="quizSlowBtn">🐢 Tortuga</button>
-            <input type="range" class="turtle-rate" id="quizSlowRateSlider" min="0.35" max="0.9" step="0.02" value="0.62" title="Velocidad tortuga">
             <button class="small-btn" id="quizDirectionBtn">ES → KO</button>
             <button class="small-btn" id="quizShuffleBtn">🔀 Barajar</button>
             <button class="small-btn" id="quizBoldBtn">Negrita: No</button>
@@ -2132,35 +1940,6 @@
     </div>
   </div>
 
-
-  <!-- MOSAICO -->
-  <div class="overlay" id="mosaicOverlay">
-    <div class="mosaic-shell">
-      <div class="modal-top">
-        <div>
-          <div class="modal-title">Modo mosaico</div>
-          <div class="modal-stats" id="mosaicStats">0 tarjetas</div>
-        </div>
-        <div class="study-group">
-          <div class="mode-style-box">
-            <button class="small-btn active" id="mosaicNormalBtn">🔊 Normal</button>
-            <button class="small-btn" id="mosaicSlowBtn">🐢 Tortuga</button>
-            <input type="range" class="turtle-rate" id="mosaicSlowRateSlider" min="0.4" max="0.9" step="0.02" value="0.62" title="Velocidad tortuga">
-            <button class="small-btn" id="mosaicToggleBtn">KO grande</button>
-            <button class="small-btn" id="mosaicSortBtn">Orden: Excel</button>
-            <button class="small-btn" id="mosaicBoldBtn">Negrita: No</button>
-            <button class="small-btn" id="mosaicFontDownBtn">A−</button>
-            <button class="small-btn" id="mosaicFontUpBtn">A+</button>
-            <button class="small-btn" id="mosaicDensityLessBtn">＋ grandes</button>
-            <button class="small-btn" id="mosaicDensityMoreBtn">＋ pequeñas</button>
-          </div>
-          <button class="icon-btn" id="closeMosaicBtn">✕</button>
-        </div>
-      </div>
-      <div class="mosaic-grid" id="mosaicGrid"></div>
-    </div>
-  </div>
-
   <!-- LISTAS -->
   <div class="overlay" id="listOverlay">
     <div class="list-wrap">
@@ -2177,7 +1956,6 @@
                 <button class="small-btn" id="listPracticeWriteBtn">Practicar en escritura</button>
         <button class="small-btn" id="listPracticeQuizBtn">Practicar en Multiple</button>
         <button class="small-btn" id="listPracticeListenBtn">Practicar en Escuchar</button>
-        <button class="small-btn" id="listPracticeMosaicBtn">Practicar en Mosaico</button>
         <button class="small-btn" id="listPracticeMixBtn">Practicar en Pairs</button>
         <button class="small-btn" id="listClearBtn">Vaciar lista</button>
       </div>
@@ -2223,7 +2001,7 @@
       <button class="theme-swatch" data-theme-palette="rose" title="Rose"><span style="background:linear-gradient(135deg,#ec4899 0 50%,#fff5fb 50% 100%)"></span></button>
       <button class="theme-swatch" data-theme-palette="lavender" title="Lavanda"><span style="background:linear-gradient(135deg,#7c3aed 0 50%,#f7f3ff 50% 100%)"></span></button>
       <button class="theme-swatch" data-theme-palette="mint" title="Mint"><span style="background:linear-gradient(135deg,#14b8a6 0 50%,#f0fdfa 50% 100%)"></span></button>
-      <button class="theme-swatch" data-theme-palette="sunny" title="Amarillo"><span style="background:linear-gradient(135deg,#eab308 0 50%,#fffdf0 50% 100%)"></span></button>
+      <button class="theme-swatch" data-theme-palette="yellow" title="Amarillo"><span style="background:linear-gradient(135deg,#eab308 0 50%,#fffbea 50% 100%)"></span></button>
     </div>
   </div>
 
@@ -2233,26 +2011,21 @@
     const STORAGE_WRONG = "flashcards-wrong-ids-v3";
     const STORAGE_TABLE_STYLE = "flashcards-table-style-v1";
     const STORAGE_FLASH_STYLE = "flashcards-study-style-v2";
-    const STORAGE_MOSAIC_STYLE = "flashcards-mosaic-style-v1";
     const STORAGE_PALETTE = "flashcards-theme-palette-v1";
 
     let allData = [];
     let excelHeaders = [];
     let selectedTopics = new Set();
     let collapsedUnits = new Set();
-    let audioRate = 1.0;
+    const NORMAL_AUDIO_RATE = 1.0;
+    const SLOW_AUDIO_RATE = 0.82;
+    let audioRate = NORMAL_AUDIO_RATE;
     let currentEditRowId = null;
     let tableStyle = { fontSize: 13, bold: true };
     let flashStyle = { fontSize: 62, bold: false };
     let writeStyle = { fontSize: 30, bold: false };
     let quizStyle = { fontSize: 28, bold: false };
     let mixStyle = { fontSize: 22, bold: false };
-    let mosaicStyle = { fontSize: 34, bold: false, density: 1 };
-    let mosaicData = [];
-    let mosaicPrimaryMode = "ko";
-    let mosaicSortMode = "excel";
-    let mosaicAudioSlow = false;
-    let quizAudioSlow = false;
     let studyFrontMode = "ko";
     let writeDirection = "es-to-ko";
     let quizDirection = "es-to-ko";
@@ -2315,12 +2088,10 @@
 
     const slowAudioBtn = document.getElementById("slowAudioBtn");
     const normalAudioBtn = document.getElementById("normalAudioBtn");
-    const globalSlowRateSlider = document.getElementById("globalSlowRateSlider");
     const flashcardsBtn = document.getElementById("flashcardsBtn");
     const writeBtn = document.getElementById("writeBtn");
     const quizBtn = document.getElementById("quizBtn");
     const listenBtn = document.getElementById("listenBtn");
-    const mosaicBtn = document.getElementById("mosaicBtn");
     const mixBtn = document.getElementById("mixBtn");
 
     const wrongPracticeDropdown = document.getElementById("wrongPracticeDropdown");
@@ -2334,7 +2105,6 @@
     const writeOverlay = document.getElementById("writeOverlay");
     const quizOverlay = document.getElementById("quizOverlay");
     const mixOverlay = document.getElementById("mixOverlay");
-    const mosaicOverlay = document.getElementById("mosaicOverlay");
     const listOverlay = document.getElementById("listOverlay");
 
     const studyModal = document.getElementById("studyModal");
@@ -2374,7 +2144,6 @@
     const writeStarBtn = document.getElementById("writeStarBtn");
     const writeDirectionBtn = document.getElementById("writeDirectionBtn");
     const writePlayBtn = document.getElementById("writePlayBtn");
-    const writePlaySlowBtn = document.getElementById("writePlaySlowBtn");
     const writeShuffleBtn = document.getElementById("writeShuffleBtn");
     const writeBoldBtn = document.getElementById("writeBoldBtn");
     const writeFontDownBtn = document.getElementById("writeFontDownBtn");
@@ -2389,9 +2158,6 @@
     const quizOptions = document.getElementById("quizOptions");
     const quizSpeakBtn = document.getElementById("quizSpeakBtn");
     const quizStarBtn = document.getElementById("quizStarBtn");
-    const quizNormalBtn = document.getElementById("quizNormalBtn");
-    const quizSlowBtn = document.getElementById("quizSlowBtn");
-    const quizSlowRateSlider = document.getElementById("quizSlowRateSlider");
     const quizDirectionBtn = document.getElementById("quizDirectionBtn");
     const quizShuffleBtn = document.getElementById("quizShuffleBtn");
     const quizInlineSpeakBtn = document.getElementById("quizInlineSpeakBtn");
@@ -2418,19 +2184,6 @@
     const mixProgressFill = document.getElementById("mixProgressFill");
     const mixProgressText = document.getElementById("mixProgressText");
 
-    const mosaicGrid = document.getElementById("mosaicGrid");
-    const mosaicStats = document.getElementById("mosaicStats");
-    const mosaicNormalBtn = document.getElementById("mosaicNormalBtn");
-    const mosaicSlowBtn = document.getElementById("mosaicSlowBtn");
-    const mosaicToggleBtn = document.getElementById("mosaicToggleBtn");
-    const mosaicSortBtn = document.getElementById("mosaicSortBtn");
-    const mosaicBoldBtn = document.getElementById("mosaicBoldBtn");
-    const mosaicFontDownBtn = document.getElementById("mosaicFontDownBtn");
-    const mosaicFontUpBtn = document.getElementById("mosaicFontUpBtn");
-    const mosaicDensityLessBtn = document.getElementById("mosaicDensityLessBtn");
-    const mosaicDensityMoreBtn = document.getElementById("mosaicDensityMoreBtn");
-    const closeMosaicBtn = document.getElementById("closeMosaicBtn");
-
     const listTitle = document.getElementById("listTitle");
     const listStats = document.getElementById("listStats");
     const listBox = document.getElementById("listBox");
@@ -2439,7 +2192,6 @@
     const listPracticeWriteBtn = document.getElementById("listPracticeWriteBtn");
     const listPracticeQuizBtn = document.getElementById("listPracticeQuizBtn");
     const listPracticeListenBtn = document.getElementById("listPracticeListenBtn");
-    const listPracticeMosaicBtn = document.getElementById("listPracticeMosaicBtn");
     const listPracticeMixBtn = document.getElementById("listPracticeMixBtn");
     const listClearBtn = document.getElementById("listClearBtn");
 
@@ -2476,13 +2228,12 @@
     applySavedTheme();
     applySavedPalette();
     loadStylePrefs();
-    setAudioRate(1.0);
+    setAudioRate(NORMAL_AUDIO_RATE);
     applyTableStyle();
     applyFlashStyle();
     applyWriteStyle();
     applyQuizStyle();
     applyMixStyle();
-    applyMosaicStyle();
 
 
     function isRowEdited(row){
@@ -2650,20 +2401,11 @@
           flashStyle.bold = !!rawFlash.bold;
         }
       }catch{}
-      try{
-        const rawMosaic = JSON.parse(localStorage.getItem(STORAGE_MOSAIC_STYLE) || "null");
-        if(rawMosaic && typeof rawMosaic === "object"){
-          mosaicStyle.fontSize = clamp(Number(rawMosaic.fontSize) || 34, 20, 56);
-          mosaicStyle.bold = !!rawMosaic.bold;
-          mosaicStyle.density = clamp(Number(rawMosaic.density ?? 1) || 1, 0, 2);
-        }
-      }catch{}
     }
 
     function saveStylePrefs(){
       localStorage.setItem(STORAGE_TABLE_STYLE, JSON.stringify(tableStyle));
       localStorage.setItem(STORAGE_FLASH_STYLE, JSON.stringify(flashStyle));
-      localStorage.setItem(STORAGE_MOSAIC_STYLE, JSON.stringify(mosaicStyle));
     }
 
     function applyTableStyle(){
@@ -2711,24 +2453,6 @@
       root.style.setProperty("--mix-font-size", `${mixStyle.fontSize}px`);
       root.style.setProperty("--mix-font-weight", mixStyle.bold ? "800" : "500");
       if(mixBoldBtn) mixBoldBtn.textContent = `Negrita: ${mixStyle.bold ? "Sí" : "No"}`;
-    }
-
-    function applyMosaicStyle(){
-      const root = document.documentElement;
-      root.style.setProperty("--mosaic-primary-size", `${mosaicStyle.fontSize}px`);
-      root.style.setProperty("--mosaic-font-weight", mosaicStyle.bold ? "800" : "500");
-      const densityMap = {
-        0: { min: "320px", height: "250px" },
-        1: { min: "260px", height: "220px" },
-        2: { min: "210px", height: "190px" }
-      };
-      const density = densityMap[mosaicStyle.density] || densityMap[1];
-      root.style.setProperty("--mosaic-grid-min", density.min);
-      root.style.setProperty("--mosaic-card-min-height", density.height);
-      if(mosaicBoldBtn) mosaicBoldBtn.textContent = `Negrita: ${mosaicStyle.bold ? "Sí" : "No"}`;
-      if(mosaicDensityLessBtn) mosaicDensityLessBtn.classList.toggle("active", mosaicStyle.density === 0);
-      if(mosaicDensityMoreBtn) mosaicDensityMoreBtn.classList.toggle("active", mosaicStyle.density === 2);
-      saveStylePrefs();
     }
 
     function getOrderedHeaders(headers){
@@ -2784,7 +2508,6 @@
       audioRate = rate;
       slowAudioBtn.classList.toggle("active", rate !== 1.0);
       normalAudioBtn.classList.toggle("active", rate === 1.0);
-      if(globalSlowRateSlider && rate !== 1.0) globalSlowRateSlider.value = String(rate);
     }
 
     function pickPreferredVoice(lang){
@@ -2810,8 +2533,25 @@
       return candidates.sort((a,b) => scoreVoice(b) - scoreVoice(a))[0] || null;
     }
 
+
+    function normalizeSpeechText(text, lang){
+      let clean = String(text ?? "").trim();
+      if(!clean) return "";
+      clean = clean
+        .replace(/\s*\(([^)]+)\)\s*/g, ", $1 ")
+        .replace(/\s*\[([^\]]+)\]\s*/g, ", $1 ")
+        .replace(/\s*[\/|]\s*/g, ", ")
+        .replace(/\s+/g, " ")
+        .replace(/\s+,/g, ",")
+        .trim();
+      if(lang === "ko-KR"){
+        clean = clean.replace(/,+/g, ", ");
+      }
+      return clean;
+    }
+
     function speak(text, lang, rateOverride = null){
-      const clean = String(text || "").trim();
+      const clean = normalizeSpeechText(text, lang);
       if(!clean) return;
       if(!("speechSynthesis" in window)){
         alert("Tu navegador no soporta síntesis de voz.");
@@ -2820,7 +2560,7 @@
       speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(clean);
       u.lang = lang;
-      u.rate = Number.isFinite(Number(rateOverride)) ? Number(rateOverride) : audioRate;
+      u.rate = rateOverride ?? audioRate;
       u.pitch = lang === "ko-KR" ? 1.02 : 1;
       u.volume = 1;
       const preferred = pickPreferredVoice(lang);
@@ -2847,19 +2587,11 @@
       });
     }
 
-    function weightWrongRows(rows, source){
-      const base = rows.slice();
-      if(source === "wrong" || source === "star") return base;
-      const extras = base.filter(r => wrongWords.has(r.id));
-      if(!extras.length) return base;
-      return shuffleArray(base.concat(extras, extras));
-    }
-
     function getRowsFromSource(source){
       const base = getFilteredData();
       if(source === "star") return base.filter(r => starredWords.has(r.id));
       if(source === "wrong") return base.filter(r => wrongWords.has(r.id));
-      return weightWrongRows(base, source);
+      return base;
     }
 
     function toggleStar(row){
@@ -3692,9 +3424,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       writePlayBtn.addEventListener("click", () => {
         const row = writeData[writeIndex];
         if(!row) return;
-        const promptText = writeDirection === "es-to-ko" ? row.español : row.coreano;
-        const promptLang = writeDirection === "es-to-ko" ? "es-ES" : "ko-KR";
-        speak(promptText, promptLang);
+        speak(writeDirection === "es-to-ko" ? row.coreano : row.español, writeDirection === "es-to-ko" ? "ko-KR" : "es-ES");
       });
     }
     if(writeShuffleBtn){ writeShuffleBtn.addEventListener("click", shuffleWriteDeck); }
@@ -3791,12 +3521,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         quizDirectionBtn.textContent = esToKo ? "ES → KO" : "KO → ES";
         quizDirectionBtn.classList.toggle("active", !esToKo);
       }
-      if(quizNormalBtn) quizNormalBtn.classList.toggle("active", !quizAudioSlow);
-      if(quizSlowBtn) quizSlowBtn.classList.toggle("active", quizAudioSlow);
-      if(quizSlowRateSlider) quizSlowRateSlider.style.display = quizAudioSlow ? "inline-block" : "none";
-      if(quizSpeakBtn){
-        quizSpeakBtn.style.display = isListenMode ? "none" : "inline-flex";
-      }
       if(quizInlineSpeakBtn){
         quizInlineSpeakBtn.style.display = isListenMode ? "inline-flex" : "none";
       }
@@ -3851,9 +3575,8 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       if(!row) return;
       const isListenMode = quizModeType === "listen";
       const esToKo = quizDirection === "es-to-ko";
-      const rate = quizAudioSlow ? getTurtleRate("quizSlowRateSlider") : null;
-      if(isListenMode) speak(row.coreano, "ko-KR", rate);
-      else speak(esToKo ? row.español : row.coreano, esToKo ? "es-ES" : "ko-KR", rate);
+      if(isListenMode) speak(row.coreano, "ko-KR");
+      else speak(esToKo ? row.español : row.coreano, esToKo ? "es-ES" : "ko-KR");
     }
 
     quizSpeakBtn.addEventListener("click", playQuizPrompt);
@@ -3865,8 +3588,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       renderQuizCard();
     });
 
-    if(quizNormalBtn){ quizNormalBtn.addEventListener("click", () => { quizAudioSlow = false; renderQuizCard(); }); }
-    if(quizSlowBtn){ quizSlowBtn.addEventListener("click", () => { quizAudioSlow = true; renderQuizCard(); }); }
     if(quizDirectionBtn){ quizDirectionBtn.addEventListener("click", () => { quizDirection = quizDirection === "es-to-ko" ? "ko-to-es" : "es-to-ko"; renderQuizCard(); }); }
     if(quizShuffleBtn){ quizShuffleBtn.addEventListener("click", shuffleQuizDeck); }
     if(quizBoldBtn){ quizBoldBtn.addEventListener("click", () => { quizStyle.bold = !quizStyle.bold; applyQuizStyle(); }); }
@@ -4030,103 +3751,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     mixResetBtn.addEventListener("click", startMix);
     closeMixBtn.addEventListener("click", closeMixMode);
 
-
-    /* ---------- mosaico ---------- */
-    function getMosaicRows(source = null){
-      const base = getRowsFromSource(source);
-      const dedup = [];
-      const seen = new Set();
-      base.forEach(row => {
-        if(!seen.has(row.id)){
-          seen.add(row.id);
-          dedup.push(row);
-        }
-      });
-      if(mosaicSortMode === "alpha"){
-        const field = mosaicPrimaryMode === "ko" ? "coreano" : "español";
-        return dedup.slice().sort((a,b) => String(a[field] || "").localeCompare(String(b[field] || ""), mosaicPrimaryMode === "ko" ? "ko" : "es"));
-      }
-      return dedup.slice().sort((a,b) => (Number(a.id)||0) - (Number(b.id)||0));
-    }
-
-    function openMosaicMode(source = null){
-      currentPracticeSource = source;
-      mosaicOverlay.classList.add("open");
-      renderMosaicGrid();
-    }
-
-    function closeMosaicMode(){
-      mosaicOverlay.classList.remove("open");
-      currentPracticeSource = null;
-    }
-
-    function renderMosaicGrid(){
-      mosaicData = getMosaicRows(currentPracticeSource);
-      if(mosaicStats) mosaicStats.textContent = `${mosaicData.length} tarjetas`;
-      if(!mosaicData.length){
-        mosaicGrid.innerHTML = '<div class="empty">No hay tarjetas disponibles para mosaico.</div>';
-        return;
-      }
-      const koPrimary = mosaicPrimaryMode === "ko";
-      if(mosaicToggleBtn){
-        mosaicToggleBtn.textContent = koPrimary ? "KO grande" : "ES grande";
-        mosaicToggleBtn.classList.toggle("active", !koPrimary);
-      }
-      if(mosaicSortBtn){
-        mosaicSortBtn.textContent = mosaicSortMode === "excel" ? "Orden: Excel" : "Orden: A-Z";
-        mosaicSortBtn.classList.toggle("active", mosaicSortMode !== "excel");
-      }
-      if(mosaicNormalBtn){
-        mosaicNormalBtn.classList.toggle("active", !mosaicAudioSlow);
-      }
-      if(mosaicSlowBtn){
-        mosaicSlowBtn.classList.toggle("active", mosaicAudioSlow);
-      }
-      mosaicGrid.innerHTML = mosaicData.map(row => {
-        const primary = koPrimary ? (row.coreano || "—") : (row.español || "—");
-        const secondary = koPrimary ? (row.español || "—") : (row.coreano || "—");
-        const pron = String(row.Pronunciación || "").trim();
-        const notes = String(row.Notas || "").trim();
-        return `
-          <article class="mosaic-card" data-row-id="${row.id}">
-            <button class="mosaic-star-btn" data-mosaic-star="${row.id}" title="Destacar">${starredWords.has(row.id) ? "⭐" : "☆"}</button>
-            <button class="mosaic-edit-btn" data-mosaic-edit="${row.id}" title="Editar">✏️</button>
-            <div class="mosaic-primary">${escapeHtml(primary)}</div>
-            <div class="mosaic-secondary">${escapeHtml(secondary)}</div>
-            <div class="mosaic-mini">
-              ${pron ? `<div class="mosaic-mini-box"><div class="mosaic-mini-label">Pronunciación</div><div class="mosaic-mini-text">${escapeHtml(pron)}</div></div>` : ``}
-              ${notes ? `<div class="mosaic-mini-box"><div class="mosaic-mini-label">Notas</div><div class="mosaic-mini-text">${escapeHtml(notes)}</div></div>` : ``}
-            </div>
-          </article>
-        `;
-      }).join("");
-
-      mosaicGrid.querySelectorAll(".mosaic-card").forEach(card => {
-        card.addEventListener("click", (e) => {
-          if(e.target.closest("[data-mosaic-edit]")) return;
-          const id = Number(card.dataset.rowId);
-          const row = mosaicData.find(r => Number(r.id) === id);
-          if(row) speak(row.coreano, "ko-KR", mosaicAudioSlow ? getTurtleRate("mosaicSlowRateSlider") : null);
-        });
-      });
-      mosaicGrid.querySelectorAll("[data-mosaic-edit]").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          openEditRow(Number(btn.dataset.mosaicEdit));
-        });
-      });
-      mosaicGrid.querySelectorAll("[data-mosaic-star]").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          const row = mosaicData.find(r => Number(r.id) === Number(btn.dataset.mosaicStar));
-          if(row){
-            toggleStar(row);
-            renderMosaicGrid();
-          }
-        });
-      });
-    }
-
     /* ---------- listas ---------- */
     function getListRows(type){
       if(type === "wrong") return allData.filter(r => wrongWords.has(r.id));
@@ -4181,7 +3805,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       if(mode === "write") openWriteMode(currentListType);
       if(mode === "quiz") openQuizMode(currentListType);
       if(mode === "listen") openListenMode(currentListType);
-      if(mode === "mosaic") openMosaicMode(currentListType);
       if(mode === "mix") openMixMode(currentListType);
     }
 
@@ -4226,14 +3849,13 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     addRowBtn.addEventListener("click", openAddRow);
     downloadEditedBtn.addEventListener("click", () => exportRowsToExcel(getFilteredData(), "excel_editado_resaltado.xlsx", true));
 
-    slowAudioBtn.addEventListener("click", () => setAudioRate(0.65));
-    normalAudioBtn.addEventListener("click", () => setAudioRate(1.0));
+    slowAudioBtn.addEventListener("click", () => setAudioRate(SLOW_AUDIO_RATE));
+    normalAudioBtn.addEventListener("click", () => setAudioRate(NORMAL_AUDIO_RATE));
 
     flashcardsBtn.addEventListener("click", () => openStudyMode(null, "flashcards"));
     writeBtn.addEventListener("click", () => openWriteMode());
     quizBtn.addEventListener("click", () => openQuizMode());
     listenBtn.addEventListener("click", () => openListenMode());
-    if(mosaicBtn) mosaicBtn.addEventListener("click", () => openMosaicMode());
     mixBtn.addEventListener("click", () => openMixMode());
 
     wrongPracticeBtn.addEventListener("click", () => toggleDropdown(wrongPracticeDropdown));
@@ -4255,7 +3877,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         if(mode === "write") openWriteMode(listType);
         if(mode === "quiz") openQuizMode(listType);
         if(mode === "listen") openListenMode(listType);
-        if(mode === "mosaic") openMosaicMode(listType);
         if(mode === "mix") openMixMode(listType);
       });
     });
@@ -4288,7 +3909,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     listPracticeWriteBtn.addEventListener("click", () => practiceFromList("write"));
     listPracticeQuizBtn.addEventListener("click", () => practiceFromList("quiz"));
     listPracticeListenBtn.addEventListener("click", () => practiceFromList("listen"));
-    if(listPracticeMosaicBtn) listPracticeMosaicBtn.addEventListener("click", () => practiceFromList("mosaic"));
     listPracticeMixBtn.addEventListener("click", () => practiceFromList("mix"));
 
     closeEditBtn.addEventListener("click", closeEditRow);
@@ -4380,68 +4000,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     if(refreshAppBtn){
       refreshAppBtn.addEventListener('click', refreshAppNow);
     }
-
-
-
-    function getTurtleRate(inputId, fallback = 0.62){
-      const el = document.getElementById(inputId);
-      const value = Number(el?.value);
-      return Number.isFinite(value) ? value : fallback;
-    }
-
-    document.querySelectorAll("[data-hangul-audio]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const text = btn.dataset.hangulAudio;
-        if(text) speak(text, "ko-KR");
-      });
-    });
-
-    if(closeMosaicBtn) closeMosaicBtn.addEventListener("click", closeMosaicMode);
-    if(mosaicOverlay) mosaicOverlay.addEventListener("click", e => {
-      if(e.target === mosaicOverlay) closeMosaicMode();
-    });
-    if(mosaicToggleBtn) mosaicToggleBtn.addEventListener("click", () => {
-      mosaicPrimaryMode = mosaicPrimaryMode === "ko" ? "es" : "ko";
-      renderMosaicGrid();
-    });
-    if(mosaicSortBtn) mosaicSortBtn.addEventListener("click", () => {
-      mosaicSortMode = mosaicSortMode === "excel" ? "alpha" : "excel";
-      renderMosaicGrid();
-    });
-    if(mosaicNormalBtn) mosaicNormalBtn.addEventListener("click", () => {
-      mosaicAudioSlow = false;
-      renderMosaicGrid();
-    });
-    if(mosaicSlowBtn) mosaicSlowBtn.addEventListener("click", () => {
-      mosaicAudioSlow = true;
-      renderMosaicGrid();
-    });
-    if(mosaicBoldBtn) mosaicBoldBtn.addEventListener("click", () => {
-      mosaicStyle.bold = !mosaicStyle.bold;
-      applyMosaicStyle();
-      renderMosaicGrid();
-    });
-    if(mosaicFontDownBtn) mosaicFontDownBtn.addEventListener("click", () => {
-      mosaicStyle.fontSize = clamp(mosaicStyle.fontSize - 2, 20, 56);
-      applyMosaicStyle();
-      renderMosaicGrid();
-    });
-    if(mosaicFontUpBtn) mosaicFontUpBtn.addEventListener("click", () => {
-      mosaicStyle.fontSize = clamp(mosaicStyle.fontSize + 2, 20, 56);
-      applyMosaicStyle();
-      renderMosaicGrid();
-    });
-    if(mosaicDensityLessBtn) mosaicDensityLessBtn.addEventListener("click", () => {
-      mosaicStyle.density = clamp(mosaicStyle.density - 1, 0, 2);
-      applyMosaicStyle();
-      renderMosaicGrid();
-    });
-    if(mosaicDensityMoreBtn) mosaicDensityMoreBtn.addEventListener("click", () => {
-      mosaicStyle.density = clamp(mosaicStyle.density + 1, 0, 2);
-      applyMosaicStyle();
-      renderMosaicGrid();
-    });
-
 
     renderDictResults();
   </script>
