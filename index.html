@@ -55,15 +55,7 @@
       --table-ko-weight:800;
       --study-font-size:62px;
       --study-back-size:44px;
-      --study-font-weight:500;
-      --write-font-size:30px;
-      --write-input-size:22px;
-      --write-font-weight:800;
-      --quiz-font-size:28px;
-      --quiz-option-size:18px;
-      --quiz-font-weight:800;
-      --mix-font-size:20px;
-      --mix-font-weight:700;
+      --study-font-weight:800;
     }
 
     body.light{
@@ -73,15 +65,15 @@
       --line:#d9e1f2;
       --text:#1f2937;
       --muted:#6b7280;
-      --primary:#2563eb;
-      --primary-2:#3b82f6;
-      --primary-soft:#dbeafe;
+      --primary:#4f46e5;
+      --primary-2:#6366f1;
+      --primary-soft:#e0e7ff;
       --danger:#dc2626;
       --notes:#fff8e7;
       --notes-line:#e7d6a5;
       --chip:#ffffff;
       --chip-border:#cfd8ea;
-      --chip-active:#2563eb;
+      --chip-active:#4caf50;
       --chip-active-text:#ffffff;
       --shadow:0 8px 24px rgba(15,23,42,.08);
       --overlay:rgba(15,23,42,.62);
@@ -1063,42 +1055,6 @@
       margin-bottom:22px;
     }
 
-    .quiz-definition-row{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-
-    .quiz-inline-play{
-      min-width:48px;
-      height:48px;
-      border-radius:14px;
-      border:1px solid var(--quiz-line);
-      background:var(--quiz-card);
-      color:var(--quiz-text);
-      font-size:22px;
-      cursor:pointer;
-    }
-
-    .quiz-nav-arrows{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      margin:10px 0 18px;
-    }
-
-    .quiz-nav-arrows .study-nav-arrow{
-      position:static;
-      transform:none;
-      width:58px;
-      height:52px;
-      background:var(--quiz-card);
-      border-color:var(--quiz-line);
-      color:var(--quiz-text);
-      backdrop-filter:none;
-    }
-
     .quiz-prompt{
       font-size:14px;
       color:var(--quiz-muted);
@@ -1295,7 +1251,6 @@
       .write-prompt{ font-size:30px; }
       .write-input{ font-size:22px; }
       .quiz-definition{ font-size:22px; }
-      .quiz-nav-arrows .study-nav-arrow{ width:52px; height:48px; }
       .quiz-option{ font-size:18px; }
       .mix-card{ min-height:96px; font-size:16px; }
     }
@@ -1603,15 +1558,66 @@
       .hero-pill{ padding:7px 10px; }
     }
 
-
-    .mode-style-box{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-right:8px;}
-    .mode-style-box .small-btn{font-size:11px;padding:7px 10px;}
-    .write-prompt{ font-size:var(--write-font-size) !important; font-weight:var(--write-font-weight) !important; }
-    .write-input{ font-size:var(--write-input-size) !important; font-weight:var(--write-font-weight) !important; }
-    .quiz-definition{ font-size:var(--quiz-font-size) !important; font-weight:var(--quiz-font-weight) !important; }
-    .quiz-option{ font-size:var(--quiz-option-size) !important; font-weight:var(--quiz-font-weight) !important; }
-    .mix-card{ font-size:var(--mix-font-size) !important; font-weight:var(--mix-font-weight) !important; }
-    .study-face .action-btn.ghost.active, .small-btn.active{ outline:2px solid color-mix(in oklab, var(--primary) 80%, white 20%); }
+  
+    .hangul-wrap{ margin-top:10px; }
+    .hangul-table{ min-width:900px; }
+    .mosaic-wrap{ width:min(1180px,100%); }
+    .mosaic-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+      gap:14px;
+      max-height:min(70vh,760px);
+      overflow:auto;
+      padding-right:4px;
+    }
+    .mosaic-card{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, color-mix(in oklab, var(--panel) 95%, white 5%) 0%, color-mix(in oklab, var(--panel-2) 35%, var(--panel) 65%) 100%);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:16px;
+      cursor:pointer;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      min-height:255px;
+    }
+    .mosaic-card:hover{ transform:translateY(-1px); }
+    .mosaic-main{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      text-align:center;
+      align-items:center;
+      justify-content:center;
+      min-height:120px;
+      flex:1;
+    }
+    .mosaic-big{
+      font-size:var(--mosaic-font-size,34px);
+      font-weight:var(--mosaic-font-weight,500);
+      line-height:1.04;
+      word-break:break-word;
+    }
+    .mosaic-small{
+      font-size:calc(var(--mosaic-font-size,34px) * .46);
+      font-weight:600;
+      line-height:1.18;
+      color:var(--muted);
+      word-break:break-word;
+    }
+    .mosaic-meta{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:8px;
+    }
+    .mosaic-meta .study-box{ padding:9px 10px; }
+    .mosaic-actions{
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      flex-wrap:wrap;
+    }
 
   </style>
 </head>
@@ -1619,11 +1625,10 @@
   <div class="layout">
     <aside class="sidebar">
       <div class="sidebar-top">
-        <div class="brand-wrap"><div class="brand-badge">🇰🇷</div><div><div class="title">Flashcards Coreano</div><div class="brand-subtitle">한국어 말</div></div></div>
+        <div class="brand-wrap"><div class="brand-badge">한</div><div><div class="title">Flashcards Coreano</div><div class="brand-subtitle">Studio de estudio multiplataforma</div></div></div>
         <div class="study-group">
           <button class="icon-btn" id="paletteBtn" title="Cambiar colores">🎨</button>
           <button class="icon-btn" id="themeBtn" title="Cambiar tema">☀</button>
-          <button class="icon-btn" id="refreshAppBtn" type="button" title="Actualizar la web">🔄</button>
         </div>
       </div>
 
@@ -1639,10 +1644,39 @@
         <button class="small-btn" id="clearFilterBtn" title="Quitar filtros">Quitar filtros</button>
       </div>
 
+      <div class="app-note">Sube tu Excel, filtra por unit y topic, y practica desde cualquier dispositivo.</div>
 
       <div class="search-box">
         <input class="search-input" id="searchInput" type="text" placeholder="Buscar..." />
       </div>
+
+      <details class="dict-card dict-collapsible" id="hangulCard">
+        <summary class="dict-summary">
+          <div class="nav-head-title">한글</div>
+          <span class="dict-toggle-icon">⌄</span>
+        </summary>
+        <div class="dict-body">
+          <div class="table-wrap hangul-wrap">
+            <div class="table-scroll">
+              <table class="vocab-table hangul-table">
+                <thead>
+                  <tr>
+                    <th>🔊</th>
+                    <th>Letra</th>
+                    <th>Sonido</th>
+                    <th>Nombre letra</th>
+                    <th>Badchim 받침</th>
+                    <th>Al inicio de una palabra</th>
+                    <th>Notas</th>
+                    <th>Nombre coreano</th>
+                  </tr>
+                </thead>
+                <tbody id="hangulTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </details>
 
       <details class="dict-card dict-collapsible" id="dictCard">
         <summary class="dict-summary">
@@ -1665,11 +1699,17 @@
     <main class="main">
       <div class="hero-banner">
         <div>
-          <div class="hero-eyebrow">한국어 말</div>
-          <h1>Korean is fun</h1>
-          
+          <div class="hero-eyebrow">Aprendizaje inteligente</div>
+          <h1>Tu cuaderno digital de vocabulario coreano</h1>
+          <p>Todo en una sola app: tabla editable, audio, listas estrella, falladas y modos de estudio sin perder datos.</p>
         </div>
-        
+        <div class="hero-pills">
+          <span class="hero-pill">PC</span>
+          <span class="hero-pill">Móvil</span>
+          <span class="hero-pill">iPad</span>
+          <span class="hero-pill">PWA</span>
+          <button class="hero-update-btn" id="refreshAppBtn" type="button" title="Actualizar la web">🔄 Actualizar web</button>
+        </div>
       </div>
 
       <div class="top-actions">
@@ -1681,8 +1721,8 @@
           <button class="mode-btn" id="flashcardsBtn">📚 Flashcards</button>
           <button class="mode-btn" id="writeBtn">✍ Escritura</button>
           <button class="mode-btn" id="quizBtn">🧩 Multiple</button>
-          <button class="mode-btn" id="listenBtn">👂 Escuchar</button>
           <button class="mode-btn" id="mixBtn">🔗 Pairs</button>
+          <button class="mode-btn" id="mosaicBtn">🧱 Mosaico</button>
 
           <div class="dropdown" id="wrongPracticeDropdown">
             <button class="dropdown-btn" id="wrongPracticeBtn">Practicar falladas ▾</button>
@@ -1690,8 +1730,8 @@
               <button class="dropdown-item" data-practice-list="wrong" data-mode="flashcards">Flashcards</button>
                             <button class="dropdown-item" data-practice-list="wrong" data-mode="write">Escritura</button>
               <button class="dropdown-item" data-practice-list="wrong" data-mode="quiz">Multiple</button>
-              <button class="dropdown-item" data-practice-list="wrong" data-mode="listen">Escuchar</button>
               <button class="dropdown-item" data-practice-list="wrong" data-mode="mix">Pairs</button>
+              <button class="dropdown-item" data-practice-list="wrong" data-mode="mosaic">Mosaico</button>
             </div>
           </div>
 
@@ -1703,8 +1743,8 @@
               <button class="dropdown-item" data-practice-list="star" data-mode="flashcards">Flashcards</button>
                             <button class="dropdown-item" data-practice-list="star" data-mode="write">Escritura</button>
               <button class="dropdown-item" data-practice-list="star" data-mode="quiz">Multiple</button>
-              <button class="dropdown-item" data-practice-list="star" data-mode="listen">Escuchar</button>
               <button class="dropdown-item" data-practice-list="star" data-mode="mix">Pairs</button>
+              <button class="dropdown-item" data-practice-list="star" data-mode="mosaic">Mosaico</button>
             </div>
           </div>
 
@@ -1743,14 +1783,12 @@
         <div class="study-group">
           <div class="style-box">
             <span class="style-label">Texto</span>
-            <button class="small-btn" id="flashBoldBtn">Negrita: No</button>
+            <button class="small-btn" id="flashBoldBtn">Negrita: Sí</button>
             <button class="small-btn" id="flashFontDownBtn">A−</button>
             <button class="small-btn" id="flashFontUpBtn">A+</button>
             <span class="style-label" id="flashFontValue">62 px</span>
           </div>
           <button class="action-btn ghost" id="studyOnlyStarBtn">Practicar ⭐</button>
-          <button class="action-btn ghost" id="studyFaceToggleBtn">KO → ES</button>
-          <button class="action-btn ghost" id="studyEditBtn">✏️ Editar</button>
           <button class="action-btn ghost" id="studyShuffleBtn">🔀 Barajar</button>
           <button class="icon-btn" id="closeStudyBtn">✕</button>
         </div>
@@ -1772,6 +1810,7 @@
             </div>
             <div class="card-actions">
               <button class="action-btn" id="studyPlayFront">🔊 Reproducir</button>
+              <button class="action-btn ghost" id="studyPlayFrontSlow">🐢 Tortuga</button>
               <button class="action-btn secondary" id="studyFlipBtn">Girar</button>
               <button class="action-btn ghost" id="studyStarBtn">☆</button>
             </div>
@@ -1783,6 +1822,7 @@
             </div>
             <div class="card-actions">
               <button class="action-btn" id="studyPlayBack">🔊 Reproducir</button>
+              <button class="action-btn ghost" id="studyPlayBackSlow">🐢 Tortuga</button>
               <button class="action-btn secondary" id="studyFlipBtnBack">Girar</button>
               <button class="action-btn ghost" id="studyStarBtnBack">☆</button>
             </div>
@@ -1821,14 +1861,6 @@
           <div class="modal-stats" id="writeStats">0 / 0</div>
         </div>
         <div class="study-group">
-          <div class="mode-style-box">
-            <button class="small-btn" id="writeDirectionBtn">ES → KO</button>
-            <button class="small-btn" id="writePlayBtn">🔊 Audio</button>
-            <button class="small-btn" id="writeShuffleBtn">🔀 Barajar</button>
-            <button class="small-btn" id="writeBoldBtn">Negrita: No</button>
-            <button class="small-btn" id="writeFontDownBtn">A−</button>
-            <button class="small-btn" id="writeFontUpBtn">A+</button>
-          </div>
           <button class="icon-btn" id="writeStarBtn">☆</button>
           <button class="icon-btn" id="closeWriteBtn">✕</button>
         </div>
@@ -1840,7 +1872,7 @@
       </div>
 
       <div class="write-card">
-        <div class="write-label" id="writeLabel">Escribe en coreano</div>
+        <div class="write-label">Escribe en coreano</div>
         <div class="write-prompt" id="writePrompt">—</div>
         <input class="write-input" id="writeInput" autocomplete="off" placeholder="Escribe aquí en coreano" />
         <div class="write-result" id="writeResult"></div>
@@ -1861,18 +1893,11 @@
     <div class="quiz-shell">
       <div class="quiz-top">
         <div class="quiz-meta">
-          <span id="quizPromptLabel">Definición</span>
-          <button class="icon-btn" id="quizSpeakBtn" title="Reproducir pista">🔊</button>
+          <span>Definición</span>
+          <button class="icon-btn" id="quizSpeakBtn" title="Reproducir español">🔊</button>
           <button class="icon-btn" id="quizStarBtn" title="Marcada">☆</button>
         </div>
         <div class="quiz-meta">
-          <div class="mode-style-box">
-            <button class="small-btn" id="quizDirectionBtn">ES → KO</button>
-            <button class="small-btn" id="quizShuffleBtn">🔀 Barajar</button>
-            <button class="small-btn" id="quizBoldBtn">Negrita: No</button>
-            <button class="small-btn" id="quizFontDownBtn">A−</button>
-            <button class="small-btn" id="quizFontUpBtn">A+</button>
-          </div>
           <span id="quizCounter">0 de 0</span>
           <button class="icon-btn" id="closeQuizBtn">✕</button>
         </div>
@@ -1885,15 +1910,7 @@
 
       <div class="quiz-wording">
         <div class="quiz-prompt">Definición</div>
-        <div class="quiz-definition-row">
-          <div class="quiz-definition" id="quizDefinition">—</div>
-          <button class="quiz-inline-play" id="quizInlineSpeakBtn" title="Reproducir pista">🔊</button>
-        </div>
-      </div>
-
-      <div class="quiz-nav-arrows">
-        <button class="study-nav-arrow left" id="quizArrowPrev" aria-label="Pregunta anterior">&lt;</button>
-        <button class="study-nav-arrow right" id="quizArrowNext" aria-label="Pregunta siguiente">&gt;</button>
+        <div class="quiz-definition" id="quizDefinition">—</div>
       </div>
 
       <div class="quiz-subtitle">Selecciona una respuesta</div>
@@ -1914,16 +1931,12 @@
       <div class="mix-top">
         <div class="quiz-meta">
           <span>Modo Pairs</span>
+          <button class="icon-btn" id="mixPlayBtn" title="Reproducir normal">🔊</button>
+          <button class="icon-btn" id="mixPlaySlowBtn" title="Reproducir tortuga">🐢</button>
           <button class="icon-btn" id="mixStarBtn" title="Marcar set">☆</button>
           <span id="mixStatus">0 / 0 parejas</span>
         </div>
         <div class="study-group">
-          <div class="mode-style-box">
-            <button class="small-btn" id="mixShuffleBtn">🔀 Barajar</button>
-            <button class="small-btn" id="mixBoldBtn">Negrita: No</button>
-            <button class="small-btn" id="mixFontDownBtn">A−</button>
-            <button class="small-btn" id="mixFontUpBtn">A+</button>
-          </div>
           <button class="quiz-btn" id="mixResetBtn">Reiniciar</button>
           <button class="icon-btn" id="closeMixBtn">✕</button>
         </div>
@@ -1937,6 +1950,41 @@
       <div class="mix-grid" id="mixGrid"></div>
     </div>
   </div>
+
+
+  <!-- MOSAICO -->
+  <div class="overlay" id="mosaicOverlay">
+    <div class="study-modal mosaic-wrap">
+      <div class="modal-top">
+        <div>
+          <div class="modal-title">Modo mosaico</div>
+          <div class="modal-stats" id="mosaicStats">0 / 0</div>
+        </div>
+        <div class="study-group">
+          <div class="style-box">
+            <span class="style-label">Texto</span>
+            <button class="small-btn" id="mosaicBoldBtn">Negrita: No</button>
+            <button class="small-btn" id="mosaicFontDownBtn">A−</button>
+            <button class="small-btn" id="mosaicFontUpBtn">A+</button>
+            <span class="style-label" id="mosaicFontValue">34 px</span>
+            <button class="small-btn" id="mosaicSwapBtn">KO arriba</button>
+            <button class="small-btn" id="mosaicShuffleBtn">🔀 Barajar</button>
+          </div>
+          <button class="action-btn ghost" id="mosaicPlayBtn">🔊 Normal</button>
+          <button class="action-btn ghost" id="mosaicPlaySlowBtn">🐢 Tortuga</button>
+          <button class="icon-btn" id="closeMosaicBtn">✕</button>
+        </div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="mosaicProgressFill"></div></div>
+        <div class="progress-text" id="mosaicProgressText">0%</div>
+      </div>
+
+      <div class="mosaic-grid" id="mosaicGrid"></div>
+    </div>
+  </div>
+
 
   <!-- LISTAS -->
   <div class="overlay" id="listOverlay">
@@ -1953,8 +2001,8 @@
         <button class="small-btn" id="listPracticeFlashBtn">Practicar en flashcards</button>
                 <button class="small-btn" id="listPracticeWriteBtn">Practicar en escritura</button>
         <button class="small-btn" id="listPracticeQuizBtn">Practicar en Multiple</button>
-        <button class="small-btn" id="listPracticeListenBtn">Practicar en Escuchar</button>
         <button class="small-btn" id="listPracticeMixBtn">Practicar en Pairs</button>
+        <button class="small-btn" id="listPracticeMosaicBtn">Practicar en Mosaico</button>
         <button class="small-btn" id="listClearBtn">Vaciar lista</button>
       </div>
 
@@ -1992,13 +2040,11 @@
   <div class="theme-popover" id="themePopover">
     <div class="nav-head-title">Temas de color</div>
     <div class="theme-swatches">
-      <button class="theme-swatch active" data-theme-palette="default" title="Predeterminado"><span style="background:linear-gradient(135deg,#8b5cf6 0 50%,#f5f7fb 50% 100%)"></span></button>
-      <button class="theme-swatch" data-theme-palette="ocean" title="Océano"><span style="background:linear-gradient(135deg,#0ea5e9 0 50%,#eef8ff 50% 100%)"></span></button>
-      <button class="theme-swatch" data-theme-palette="forest" title="Bosque"><span style="background:linear-gradient(135deg,#22c55e 0 50%,#f3fbf5 50% 100%)"></span></button>
-      <button class="theme-swatch" data-theme-palette="sunset" title="Atardecer"><span style="background:linear-gradient(135deg,#f97316 0 50%,#fff6f0 50% 100%)"></span></button>
-      <button class="theme-swatch" data-theme-palette="rose" title="Rose"><span style="background:linear-gradient(135deg,#ec4899 0 50%,#fff5fb 50% 100%)"></span></button>
-      <button class="theme-swatch" data-theme-palette="lavender" title="Lavanda"><span style="background:linear-gradient(135deg,#7c3aed 0 50%,#f7f3ff 50% 100%)"></span></button>
-      <button class="theme-swatch" data-theme-palette="mint" title="Mint"><span style="background:linear-gradient(135deg,#14b8a6 0 50%,#f0fdfa 50% 100%)"></span></button>
+      <button class="theme-swatch active" data-theme-palette="default" title="Predeterminado"><span style="background:linear-gradient(135deg,#8b5cf6,#0f1020)"></span></button>
+      <button class="theme-swatch" data-theme-palette="ocean" title="Océano"><span style="background:linear-gradient(135deg,#0ea5e9,#082f49)"></span></button>
+      <button class="theme-swatch" data-theme-palette="forest" title="Bosque"><span style="background:linear-gradient(135deg,#22c55e,#052e16)"></span></button>
+      <button class="theme-swatch" data-theme-palette="sunset" title="Atardecer"><span style="background:linear-gradient(135deg,#f97316,#7c2d12)"></span></button>
+      <button class="theme-swatch" data-theme-palette="rose" title="Rose"><span style="background:linear-gradient(135deg,#ec4899,#4a044e)"></span></button>
     </div>
   </div>
 
@@ -2007,7 +2053,7 @@
     const STORAGE_STAR = "flashcards-star-ids-v3";
     const STORAGE_WRONG = "flashcards-wrong-ids-v3";
     const STORAGE_TABLE_STYLE = "flashcards-table-style-v1";
-    const STORAGE_FLASH_STYLE = "flashcards-study-style-v2";
+    const STORAGE_FLASH_STYLE = "flashcards-study-style-v1";
     const STORAGE_PALETTE = "flashcards-theme-palette-v1";
 
     let allData = [];
@@ -2017,13 +2063,7 @@
     let audioRate = 1.0;
     let currentEditRowId = null;
     let tableStyle = { fontSize: 13, bold: true };
-    let flashStyle = { fontSize: 62, bold: false };
-    let writeStyle = { fontSize: 30, bold: false };
-    let quizStyle = { fontSize: 28, bold: false };
-    let mixStyle = { fontSize: 22, bold: false };
-    let studyFrontMode = "ko";
-    let writeDirection = "es-to-ko";
-    let quizDirection = "es-to-ko";
+    let flashStyle = { fontSize: 62, bold: true };
 
     let starredWords = new Set(loadIdSet(STORAGE_STAR));
     let wrongWords = new Set(loadIdSet(STORAGE_WRONG));
@@ -2041,7 +2081,6 @@
     let quizData = [];
     let quizIndex = 0;
     let quizAnswered = false;
-    let quizModeType = "multiple";
 
     let mixData = [];
     let mixTiles = [];
@@ -2086,7 +2125,6 @@
     const flashcardsBtn = document.getElementById("flashcardsBtn");
     const writeBtn = document.getElementById("writeBtn");
     const quizBtn = document.getElementById("quizBtn");
-    const listenBtn = document.getElementById("listenBtn");
     const mixBtn = document.getElementById("mixBtn");
 
     const wrongPracticeDropdown = document.getElementById("wrongPracticeDropdown");
@@ -2122,14 +2160,11 @@
     const studyStarBtnBack = document.getElementById("studyStarBtnBack");
     const studyOnlyStarBtn = document.getElementById("studyOnlyStarBtn");
     const studyShuffleBtn = document.getElementById("studyShuffleBtn");
-    const studyFaceToggleBtn = document.getElementById("studyFaceToggleBtn");
-    const studyEditBtn = document.getElementById("studyEditBtn");
     const closeStudyBtn = document.getElementById("closeStudyBtn");
     const studyProgressFill = document.getElementById("studyProgressFill");
     const studyProgressText = document.getElementById("studyProgressText");
 
     const writeStats = document.getElementById("writeStats");
-    const writeLabel = document.getElementById("writeLabel");
     const writePrompt = document.getElementById("writePrompt");
     const writeInput = document.getElementById("writeInput");
     const writeResult = document.getElementById("writeResult");
@@ -2137,30 +2172,15 @@
     const writeNextBtn = document.getElementById("writeNextBtn");
     const checkWriteBtn = document.getElementById("checkWriteBtn");
     const writeStarBtn = document.getElementById("writeStarBtn");
-    const writeDirectionBtn = document.getElementById("writeDirectionBtn");
-    const writePlayBtn = document.getElementById("writePlayBtn");
-    const writeShuffleBtn = document.getElementById("writeShuffleBtn");
-    const writeBoldBtn = document.getElementById("writeBoldBtn");
-    const writeFontDownBtn = document.getElementById("writeFontDownBtn");
-    const writeFontUpBtn = document.getElementById("writeFontUpBtn");
     const closeWriteBtn = document.getElementById("closeWriteBtn");
     const writeProgressFill = document.getElementById("writeProgressFill");
     const writeProgressText = document.getElementById("writeProgressText");
 
     const quizCounter = document.getElementById("quizCounter");
-    const quizPromptLabel = document.getElementById("quizPromptLabel");
     const quizDefinition = document.getElementById("quizDefinition");
     const quizOptions = document.getElementById("quizOptions");
     const quizSpeakBtn = document.getElementById("quizSpeakBtn");
     const quizStarBtn = document.getElementById("quizStarBtn");
-    const quizDirectionBtn = document.getElementById("quizDirectionBtn");
-    const quizShuffleBtn = document.getElementById("quizShuffleBtn");
-    const quizInlineSpeakBtn = document.getElementById("quizInlineSpeakBtn");
-    const quizArrowPrev = document.getElementById("quizArrowPrev");
-    const quizArrowNext = document.getElementById("quizArrowNext");
-    const quizBoldBtn = document.getElementById("quizBoldBtn");
-    const quizFontDownBtn = document.getElementById("quizFontDownBtn");
-    const quizFontUpBtn = document.getElementById("quizFontUpBtn");
     const quizPrevBtn = document.getElementById("quizPrevBtn");
     const quizNextBtn = document.getElementById("quizNextBtn");
     const closeQuizBtn = document.getElementById("closeQuizBtn");
@@ -2170,10 +2190,6 @@
     const mixGrid = document.getElementById("mixGrid");
     const mixStatus = document.getElementById("mixStatus");
     const mixStarBtn = document.getElementById("mixStarBtn");
-    const mixShuffleBtn = document.getElementById("mixShuffleBtn");
-    const mixBoldBtn = document.getElementById("mixBoldBtn");
-    const mixFontDownBtn = document.getElementById("mixFontDownBtn");
-    const mixFontUpBtn = document.getElementById("mixFontUpBtn");
     const mixResetBtn = document.getElementById("mixResetBtn");
     const closeMixBtn = document.getElementById("closeMixBtn");
     const mixProgressFill = document.getElementById("mixProgressFill");
@@ -2186,7 +2202,6 @@
     const listPracticeFlashBtn = document.getElementById("listPracticeFlashBtn");
     const listPracticeWriteBtn = document.getElementById("listPracticeWriteBtn");
     const listPracticeQuizBtn = document.getElementById("listPracticeQuizBtn");
-    const listPracticeListenBtn = document.getElementById("listPracticeListenBtn");
     const listPracticeMixBtn = document.getElementById("listPracticeMixBtn");
     const listClearBtn = document.getElementById("listClearBtn");
 
@@ -2226,9 +2241,6 @@
     setAudioRate(1.0);
     applyTableStyle();
     applyFlashStyle();
-    applyWriteStyle();
-    applyQuizStyle();
-    applyMixStyle();
 
 
     function isRowEdited(row){
@@ -2240,9 +2252,9 @@
     }
 
     function getEditableHeaders(){
-      const headers = getOrderedHeaders(getDisplayHeaders());
+      const headers = getDisplayHeaders();
       if(headers.length) return headers;
-      return ["coreano","español","Pronunciación","Notas","topic","unit"];
+      return ["coreano","español","Notas","Pronunciación","topic","unit"];
     }
 
     function applySavedPalette(){
@@ -2254,7 +2266,7 @@
       const paletteThemes = {
         default: {
           dark:{bg:'#0f1020',panel:'#171a2d',panel2:'#1d2240',line:'#313a63',text:'#eef1ff',muted:'#aeb6db',notes:'#231f3d',notesLine:'#4d4677',chip:'#1f2544',chipBorder:'#47527f',chipActive:'#7c3aed',chipActiveText:'#ffffff',shadow:'0 10px 30px rgba(0,0,0,.35)',overlay:'rgba(4,5,16,.84)',quizBg:'#11163a',quizCard:'#2e3a63',quizLine:'#5a6893',quizText:'#f4f6ff',quizMuted:'#aeb9e6',progressBg:'#2a2f57',primary:'#8b5cf6',primary2:'#a78bfa',primarySoft:'#282251',progress:'#8b5cf6'},
-          light:{bg:'#f5f7fb',panel:'#ffffff',panel2:'#eaf2ff',line:'#d6e3fb',text:'#1f2937',muted:'#6b7280',notes:'#fff8e7',notesLine:'#e7d6a5',chip:'#ffffff',chipBorder:'#cfd8ea',chipActive:'#2563eb',chipActiveText:'#ffffff',shadow:'0 8px 24px rgba(15,23,42,.08)',overlay:'rgba(15,23,42,.62)',quizBg:'#244377',quizCard:'#325892',quizLine:'#5f81ba',quizText:'#f2f6ff',quizMuted:'#c3d3f1',progressBg:'#dbeafe',primary:'#2563eb',primary2:'#3b82f6',primarySoft:'#dbeafe',progress:'#2563eb'}
+          light:{bg:'#f5f7fb',panel:'#ffffff',panel2:'#eef2ff',line:'#d9e1f2',text:'#1f2937',muted:'#6b7280',notes:'#fff8e7',notesLine:'#e7d6a5',chip:'#ffffff',chipBorder:'#cfd8ea',chipActive:'#4caf50',chipActiveText:'#ffffff',shadow:'0 8px 24px rgba(15,23,42,.08)',overlay:'rgba(15,23,42,.62)',quizBg:'#2f3b63',quizCard:'#34406a',quizLine:'#586992',quizText:'#f2f4ff',quizMuted:'#b9c2e2',progressBg:'#dbe4ff',primary:'#4f46e5',primary2:'#6366f1',primarySoft:'#e0e7ff',progress:'#4f46e5'}
         },
         ocean: {
           dark:{bg:'#061723',panel:'#0b2232',panel2:'#0f3047',line:'#1f5372',text:'#e7f8ff',muted:'#9cc8db',notes:'#0d2a3c',notesLine:'#2c6583',chip:'#12344c',chipBorder:'#2a6887',chipActive:'#0ea5e9',chipActiveText:'#ffffff',shadow:'0 10px 30px rgba(0,28,48,.35)',overlay:'rgba(3,16,24,.82)',quizBg:'#0b2740',quizCard:'#15405d',quizLine:'#3d7598',quizText:'#f1fbff',quizMuted:'#b4d9eb',progressBg:'#15364a',primary:'#0ea5e9',primary2:'#38bdf8',primarySoft:'#12364b',progress:'#0ea5e9'},
@@ -2271,45 +2283,36 @@
         rose: {
           dark:{bg:'#20101f',panel:'#31182e',panel2:'#43203f',line:'#7a4371',text:'#fff0fb',muted:'#ddb2d4',notes:'#3a1833',notesLine:'#945486',chip:'#4a2450',chipBorder:'#9854a0',chipActive:'#ec4899',chipActiveText:'#ffffff',shadow:'0 10px 30px rgba(43,7,34,.35)',overlay:'rgba(20,5,18,.82)',quizBg:'#45183c',quizCard:'#5d2451',quizLine:'#9a5d90',quizText:'#fff4fd',quizMuted:'#efcfe9',progressBg:'#532247',primary:'#ec4899',primary2:'#f472b6',primarySoft:'#40203a',progress:'#ec4899'},
           light:{bg:'#fff5fb',panel:'#ffffff',panel2:'#ffe4f3',line:'#efc8df',text:'#4b1f3f',muted:'#8e6680',notes:'#fff7fb',notesLine:'#edd0e1',chip:'#ffffff',chipBorder:'#f0d7e8',chipActive:'#db2777',chipActiveText:'#ffffff',shadow:'0 8px 24px rgba(114,20,76,.10)',overlay:'rgba(88,20,72,.55)',quizBg:'#a03b79',quizCard:'#bb4b8c',quizLine:'#d58ab5',quizText:'#fff6fc',quizMuted:'#f1d8e9',progressBg:'#ffe0f0',primary:'#db2777',primary2:'#ec4899',primarySoft:'#ffe0f0',progress:'#db2777'}
-        },
-        lavender: {
-          dark:{bg:'#18112b',panel:'#25193f',panel2:'#312154',line:'#65539d',text:'#f3eeff',muted:'#c4b8ea',notes:'#2f2148',notesLine:'#7a67b0',chip:'#33244f',chipBorder:'#7c6ab3',chipActive:'#8b5cf6',chipActiveText:'#ffffff',shadow:'0 10px 30px rgba(34,15,60,.35)',overlay:'rgba(20,10,34,.82)',quizBg:'#2d1f4a',quizCard:'#432d68',quizLine:'#74629c',quizText:'#f8f4ff',quizMuted:'#ddd5f3',progressBg:'#3c2b61',primary:'#8b5cf6',primary2:'#c4b5fd',primarySoft:'#2a1d43',progress:'#8b5cf6'},
-          light:{bg:'#f7f3ff',panel:'#ffffff',panel2:'#efe7ff',line:'#d8cdf7',text:'#34205f',muted:'#75679c',notes:'#fbf8ff',notesLine:'#e2d8fa',chip:'#ffffff',chipBorder:'#e4dbf8',chipActive:'#7c3aed',chipActiveText:'#ffffff',shadow:'0 8px 24px rgba(63,38,120,.10)',overlay:'rgba(64,38,120,.52)',quizBg:'#6d56b3',quizCard:'#7f67c5',quizLine:'#a796dc',quizText:'#faf8ff',quizMuted:'#e2ddf6',progressBg:'#e8e0ff',primary:'#7c3aed',primary2:'#8b5cf6',primarySoft:'#efe7ff',progress:'#7c3aed'}
-        },
-        mint: {
-          dark:{bg:'#0d1a1a',panel:'#143030',panel2:'#184040',line:'#2f7770',text:'#ebfffc',muted:'#a9d6cf',notes:'#173636',notesLine:'#3b8e86',chip:'#1b4544',chipBorder:'#4c9e95',chipActive:'#14b8a6',chipActiveText:'#ffffff',shadow:'0 10px 30px rgba(3,34,34,.35)',overlay:'rgba(3,22,22,.82)',quizBg:'#164746',quizCard:'#21625f',quizLine:'#4d9a92',quizText:'#f2fffd',quizMuted:'#c7e6e2',progressBg:'#1e5654',primary:'#14b8a6',primary2:'#2dd4bf',primarySoft:'#15403f',progress:'#14b8a6'},
-          light:{bg:'#f0fdfa',panel:'#ffffff',panel2:'#dff9f3',line:'#bee9e0',text:'#18423d',muted:'#5e817b',notes:'#f6fffc',notesLine:'#d4f1ea',chip:'#ffffff',chipBorder:'#d4eee8',chipActive:'#0f766e',chipActiveText:'#ffffff',shadow:'0 8px 24px rgba(17,89,82,.10)',overlay:'rgba(12,93,86,.52)',quizBg:'#2e7d76',quizCard:'#3f968e',quizLine:'#73b9b2',quizText:'#f6fffe',quizMuted:'#d6f0ed',progressBg:'#d7f6f1',primary:'#0f766e',primary2:'#14b8a6',primarySoft:'#dff9f3',progress:'#0f766e'}
         }
       };
       const selected = paletteThemes[name] || paletteThemes.default;
       const mode = document.body.classList.contains('light') ? 'light' : 'dark';
       const palette = selected[mode];
-      [document.documentElement, document.body].forEach(root => {
-        root.style.setProperty('--bg', palette.bg);
-        root.style.setProperty('--panel', palette.panel);
-        root.style.setProperty('--panel-2', palette.panel2);
-        root.style.setProperty('--line', palette.line);
-        root.style.setProperty('--text', palette.text);
-        root.style.setProperty('--muted', palette.muted);
-        root.style.setProperty('--notes', palette.notes);
-        root.style.setProperty('--notes-line', palette.notesLine);
-        root.style.setProperty('--chip', palette.chip);
-        root.style.setProperty('--chip-border', palette.chipBorder);
-        root.style.setProperty('--chip-active', palette.chipActive);
-        root.style.setProperty('--chip-active-text', palette.chipActiveText);
-        root.style.setProperty('--shadow', palette.shadow);
-        root.style.setProperty('--overlay', palette.overlay);
-        root.style.setProperty('--quiz-bg', palette.quizBg);
-        root.style.setProperty('--quiz-card', palette.quizCard);
-        root.style.setProperty('--quiz-line', palette.quizLine);
-        root.style.setProperty('--quiz-text', palette.quizText);
-        root.style.setProperty('--quiz-muted', palette.quizMuted);
-        root.style.setProperty('--progress-bg', palette.progressBg);
-        root.style.setProperty('--primary', palette.primary);
-        root.style.setProperty('--primary-2', palette.primary2);
-        root.style.setProperty('--primary-soft', palette.primarySoft);
-        root.style.setProperty('--progress-fill', palette.progress);
-      });
+      const root = document.documentElement;
+      root.style.setProperty('--bg', palette.bg);
+      root.style.setProperty('--panel', palette.panel);
+      root.style.setProperty('--panel-2', palette.panel2);
+      root.style.setProperty('--line', palette.line);
+      root.style.setProperty('--text', palette.text);
+      root.style.setProperty('--muted', palette.muted);
+      root.style.setProperty('--notes', palette.notes);
+      root.style.setProperty('--notes-line', palette.notesLine);
+      root.style.setProperty('--chip', palette.chip);
+      root.style.setProperty('--chip-border', palette.chipBorder);
+      root.style.setProperty('--chip-active', palette.chipActive);
+      root.style.setProperty('--chip-active-text', palette.chipActiveText);
+      root.style.setProperty('--shadow', palette.shadow);
+      root.style.setProperty('--overlay', palette.overlay);
+      root.style.setProperty('--quiz-bg', palette.quizBg);
+      root.style.setProperty('--quiz-card', palette.quizCard);
+      root.style.setProperty('--quiz-line', palette.quizLine);
+      root.style.setProperty('--quiz-text', palette.quizText);
+      root.style.setProperty('--quiz-muted', palette.quizMuted);
+      root.style.setProperty('--progress-bg', palette.progressBg);
+      root.style.setProperty('--primary', palette.primary);
+      root.style.setProperty('--primary-2', palette.primary2);
+      root.style.setProperty('--primary-soft', palette.primarySoft);
+      root.style.setProperty('--progress-fill', palette.progress);
       localStorage.setItem(STORAGE_PALETTE, paletteThemes[name] ? name : 'default');
       document.querySelectorAll('[data-theme-palette]').forEach(btn => btn.classList.toggle('active', btn.dataset.themePalette === (paletteThemes[name] ? name : 'default')));
     }
@@ -2393,7 +2396,7 @@
         const rawFlash = JSON.parse(localStorage.getItem(STORAGE_FLASH_STYLE) || "null");
         if(rawFlash && typeof rawFlash === "object"){
           flashStyle.fontSize = clamp(Number(rawFlash.fontSize) || 62, 28, 90);
-          flashStyle.bold = !!rawFlash.bold;
+          flashStyle.bold = rawFlash.bold !== false;
         }
       }catch{}
     }
@@ -2425,37 +2428,6 @@
       if(flashBoldBtn) flashBoldBtn.textContent = `Negrita: ${flashStyle.bold ? "Sí" : "No"}`;
       if(flashFontValue) flashFontValue.textContent = `${flashStyle.fontSize} px`;
       saveStylePrefs();
-    }
-
-    function applyWriteStyle(){
-      const root = document.documentElement;
-      root.style.setProperty("--write-font-size", `${writeStyle.fontSize}px`);
-      root.style.setProperty("--write-input-size", `${Math.max(18, Math.round(writeStyle.fontSize * 0.73))}px`);
-      root.style.setProperty("--write-font-weight", writeStyle.bold ? "800" : "500");
-      if(writeBoldBtn) writeBoldBtn.textContent = `Negrita: ${writeStyle.bold ? "Sí" : "No"}`;
-    }
-
-    function applyQuizStyle(){
-      const root = document.documentElement;
-      root.style.setProperty("--quiz-font-size", `${quizStyle.fontSize}px`);
-      root.style.setProperty("--quiz-option-size", `${Math.max(16, Math.round(quizStyle.fontSize * 0.82))}px`);
-      root.style.setProperty("--quiz-font-weight", quizStyle.bold ? "800" : "500");
-      if(quizBoldBtn) quizBoldBtn.textContent = `Negrita: ${quizStyle.bold ? "Sí" : "No"}`;
-    }
-
-    function applyMixStyle(){
-      const root = document.documentElement;
-      root.style.setProperty("--mix-font-size", `${mixStyle.fontSize}px`);
-      root.style.setProperty("--mix-font-weight", mixStyle.bold ? "800" : "500");
-      if(mixBoldBtn) mixBoldBtn.textContent = `Negrita: ${mixStyle.bold ? "Sí" : "No"}`;
-    }
-
-    function getOrderedHeaders(headers){
-      const preferred = ["coreano","español","Pronunciación","Notas","topic","unit"];
-      const out = [];
-      preferred.forEach(h => { if(headers.includes(h)) out.push(h); });
-      headers.forEach(h => { if(!out.includes(h)) out.push(h); });
-      return out;
     }
 
     function escapeHtml(value){
@@ -2528,25 +2500,8 @@
       return candidates.sort((a,b) => scoreVoice(b) - scoreVoice(a))[0] || null;
     }
 
-
-    function normalizeSpeechText(text, lang){
-      let clean = String(text ?? "").trim();
-      if(!clean) return "";
-      clean = clean
-        .replace(/\s*\(([^)]+)\)\s*/g, ", $1 ")
-        .replace(/\s*\[([^\]]+)\]\s*/g, ", $1 ")
-        .replace(/\s*[\/|]\s*/g, ", ")
-        .replace(/\s+/g, " ")
-        .replace(/\s+,/g, ",")
-        .trim();
-      if(lang === "ko-KR"){
-        clean = clean.replace(/,+/g, ", ");
-      }
-      return clean;
-    }
-
     function speak(text, lang){
-      const clean = normalizeSpeechText(text, lang);
+      const clean = String(text || "").trim();
       if(!clean) return;
       if(!("speechSynthesis" in window)){
         alert("Tu navegador no soporta síntesis de voz.");
@@ -2640,10 +2595,10 @@
     }
 
     function getDisplayHeaders(){
-      if(excelHeaders.length) return getOrderedHeaders(excelHeaders);
+      if(excelHeaders.length) return excelHeaders;
       const fromRows = new Set();
       allData.forEach(row => Object.keys(row._raw || {}).forEach(key => fromRows.add(key)));
-      return getOrderedHeaders([...fromRows]);
+      return [...fromRows];
     }
 
     function syncMappedFields(row){
@@ -2806,7 +2761,7 @@
 
         const headerSet = new Set();
         json.forEach(row => Object.keys(row).forEach(key => headerSet.add(key)));
-        const headers = getOrderedHeaders([...headerSet]);
+        const headers = [...headerSet];
         excelHeaders = headers.slice();
         detectedColumns = detectColumns(json, headers);
 
@@ -3032,9 +2987,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       const saved = localStorage.getItem(STORAGE_THEME);
       if(saved === "light"){
         document.body.classList.add("light");
-      }else{
-        document.body.classList.remove("light");
-        if(!saved) localStorage.setItem(STORAGE_THEME, "dark");
       }
       themeBtn.textContent = document.body.classList.contains("light") ? "🌙" : "☀";
     }
@@ -3160,9 +3112,8 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       if(row) studyVisited.add(row.id);
       studyInner.classList.remove("flip");
       updateStudyVisual(row);
-      const frontIsKo = studyFrontMode === "ko";
-      studyFrontText.textContent = frontIsKo ? (row.coreano || "—") : (row.español || "—");
-      studyBackText.textContent = frontIsKo ? (row.español || "—") : (row.coreano || "—");
+      studyFrontText.textContent = row.coreano || "—";
+      studyBackText.textContent = row.español || "—";
       studyPron.textContent = row.Pronunciación || "—";
       studyNotes.textContent = row.Notas || "—";
       studyStats.textContent = `${studyIndex + 1} / ${studyData.length}`;
@@ -3171,10 +3122,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       studyStarBtnBack.textContent = icon;
       studyOnlyStarBtn.classList.toggle("active", currentPracticeSource === "star");
       studyOnlyStarBtn.textContent = currentPracticeSource === "star" ? "Viendo ⭐" : "Practicar ⭐";
-      if(studyFaceToggleBtn){
-        studyFaceToggleBtn.textContent = frontIsKo ? "KO → ES" : "ES → KO";
-        studyFaceToggleBtn.classList.toggle("active", !frontIsKo);
-      }
       const isFirst = studyIndex === 0;
       const isLast = studyIndex === studyData.length - 1;
       studyPrevBtn.disabled = isFirst;
@@ -3211,16 +3158,12 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
 
     studyPlayFront.addEventListener("click", () => {
       const row = studyData[studyIndex];
-      if(!row) return;
-      const frontIsKo = studyFrontMode === "ko";
-      speak(frontIsKo ? row.coreano : row.español, frontIsKo ? "ko-KR" : "es-ES");
+      if(row) speak(row.coreano, "ko-KR");
     });
 
     studyPlayBack.addEventListener("click", () => {
       const row = studyData[studyIndex];
-      if(!row) return;
-      const frontIsKo = studyFrontMode === "ko";
-      speak(frontIsKo ? row.español : row.coreano, frontIsKo ? "es-ES" : "ko-KR");
+      if(row) speak(row.español, "es-ES");
     });
 
     studyFlipBtn.addEventListener("click", () => studyInner.classList.toggle("flip"));
@@ -3248,27 +3191,11 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
 
     studyShuffleBtn.addEventListener("click", () => {
       if(!studyData.length) return;
-      const currentId = studyData[studyIndex]?.id;
-      const shuffled = shuffleArray(studyData);
-      const changed = shuffled.some((row, index) => row.id !== studyData[index]?.id);
-      studyData = changed ? shuffled : shuffleArray(studyData.slice().reverse());
-      studyIndex = Math.max(0, studyData.findIndex(row => row.id === currentId));
-      if(studyIndex < 0) studyIndex = 0;
+      studyData = shuffleArray(studyData);
+      studyIndex = 0;
       renderStudyCard();
     });
 
-    if(studyFaceToggleBtn){
-      studyFaceToggleBtn.addEventListener("click", () => {
-        studyFrontMode = studyFrontMode === "ko" ? "es" : "ko";
-        renderStudyCard();
-      });
-    }
-    if(studyEditBtn){
-      studyEditBtn.addEventListener("click", () => {
-        const row = studyData[studyIndex];
-        if(row) openEditRow(row.id);
-      });
-    }
     closeStudyBtn.addEventListener("click", closeStudyMode);
     studyArrowPrev.addEventListener("click", prevStudyCard);
     studyArrowNext.addEventListener("click", nextStudyCard);
@@ -3329,14 +3256,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       }
 
       const row = writeData[writeIndex];
-      const esToKo = writeDirection === "es-to-ko";
-      if(writeLabel) writeLabel.textContent = esToKo ? "Escribe en coreano" : "Escribe en español";
-      writePrompt.textContent = esToKo ? (row.español || "—") : (row.coreano || "—");
-      writeInput.placeholder = esToKo ? "Escribe aquí en coreano" : "Escribe aquí en español";
-      if(writeDirectionBtn){
-        writeDirectionBtn.textContent = esToKo ? "ES → KO" : "KO → ES";
-        writeDirectionBtn.classList.toggle("active", !esToKo);
-      }
+      writePrompt.textContent = row.español || "—";
       writeStats.textContent = `${writeIndex + 1} / ${writeData.length}`;
       writeInput.value = "";
       writeResult.textContent = "";
@@ -3358,7 +3278,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       if(!writeData.length) return;
       const row = writeData[writeIndex];
       const answer = normalizeAnswer(writeInput.value);
-      const correct = normalizeAnswer(writeDirection === "es-to-ko" ? row.coreano : row.español);
+      const correct = normalizeAnswer(row.coreano);
       const ok = !!answer && answer === correct;
       writeAnswered.set(row.id, ok);
       if(ok){
@@ -3367,7 +3287,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         writeResult.className = "write-result good";
       }else{
         wrongWords.add(row.id);
-        writeResult.textContent = `❌ Incorrecto · Correcto: ${writeDirection === "es-to-ko" ? row.coreano : row.español}`;
+        writeResult.textContent = `❌ Incorrecto · Correcto: ${row.coreano}`;
         writeResult.className = "write-result bad";
       }
       persistLists();
@@ -3409,23 +3329,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       toggleStar(row);
       renderWriteCard();
     });
-    if(writeDirectionBtn){
-      writeDirectionBtn.addEventListener("click", () => {
-        writeDirection = writeDirection === "es-to-ko" ? "ko-to-es" : "es-to-ko";
-        renderWriteCard();
-      });
-    }
-    if(writePlayBtn){
-      writePlayBtn.addEventListener("click", () => {
-        const row = writeData[writeIndex];
-        if(!row) return;
-        speak(writeDirection === "es-to-ko" ? row.coreano : row.español, writeDirection === "es-to-ko" ? "ko-KR" : "es-ES");
-      });
-    }
-    if(writeShuffleBtn){ writeShuffleBtn.addEventListener("click", shuffleWriteDeck); }
-    if(writeBoldBtn){ writeBoldBtn.addEventListener("click", () => { writeStyle.bold = !writeStyle.bold; applyWriteStyle(); }); }
-    if(writeFontDownBtn){ writeFontDownBtn.addEventListener("click", () => { writeStyle.fontSize = clamp(writeStyle.fontSize - 2, 20, 56); applyWriteStyle(); }); }
-    if(writeFontUpBtn){ writeFontUpBtn.addEventListener("click", () => { writeStyle.fontSize = clamp(writeStyle.fontSize + 2, 20, 56); applyWriteStyle(); }); }
     closeWriteBtn.addEventListener("click", closeWriteMode);
 
     /* ---------- multiple ---------- */
@@ -3434,25 +3337,8 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       if(quizIndex >= quizData.length) quizIndex = Math.max(0, quizData.length - 1);
     }
 
-    function shuffleWriteDeck(){
-      if(!writeData.length) return;
-      writeData = shuffleArray(writeData);
-      writeIndex = 0;
-      writeAnswered = new Map();
-      renderWriteCard();
-    }
-
-    function shuffleQuizDeck(){
-      if(!quizData.length) return;
-      quizData = shuffleArray(quizData);
-      quizIndex = 0;
-      quizAnsweredMap = new Map();
-      renderQuizCard();
-    }
-
-    function openQuizMode(source = null, modeType = "multiple"){
+    function openQuizMode(source = null){
       currentPracticeSource = source;
-      quizModeType = modeType;
       quizIndex = 0;
       quizAnsweredMap = new Map();
       buildQuizDeck();
@@ -3464,19 +3350,13 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       renderQuizCard();
     }
 
-    function openListenMode(source = null){
-      openQuizMode(source, "listen");
-    }
-
     function closeQuizMode(){
       quizOverlay.classList.remove("open");
       currentPracticeSource = null;
-      quizModeType = "multiple";
-      if(quizDirectionBtn) quizDirectionBtn.style.display = "";
     }
 
     function getQuizOptions(correctRow){
-      const pool = getRowsFromSource(currentPracticeSource).filter(r => r.id !== correctRow.id && (quizModeType === "listen" ? r.español : r.coreano));
+      const pool = getRowsFromSource(currentPracticeSource).filter(r => r.id !== correctRow.id && r.coreano);
       const shuffled = shuffleArray(pool).slice(0, 3);
       return shuffleArray([correctRow, ...shuffled]);
     }
@@ -3491,14 +3371,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         quizNextBtn.disabled = true;
         quizPrevBtn.style.opacity = ".5";
         quizNextBtn.style.opacity = ".5";
-        if(quizArrowPrev){
-          quizArrowPrev.disabled = true;
-          quizArrowPrev.style.opacity = ".45";
-        }
-        if(quizArrowNext){
-          quizArrowNext.disabled = true;
-          quizArrowNext.style.opacity = ".45";
-        }
         quizNextBtn.textContent = "Siguiente →";
         updateProgress(quizProgressFill, quizProgressText, 0, 0);
         return;
@@ -3508,25 +3380,14 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       const row = quizData[quizIndex];
       const options = getQuizOptions(row);
 
-      const esToKo = quizDirection === "es-to-ko";
-      const isListenMode = quizModeType === "listen";
-      if(quizPromptLabel) quizPromptLabel.textContent = isListenMode ? "Escuchar" : (esToKo ? "Definición" : "Palabra en coreano");
-      if(quizDirectionBtn){
-        quizDirectionBtn.style.display = isListenMode ? "none" : "inline-flex";
-        quizDirectionBtn.textContent = esToKo ? "ES → KO" : "KO → ES";
-        quizDirectionBtn.classList.toggle("active", !esToKo);
-      }
-      if(quizInlineSpeakBtn){
-        quizInlineSpeakBtn.style.display = isListenMode ? "inline-flex" : "none";
-      }
-      quizDefinition.textContent = isListenMode ? "Escucha y elige la opción correcta" : (esToKo ? row.español : row.coreano);
+      quizDefinition.textContent = row.español;
       quizCounter.textContent = `${quizIndex + 1} de ${quizData.length}`;
       quizStarBtn.textContent = starredWords.has(row.id) ? "⭐" : "☆";
       updateProgress(quizProgressFill, quizProgressText, quizIndex, quizData.length);
 
       quizOptions.innerHTML = options.map(opt => `
         <button class="quiz-option" data-id="${opt.id}" data-correct="${opt.id === row.id ? "1" : "0"}">
-          ${escapeHtml(isListenMode ? opt.español : (esToKo ? opt.coreano : opt.español))}
+          ${escapeHtml(opt.coreano)}
         </button>
       `).join("");
 
@@ -3554,28 +3415,13 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       quizNextBtn.disabled = false;
       quizPrevBtn.style.opacity = quizPrevBtn.disabled ? ".5" : "1";
       quizNextBtn.style.opacity = "1";
-      if(quizArrowPrev){
-        quizArrowPrev.disabled = quizPrevBtn.disabled;
-        quizArrowPrev.style.opacity = quizPrevBtn.disabled ? ".45" : "1";
-      }
-      if(quizArrowNext){
-        quizArrowNext.disabled = false;
-        quizArrowNext.style.opacity = "1";
-      }
       quizNextBtn.textContent = quizIndex >= quizData.length - 1 ? "✅ Finalizar" : "Siguiente →";
     }
 
-    function playQuizPrompt(){
+    quizSpeakBtn.addEventListener("click", () => {
       const row = quizData[quizIndex];
-      if(!row) return;
-      const isListenMode = quizModeType === "listen";
-      const esToKo = quizDirection === "es-to-ko";
-      if(isListenMode) speak(row.coreano, "ko-KR");
-      else speak(esToKo ? row.español : row.coreano, esToKo ? "es-ES" : "ko-KR");
-    }
-
-    quizSpeakBtn.addEventListener("click", playQuizPrompt);
-    if(quizInlineSpeakBtn) quizInlineSpeakBtn.addEventListener("click", playQuizPrompt);
+      if(row) speak(row.español, "es-ES");
+    });
 
     quizStarBtn.addEventListener("click", () => {
       const row = quizData[quizIndex];
@@ -3583,25 +3429,18 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       renderQuizCard();
     });
 
-    if(quizDirectionBtn){ quizDirectionBtn.addEventListener("click", () => { quizDirection = quizDirection === "es-to-ko" ? "ko-to-es" : "es-to-ko"; renderQuizCard(); }); }
-    if(quizShuffleBtn){ quizShuffleBtn.addEventListener("click", shuffleQuizDeck); }
-    if(quizBoldBtn){ quizBoldBtn.addEventListener("click", () => { quizStyle.bold = !quizStyle.bold; applyQuizStyle(); }); }
-    if(quizFontDownBtn){ quizFontDownBtn.addEventListener("click", () => { quizStyle.fontSize = clamp(quizStyle.fontSize - 2, 18, 42); applyQuizStyle(); }); }
-    if(quizFontUpBtn){ quizFontUpBtn.addEventListener("click", () => { quizStyle.fontSize = clamp(quizStyle.fontSize + 2, 18, 42); applyQuizStyle(); }); }
-
     quizPrevBtn.addEventListener("click", () => {
       if(quizIndex === 0) return;
       quizIndex--;
       renderQuizCard();
     });
-    if(quizArrowPrev) quizArrowPrev.addEventListener("click", () => quizPrevBtn.click());
 
     function finishQuizMode(){
       const total = quizData.length || 0;
       const correct = [...quizAnsweredMap.values()].filter(Boolean).length;
       const percent = total ? Math.round((correct / total) * 100) : 0;
       closeQuizMode();
-      showCelebration(quizModeType === "listen" ? "Escuchar" : "Multiple", percent);
+      showCelebration("Multiple", percent);
     }
 
     quizNextBtn.addEventListener("click", () => {
@@ -3613,7 +3452,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       quizIndex++;
       renderQuizCard();
     });
-    if(quizArrowNext) quizArrowNext.addEventListener("click", () => quizNextBtn.click());
 
     closeQuizBtn.addEventListener("click", closeQuizMode);
 
@@ -3739,10 +3577,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       renderMixGrid();
     });
 
-    if(mixBoldBtn){ mixBoldBtn.addEventListener("click", () => { mixStyle.bold = !mixStyle.bold; applyMixStyle(); renderMixGrid(); }); }
-    if(mixFontDownBtn){ mixFontDownBtn.addEventListener("click", () => { mixStyle.fontSize = clamp(mixStyle.fontSize - 1, 14, 28); applyMixStyle(); renderMixGrid(); }); }
-    if(mixFontUpBtn){ mixFontUpBtn.addEventListener("click", () => { mixStyle.fontSize = clamp(mixStyle.fontSize + 1, 14, 28); applyMixStyle(); renderMixGrid(); }); }
-    if(mixShuffleBtn){ mixShuffleBtn.addEventListener("click", startMix); }
     mixResetBtn.addEventListener("click", startMix);
     closeMixBtn.addEventListener("click", closeMixMode);
 
@@ -3799,7 +3633,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       if(mode === "flashcards") openStudyMode(currentListType, "flashcards");
       if(mode === "write") openWriteMode(currentListType);
       if(mode === "quiz") openQuizMode(currentListType);
-      if(mode === "listen") openListenMode(currentListType);
       if(mode === "mix") openMixMode(currentListType);
     }
 
@@ -3850,7 +3683,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     flashcardsBtn.addEventListener("click", () => openStudyMode(null, "flashcards"));
     writeBtn.addEventListener("click", () => openWriteMode());
     quizBtn.addEventListener("click", () => openQuizMode());
-    listenBtn.addEventListener("click", () => openListenMode());
     mixBtn.addEventListener("click", () => openMixMode());
 
     wrongPracticeBtn.addEventListener("click", () => toggleDropdown(wrongPracticeDropdown));
@@ -3871,7 +3703,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         if(mode === "flashcards") openStudyMode(listType, "flashcards");
         if(mode === "write") openWriteMode(listType);
         if(mode === "quiz") openQuizMode(listType);
-        if(mode === "listen") openListenMode(listType);
         if(mode === "mix") openMixMode(listType);
       });
     });
@@ -3903,7 +3734,6 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     listPracticeFlashBtn.addEventListener("click", () => practiceFromList("flashcards"));
     listPracticeWriteBtn.addEventListener("click", () => practiceFromList("write"));
     listPracticeQuizBtn.addEventListener("click", () => practiceFromList("quiz"));
-    listPracticeListenBtn.addEventListener("click", () => practiceFromList("listen"));
     listPracticeMixBtn.addEventListener("click", () => practiceFromList("mix"));
 
     closeEditBtn.addEventListener("click", closeEditRow);
@@ -4008,6 +3838,380 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     });
   }
 </script>
+
+
+  <script>
+  (() => {
+    const HANGUL_ROWS = [{"letra": "ㄱ", "sonido": "/g-k/ poco aire (entre medias de la g y k)", "nombre_letra": "/kiiok/", "badchim": "Igual pero sin soltar aire: /g/", "inicio": "/k/", "notas": "", "nombre_coreano": "기역"}, {"letra": "ㅋ", "sonido": "/k/ mucho aire (\"key, \"kind\" inglés)", "nombre_letra": "/kii_/", "badchim": "Igual pero sin soltar aire: /k/", "inicio": "", "notas": "", "nombre_coreano": "키읔"}, {"letra": "ㄲ", "sonido": "/kk/ sin aire (español)", "nombre_letra": "/ssang gi-yeok/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "쌍기역"}, {"letra": "ㄷ", "sonido": "/d-t/ poco aire (entre medias de la d y t)", "nombre_letra": "/tig_t/", "badchim": "Igual pero sin soltar aire: /d/", "inicio": "/t/", "notas": "", "nombre_coreano": "디귿"}, {"letra": "ㅌ", "sonido": "/t/ mucho aire (\"time\" inglés)", "nombre_letra": "/ti_t/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "티읕"}, {"letra": "ㄸ", "sonido": "/tt/ sin aire (español)", "nombre_letra": "/ssang di-g_t/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "쌍디귿"}, {"letra": "ㅂ", "sonido": "/b-p/ poco aire (entre medias de la b y p)", "nombre_letra": "/pi_b/", "badchim": "Igual pero sin soltar aire: /b/", "inicio": "/p/", "notas": "", "nombre_coreano": "비읍"}, {"letra": "ㅍ", "sonido": "/p/ mucho aire (\"pound\" inglés)", "nombre_letra": "/pi_p/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "피읖"}, {"letra": "ㅃ", "sonido": "/pp/ sin aire (español)", "nombre_letra": "/ssang bi_p/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "쌍비읍"}, {"letra": "ㅈ", "sonido": "/y/ poco aire (\"juice\" inglés)", "nombre_letra": "/ji_t/", "badchim": "Igual pero sin soltar aire: /d/", "inicio": "/Ch/", "notas": "", "nombre_coreano": "지읒"}, {"letra": "ㅊ", "sonido": "/Ch/ mucho aire (\"chocolate\" inglés)", "nombre_letra": "/chi_t/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "치읓"}, {"letra": "ㅉ", "sonido": "/chch/ o /jj/ sin aire (no existe en español)", "nombre_letra": "/ssang ji_t/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "쌍지읒"}, {"letra": "ㅅ", "sonido": "/s/ poco aire (\"sad\" inglés)*", "nombre_letra": "/shiot/", "badchim": "Igual pero sin soltar aire: /d/", "inicio": "", "notas": "(*) Para los sonidos que contienen por \"i\", ㅅ se pronuncia /sh/: 시 /shi/   새 /she/  세 /she/  쉬 /shi/   샤 /shia/   셔 /shio/   슈 /shiㅡ/   쇼 /shio/", "nombre_coreano": "시옷"}, {"letra": "ㅆ", "sonido": "/ss/ sin aire (español)*", "nombre_letra": "/ssang shi-ot/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "쌍시옷"}, {"letra": "ㄴ", "sonido": "/n/ (n de \"nariz\" del español)", "nombre_letra": "/ni_n/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "니은"}, {"letra": "ㄹ", "sonido": "/L/ (entre medias de la r y L)", "nombre_letra": "/li_l/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "리을"}, {"letra": "ㅁ", "sonido": "/m/ (español)", "nombre_letra": "/mi_m/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "미음"}, {"letra": "ㅇ", "sonido": "a) Ꝋ", "nombre_letra": "x", "badchim": "Ꝋ", "inicio": "", "notas": "", "nombre_coreano": "Ꝋ"}, {"letra": "ㅇ", "sonido": "b) /ng/ si batchim o conosonate inicial", "nombre_letra": "/i_ng/", "badchim": "/ng/", "inicio": "", "notas": "", "nombre_coreano": "이응"}, {"letra": "ㅎ", "sonido": "/h/ inglés o /j/  (\"harry Potter\")", "nombre_letra": "/hi_h/", "badchim": "Igual pero sin soltar aire: /d/", "inicio": "", "notas": "", "nombre_coreano": "히읗"}, {"letra": "ㅏ", "sonido": "/a/ (español)", "nombre_letra": "/a/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅏ"}, {"letra": "ㅓ", "sonido": "/eo/ o /ᴧ/ (\"oh, oh\", \"London\" inglés) se ebre mucho la boca", "nombre_letra": "/eo/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅓ"}, {"letra": "ㅗ", "sonido": "/o/ (español)                           se cierran un poco los labios", "nombre_letra": "/o/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅗ"}, {"letra": "ㅜ", "sonido": "/u/ (español)                                 se cierran un poco los labios", "nombre_letra": "/u/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅜ"}, {"letra": "ㅡ", "sonido": "/ɯ/ asquito", "nombre_letra": "/eu/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅡ"}, {"letra": "ㅣ", "sonido": "/i/ (español)", "nombre_letra": "/i/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅣ"}, {"letra": "ㅑ", "sonido": "/ia/", "nombre_letra": "/ya/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅑ"}, {"letra": "ㅕ", "sonido": "/iᴧ/", "nombre_letra": "/yeo/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅕ"}, {"letra": "ㅛ", "sonido": "/io/", "nombre_letra": "/yo/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅛ"}, {"letra": "ㅠ", "sonido": "/iu/", "nombre_letra": "/yu/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅠ"}, {"letra": "ㅐ", "sonido": "/e/ (español)", "nombre_letra": "/e/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅐ"}, {"letra": "ㅔ", "sonido": "", "nombre_letra": "/ae/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅔ"}, {"letra": "ㅒ", "sonido": "/ye/", "nombre_letra": "/yae/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅒ"}, {"letra": "ㅖ", "sonido": "", "nombre_letra": "/ye/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅖ"}, {"letra": "ㅘ", "sonido": "/wa/", "nombre_letra": "/wa/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅘ"}, {"letra": "ㅙ", "sonido": "/we/", "nombre_letra": "/wae/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅙ"}, {"letra": "ㅚ", "sonido": "", "nombre_letra": "/oe/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅚ"}, {"letra": "ㅞ", "sonido": "/ue/", "nombre_letra": "/we/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅞ"}, {"letra": "ㅝ", "sonido": "/wo/", "nombre_letra": "/weo/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅝ"}, {"letra": "ㅟ", "sonido": "/wi/", "nombre_letra": "/wi/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅟ"}, {"letra": "ㅢ", "sonido": "/ɯi/", "nombre_letra": "/ui/", "badchim": "", "inicio": "", "notas": "", "nombre_coreano": "ㅢ"}];
+    const STORAGE_MOSAIC_STYLE = "flashcards-mosaic-style-v1";
+    let mosaicData = [];
+    let mosaicSource = null;
+    let mosaicStyle = (() => {
+      try {
+        const raw = JSON.parse(localStorage.getItem(STORAGE_MOSAIC_STYLE) || "null");
+        return {
+          fontSize: Math.min(52, Math.max(22, Number(raw?.fontSize) || 34)),
+          bold: !!raw?.bold,
+          reverse: !!raw?.reverse
+        };
+      } catch {
+        return { fontSize: 34, bold: false, reverse: false };
+      }
+    })();
+    let lastMixAudioRow = null;
+
+    function saveMosaicStyle(){
+      localStorage.setItem(STORAGE_MOSAIC_STYLE, JSON.stringify(mosaicStyle));
+    }
+    function applyMosaicStyle(){
+      document.documentElement.style.setProperty("--mosaic-font-size", `${mosaicStyle.fontSize}px`);
+      document.documentElement.style.setProperty("--mosaic-font-weight", mosaicStyle.bold ? "800" : "500");
+      const fb = document.getElementById("mosaicBoldBtn");
+      const fv = document.getElementById("mosaicFontValue");
+      const sb = document.getElementById("mosaicSwapBtn");
+      if(fb) fb.textContent = `Negrita: ${mosaicStyle.bold ? "Sí" : "No"}`;
+      if(fv) fv.textContent = `${mosaicStyle.fontSize} px`;
+      if(sb) sb.textContent = mosaicStyle.reverse ? "ES arriba" : "KO arriba";
+      saveMosaicStyle();
+    }
+
+    function weightedDeck(rows){
+      const base = Array.isArray(rows) ? rows.slice() : [];
+      if(!base.length) return [];
+      if(mosaicSource === "wrong" || currentPracticeSource === "wrong") return shuffleArray(base);
+      const out = [];
+      base.forEach(row => {
+        out.push(row);
+        if(wrongWords.has(row.id)) {
+          out.push(row);
+          out.push(row);
+        }
+      });
+      return shuffleArray(out);
+    }
+
+    function weightedUniqueSample(rows, count){
+      const pool = rows.slice();
+      const picked = [];
+      while(pool.length && picked.length < count){
+        const total = pool.reduce((sum, row) => sum + (wrongWords.has(row.id) ? 3 : 1), 0);
+        let cursor = Math.random() * total;
+        let index = 0;
+        for(; index < pool.length; index++){
+          cursor -= wrongWords.has(pool[index].id) ? 3 : 1;
+          if(cursor <= 0) break;
+        }
+        picked.push(pool[index]);
+        pool.splice(index,1);
+      }
+      return picked;
+    }
+
+    const originalBuildStudyDeck = typeof buildStudyDeck === "function" ? buildStudyDeck : null;
+    if(originalBuildStudyDeck){
+      buildStudyDeck = function(){
+        studyData = weightedDeck(getRowsFromSource(currentPracticeSource));
+        if(studyIndex >= studyData.length) studyIndex = Math.max(0, studyData.length - 1);
+      }
+    }
+    const originalBuildWriteDeck = typeof buildWriteDeck === "function" ? buildWriteDeck : null;
+    if(originalBuildWriteDeck){
+      buildWriteDeck = function(){
+        writeData = weightedDeck(getRowsFromSource(currentPracticeSource));
+        if(writeIndex >= writeData.length) writeIndex = Math.max(0, writeData.length - 1);
+      }
+    }
+    const originalBuildQuizDeck = typeof buildQuizDeck === "function" ? buildQuizDeck : null;
+    if(originalBuildQuizDeck){
+      buildQuizDeck = function(){
+        quizData = weightedDeck(getRowsFromSource(currentPracticeSource));
+        if(quizIndex >= quizData.length) quizIndex = Math.max(0, quizData.length - 1);
+      }
+    }
+    const originalBuildMixDeck = typeof buildMixDeck === "function" ? buildMixDeck : null;
+    if(originalBuildMixDeck){
+      buildMixDeck = function(){
+        const base = weightedUniqueSample(getRowsFromSource(currentPracticeSource), Math.min(6, getRowsFromSource(currentPracticeSource).length));
+        mixData = shuffleArray(base);
+      }
+    }
+
+    function injectWrongPriorityBadge(){
+      const infoBar = document.getElementById("infoBar");
+      if(!infoBar || document.getElementById("wrongPriorityChip")) return;
+      const chip = document.createElement("div");
+      chip.className = "chip-info";
+      chip.id = "wrongPriorityChip";
+      chip.innerHTML = "<strong>❌</strong> Las falladas se repiten más";
+      infoBar.appendChild(chip);
+    }
+    const originalRenderInfo = typeof renderInfo === "function" ? renderInfo : null;
+    if(originalRenderInfo){
+      renderInfo = function(filtered){
+        originalRenderInfo(filtered);
+        injectWrongPriorityBadge();
+      }
+    }
+
+    function renderHangul(){
+      const tbody = document.getElementById("hangulTableBody");
+      if(!tbody) return;
+      tbody.innerHTML = HANGUL_ROWS.map((row, index) => `
+        <tr>
+          <td><button class="table-icon-btn" data-hangul-play="${index}" title="Reproducir nombre coreano">🔊</button></td>
+          <td class="ko-cell">${escapeHtml(row.letra || "—")}</td>
+          <td>${escapeHtml(row.sonido || "—")}</td>
+          <td>${escapeHtml(row.nombre_letra || "—")}</td>
+          <td>${escapeHtml(row.badchim || "—")}</td>
+          <td>${escapeHtml(row.inicio || "—")}</td>
+          <td>${escapeHtml(row.notas || "—")}</td>
+          <td>${escapeHtml(row.nombre_coreano || "—")}</td>
+        </tr>`).join("");
+      tbody.querySelectorAll("[data-hangul-play]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const row = HANGUL_ROWS[Number(btn.dataset.hangulPlay)];
+          if(row?.nombre_coreano) speak(row.nombre_coreano, "ko-KR");
+        });
+      });
+    }
+
+    function ensureQuizSlowButtons(){
+      const top = document.getElementById("quizSpeakSlowBtn");
+      const inline = document.getElementById("quizInlineSpeakSlowBtn");
+      if(top) top.addEventListener("click", () => {
+        const row = quizData[quizIndex];
+        if(!row) return;
+        speak(row.coreano, "ko-KR");
+        setTimeout(() => speak(row.coreano, "ko-KR"), 0);
+      });
+      if(inline) inline.addEventListener("click", () => {
+        const row = quizData[quizIndex];
+        if(!row) return;
+        speak(row.coreano, "ko-KR");
+        setTimeout(() => speak(row.coreano, "ko-KR"), 0);
+      });
+      const topNormal = document.getElementById("quizSpeakBtn");
+      if(topNormal && !topNormal.dataset.mosaicpatched){
+        topNormal.dataset.mosaicpatched = "1";
+        topNormal.addEventListener("click", () => {
+          const row = quizData[quizIndex];
+          if(row) speak(row.coreano, "ko-KR");
+        });
+      }
+      const inlineNormal = document.getElementById("quizInlineSpeakBtn");
+      if(inlineNormal && !inlineNormal.dataset.mosaicpatched){
+        inlineNormal.dataset.mosaicpatched = "1";
+        inlineNormal.addEventListener("click", () => {
+          const row = quizData[quizIndex];
+          if(row) speak(row.coreano, "ko-KR");
+        });
+      }
+    }
+
+    function ensureStudySlowButtons(){
+      const fs = document.getElementById("studyPlayFrontSlow");
+      const bs = document.getElementById("studyPlayBackSlow");
+      if(fs) fs.addEventListener("click", () => {
+        const row = studyData[studyIndex];
+        if(row) speak(row.coreano, "ko-KR");
+      });
+      if(bs) bs.addEventListener("click", () => {
+        const row = studyData[studyIndex];
+        if(row) speak(row.español, "es-ES");
+      });
+    }
+
+    function ensureWriteSlowButtons(){
+      const btn = document.getElementById("writePlaySlowBtn");
+      if(btn) btn.addEventListener("click", () => {
+        const row = writeData[writeIndex];
+        if(row) speak(row.coreano, "ko-KR");
+      });
+      const normal = document.getElementById("writePlayBtn");
+      if(normal && !normal.dataset.enhanced){
+        normal.dataset.enhanced = "1";
+        normal.addEventListener("click", () => {
+          const row = writeData[writeIndex];
+          if(row) speak(row.coreano, "ko-KR");
+        });
+      }
+    }
+
+    function getPairAudioRow(){
+      if(lastMixAudioRow) return lastMixAudioRow;
+      const active = mixSelected.map(uid => mixTiles.find(t => t.uid === uid)).find(tile => tile && tile.type === "ko");
+      if(active) return mixData.find(r => r.id === active.pairId) || null;
+      const firstOpen = mixTiles.find(tile => !tile.done && tile.type === "ko");
+      return firstOpen ? (mixData.find(r => r.id === firstOpen.pairId) || null) : null;
+    }
+    function ensureMixAudioButtons(){
+      const n = document.getElementById("mixPlayBtn");
+      const s = document.getElementById("mixPlaySlowBtn");
+      if(n) n.addEventListener("click", () => {
+        const row = getPairAudioRow();
+        if(row) speak(row.coreano, "ko-KR");
+      });
+      if(s) s.addEventListener("click", () => {
+        const row = getPairAudioRow();
+        if(row) speak(row.coreano, "ko-KR");
+      });
+      const originalHandleMixSelect = typeof handleMixSelect === "function" ? handleMixSelect : null;
+      if(originalHandleMixSelect && !window.__mixAudioWrapped){
+        window.__mixAudioWrapped = true;
+        handleMixSelect = function(uid){
+          const tile = mixTiles.find(t => t.uid === uid);
+          if(tile?.type === "ko") lastMixAudioRow = mixData.find(r => r.id === tile.pairId) || null;
+          return originalHandleMixSelect(uid);
+        }
+      }
+    }
+
+    function buildMosaicDeck(source = null){
+      mosaicSource = source;
+      mosaicData = weightedDeck(getRowsFromSource(mosaicSource));
+    }
+    function renderMosaic(){
+      const grid = document.getElementById("mosaicGrid");
+      const stats = document.getElementById("mosaicStats");
+      if(!grid || !stats) return;
+      buildMosaicDeck(mosaicSource);
+      stats.textContent = `${mosaicData.length} tarjetas`;
+      updateProgress(document.getElementById("mosaicProgressFill"), document.getElementById("mosaicProgressText"), mosaicData.length ? mosaicData.length - 1 : 0, mosaicData.length);
+      if(!mosaicData.length){
+        grid.innerHTML = '<div class="empty">No hay tarjetas disponibles para este modo.</div>';
+        return;
+      }
+      grid.innerHTML = mosaicData.map(row => {
+        const top = mosaicStyle.reverse ? (row.español || "—") : (row.coreano || "—");
+        const bottom = mosaicStyle.reverse ? (row.coreano || "—") : (row.español || "—");
+        return `
+        <div class="mosaic-card" data-mosaic-id="${row.id}">
+          <div class="mosaic-main">
+            <div class="mosaic-big">${escapeHtml(top)}</div>
+            <div class="mosaic-small">${escapeHtml(bottom)}</div>
+          </div>
+          <div class="mosaic-meta">
+            <div class="study-box">
+              <div class="label">Pronunciación</div>
+              <div class="text">${escapeHtml(row.Pronunciación || "—")}</div>
+            </div>
+            <div class="study-box">
+              <div class="label">Notas</div>
+              <div class="text">${escapeHtml(row.Notas || "—")}</div>
+            </div>
+          </div>
+          <div class="mosaic-actions">
+            <button class="action-btn ghost" data-mosaic-play="${row.id}">🔊</button>
+            <button class="action-btn ghost" data-mosaic-play-slow="${row.id}">🐢</button>
+            <button class="action-btn ghost" data-mosaic-edit="${row.id}">✏️</button>
+            <button class="action-btn ghost" data-mosaic-star="${row.id}">${starredWords.has(row.id) ? "⭐" : "☆"}</button>
+          </div>
+        </div>`;
+      }).join("");
+      grid.querySelectorAll("[data-mosaic-id]").forEach(card => {
+        card.addEventListener("click", e => {
+          if(e.target.closest("button")) return;
+          const row = mosaicData.find(r => r.id === Number(card.dataset.mosaicId));
+          if(row?.coreano) speak(row.coreano, "ko-KR");
+        });
+      });
+      grid.querySelectorAll("[data-mosaic-play]").forEach(btn => btn.addEventListener("click", e => {
+        e.stopPropagation();
+        const row = mosaicData.find(r => r.id === Number(btn.dataset.mosaicPlay));
+        if(row?.coreano) speak(row.coreano, "ko-KR");
+      }));
+      grid.querySelectorAll("[data-mosaic-play-slow]").forEach(btn => btn.addEventListener("click", e => {
+        e.stopPropagation();
+        const row = mosaicData.find(r => r.id === Number(btn.dataset.mosaicPlaySlow));
+        if(row?.coreano) speak(row.coreano, "ko-KR");
+      }));
+      grid.querySelectorAll("[data-mosaic-edit]").forEach(btn => btn.addEventListener("click", e => {
+        e.stopPropagation();
+        openEditRow(Number(btn.dataset.mosaicEdit));
+      }));
+      grid.querySelectorAll("[data-mosaic-star]").forEach(btn => btn.addEventListener("click", e => {
+        e.stopPropagation();
+        const row = mosaicData.find(r => r.id === Number(btn.dataset.mosaicStar));
+        if(row) {
+          toggleStar(row);
+          renderMosaic();
+        }
+      }));
+    }
+    function openMosaicMode(source = null){
+      mosaicSource = source;
+      buildMosaicDeck(source);
+      document.getElementById("mosaicOverlay")?.classList.add("open");
+      applyMosaicStyle();
+      renderMosaic();
+    }
+    function closeMosaicMode(){
+      document.getElementById("mosaicOverlay")?.classList.remove("open");
+      mosaicSource = null;
+    }
+
+    // Buttons and listeners
+    document.getElementById("mosaicBtn")?.addEventListener("click", () => openMosaicMode());
+    document.querySelectorAll('[data-practice-list="wrong"][data-mode="mosaic"]').forEach(btn => btn.addEventListener("click", () => {
+      document.querySelectorAll(".dropdown").forEach(d => d.classList.remove("open"));
+      openMosaicMode("wrong");
+    }));
+    document.querySelectorAll('[data-practice-list="star"][data-mode="mosaic"]').forEach(btn => btn.addEventListener("click", () => {
+      document.querySelectorAll(".dropdown").forEach(d => d.classList.remove("open"));
+      openMosaicMode("star");
+    }));
+    document.getElementById("closeMosaicBtn")?.addEventListener("click", closeMosaicMode);
+    document.getElementById("mosaicOverlay")?.addEventListener("click", e => {
+      if(e.target.id === "mosaicOverlay") closeMosaicMode();
+    });
+    document.getElementById("mosaicBoldBtn")?.addEventListener("click", () => {
+      mosaicStyle.bold = !mosaicStyle.bold; applyMosaicStyle(); renderMosaic();
+    });
+    document.getElementById("mosaicFontDownBtn")?.addEventListener("click", () => {
+      mosaicStyle.fontSize = Math.max(22, mosaicStyle.fontSize - 2); applyMosaicStyle();
+    });
+    document.getElementById("mosaicFontUpBtn")?.addEventListener("click", () => {
+      mosaicStyle.fontSize = Math.min(52, mosaicStyle.fontSize + 2); applyMosaicStyle();
+    });
+    document.getElementById("mosaicSwapBtn")?.addEventListener("click", () => {
+      mosaicStyle.reverse = !mosaicStyle.reverse; applyMosaicStyle(); renderMosaic();
+    });
+    document.getElementById("mosaicShuffleBtn")?.addEventListener("click", () => {
+      mosaicData = shuffleArray(mosaicData); renderMosaic();
+    });
+    document.getElementById("mosaicPlayBtn")?.addEventListener("click", () => {
+      const row = mosaicData[0];
+      if(row?.coreano) speak(row.coreano, "ko-KR");
+    });
+    document.getElementById("mosaicPlaySlowBtn")?.addEventListener("click", () => {
+      const row = mosaicData[0];
+      if(row?.coreano) speak(row.coreano, "ko-KR");
+    });
+
+    document.getElementById("listPracticeMosaicBtn")?.addEventListener("click", () => {
+      if(!currentListType) return;
+      closeListMode();
+      openMosaicMode(currentListType);
+    });
+
+    // Re-render mosaic after editing
+    const oldSaveEditRow = typeof saveEditRow === "function" ? saveEditRow : null;
+    if(oldSaveEditRow && !window.__mosaicSaveWrap){
+      window.__mosaicSaveWrap = true;
+      saveEditRow = function(){
+        oldSaveEditRow();
+        if(document.getElementById("mosaicOverlay")?.classList.contains("open")) renderMosaic();
+      }
+    }
+
+    applyMosaicStyle();
+    renderHangul();
+    ensureStudySlowButtons();
+    ensureQuizSlowButtons();
+    ensureWriteSlowButtons();
+    ensureMixAudioButtons();
+  })();
+  </script>
 
 </body>
 </html>

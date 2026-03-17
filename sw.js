@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hangukeo-mal-v6';
+const CACHE_NAME = 'flashcards-coreano-v2';
 const ASSETS = [
   './',
   './index.html',
