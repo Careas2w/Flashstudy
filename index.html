@@ -64,6 +64,8 @@
       --quiz-font-weight:800;
       --mix-font-size:20px;
       --mix-font-weight:700;
+      --mosaic-grid-min:260px;
+      --mosaic-card-min-height:var(--mosaic-card-min-height,220px);
     }
 
     body.light{
@@ -1630,7 +1632,7 @@
     }
     .mosaic-grid{
       display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+      grid-template-columns:repeat(auto-fill,minmax(var(--mosaic-grid-min,260px),1fr));
       gap:16px;
       margin-top:12px;
     }
@@ -1860,6 +1862,7 @@
 
         <div class="audio-controls">
           <button class="mode-btn" id="slowAudioBtn">🐢 Lento</button>
+          <input type="range" class="turtle-rate" id="globalSlowRateSlider" min="0.35" max="0.9" step="0.02" value="0.65" title="Velocidad tortuga general">
           <button class="mode-btn active" id="normalAudioBtn">▶ Normal</button>
           <button class="mode-btn" id="flashcardsBtn">📚 Flashcards</button>
           <button class="mode-btn" id="writeBtn">✍ Escritura</button>
@@ -2055,6 +2058,9 @@
         </div>
         <div class="quiz-meta">
           <div class="mode-style-box">
+            <button class="small-btn active" id="quizNormalBtn">🔊 Normal</button>
+            <button class="small-btn" id="quizSlowBtn">🐢 Tortuga</button>
+            <input type="range" class="turtle-rate" id="quizSlowRateSlider" min="0.35" max="0.9" step="0.02" value="0.62" title="Velocidad tortuga">
             <button class="small-btn" id="quizDirectionBtn">ES → KO</button>
             <button class="small-btn" id="quizShuffleBtn">🔀 Barajar</button>
             <button class="small-btn" id="quizBoldBtn">Negrita: No</button>
@@ -2145,6 +2151,8 @@
             <button class="small-btn" id="mosaicBoldBtn">Negrita: No</button>
             <button class="small-btn" id="mosaicFontDownBtn">A−</button>
             <button class="small-btn" id="mosaicFontUpBtn">A+</button>
+            <button class="small-btn" id="mosaicDensityLessBtn">＋ grandes</button>
+            <button class="small-btn" id="mosaicDensityMoreBtn">＋ pequeñas</button>
           </div>
           <button class="icon-btn" id="closeMosaicBtn">✕</button>
         </div>
@@ -2215,6 +2223,7 @@
       <button class="theme-swatch" data-theme-palette="rose" title="Rose"><span style="background:linear-gradient(135deg,#ec4899 0 50%,#fff5fb 50% 100%)"></span></button>
       <button class="theme-swatch" data-theme-palette="lavender" title="Lavanda"><span style="background:linear-gradient(135deg,#7c3aed 0 50%,#f7f3ff 50% 100%)"></span></button>
       <button class="theme-swatch" data-theme-palette="mint" title="Mint"><span style="background:linear-gradient(135deg,#14b8a6 0 50%,#f0fdfa 50% 100%)"></span></button>
+      <button class="theme-swatch" data-theme-palette="sunny" title="Amarillo"><span style="background:linear-gradient(135deg,#eab308 0 50%,#fffdf0 50% 100%)"></span></button>
     </div>
   </div>
 
@@ -2238,11 +2247,12 @@
     let writeStyle = { fontSize: 30, bold: false };
     let quizStyle = { fontSize: 28, bold: false };
     let mixStyle = { fontSize: 22, bold: false };
-    let mosaicStyle = { fontSize: 34, bold: false };
+    let mosaicStyle = { fontSize: 34, bold: false, density: 1 };
     let mosaicData = [];
     let mosaicPrimaryMode = "ko";
     let mosaicSortMode = "excel";
     let mosaicAudioSlow = false;
+    let quizAudioSlow = false;
     let studyFrontMode = "ko";
     let writeDirection = "es-to-ko";
     let quizDirection = "es-to-ko";
@@ -2305,6 +2315,7 @@
 
     const slowAudioBtn = document.getElementById("slowAudioBtn");
     const normalAudioBtn = document.getElementById("normalAudioBtn");
+    const globalSlowRateSlider = document.getElementById("globalSlowRateSlider");
     const flashcardsBtn = document.getElementById("flashcardsBtn");
     const writeBtn = document.getElementById("writeBtn");
     const quizBtn = document.getElementById("quizBtn");
@@ -2378,6 +2389,9 @@
     const quizOptions = document.getElementById("quizOptions");
     const quizSpeakBtn = document.getElementById("quizSpeakBtn");
     const quizStarBtn = document.getElementById("quizStarBtn");
+    const quizNormalBtn = document.getElementById("quizNormalBtn");
+    const quizSlowBtn = document.getElementById("quizSlowBtn");
+    const quizSlowRateSlider = document.getElementById("quizSlowRateSlider");
     const quizDirectionBtn = document.getElementById("quizDirectionBtn");
     const quizShuffleBtn = document.getElementById("quizShuffleBtn");
     const quizInlineSpeakBtn = document.getElementById("quizInlineSpeakBtn");
@@ -2413,6 +2427,8 @@
     const mosaicBoldBtn = document.getElementById("mosaicBoldBtn");
     const mosaicFontDownBtn = document.getElementById("mosaicFontDownBtn");
     const mosaicFontUpBtn = document.getElementById("mosaicFontUpBtn");
+    const mosaicDensityLessBtn = document.getElementById("mosaicDensityLessBtn");
+    const mosaicDensityMoreBtn = document.getElementById("mosaicDensityMoreBtn");
     const closeMosaicBtn = document.getElementById("closeMosaicBtn");
 
     const listTitle = document.getElementById("listTitle");
@@ -2639,6 +2655,7 @@
         if(rawMosaic && typeof rawMosaic === "object"){
           mosaicStyle.fontSize = clamp(Number(rawMosaic.fontSize) || 34, 20, 56);
           mosaicStyle.bold = !!rawMosaic.bold;
+          mosaicStyle.density = clamp(Number(rawMosaic.density ?? 1) || 1, 0, 2);
         }
       }catch{}
     }
@@ -2700,7 +2717,17 @@
       const root = document.documentElement;
       root.style.setProperty("--mosaic-primary-size", `${mosaicStyle.fontSize}px`);
       root.style.setProperty("--mosaic-font-weight", mosaicStyle.bold ? "800" : "500");
+      const densityMap = {
+        0: { min: "320px", height: "250px" },
+        1: { min: "260px", height: "220px" },
+        2: { min: "210px", height: "190px" }
+      };
+      const density = densityMap[mosaicStyle.density] || densityMap[1];
+      root.style.setProperty("--mosaic-grid-min", density.min);
+      root.style.setProperty("--mosaic-card-min-height", density.height);
       if(mosaicBoldBtn) mosaicBoldBtn.textContent = `Negrita: ${mosaicStyle.bold ? "Sí" : "No"}`;
+      if(mosaicDensityLessBtn) mosaicDensityLessBtn.classList.toggle("active", mosaicStyle.density === 0);
+      if(mosaicDensityMoreBtn) mosaicDensityMoreBtn.classList.toggle("active", mosaicStyle.density === 2);
       saveStylePrefs();
     }
 
@@ -2757,6 +2784,7 @@
       audioRate = rate;
       slowAudioBtn.classList.toggle("active", rate !== 1.0);
       normalAudioBtn.classList.toggle("active", rate === 1.0);
+      if(globalSlowRateSlider && rate !== 1.0) globalSlowRateSlider.value = String(rate);
     }
 
     function pickPreferredVoice(lang){
@@ -2782,7 +2810,7 @@
       return candidates.sort((a,b) => scoreVoice(b) - scoreVoice(a))[0] || null;
     }
 
-    function speak(text, lang){
+    function speak(text, lang, rateOverride = null){
       const clean = String(text || "").trim();
       if(!clean) return;
       if(!("speechSynthesis" in window)){
@@ -2792,7 +2820,7 @@
       speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(clean);
       u.lang = lang;
-      u.rate = audioRate;
+      u.rate = Number.isFinite(Number(rateOverride)) ? Number(rateOverride) : audioRate;
       u.pitch = lang === "ko-KR" ? 1.02 : 1;
       u.volume = 1;
       const preferred = pickPreferredVoice(lang);
@@ -3664,7 +3692,9 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       writePlayBtn.addEventListener("click", () => {
         const row = writeData[writeIndex];
         if(!row) return;
-        speak(writeDirection === "es-to-ko" ? row.coreano : row.español, writeDirection === "es-to-ko" ? "ko-KR" : "es-ES");
+        const promptText = writeDirection === "es-to-ko" ? row.español : row.coreano;
+        const promptLang = writeDirection === "es-to-ko" ? "es-ES" : "ko-KR";
+        speak(promptText, promptLang);
       });
     }
     if(writeShuffleBtn){ writeShuffleBtn.addEventListener("click", shuffleWriteDeck); }
@@ -3761,6 +3791,12 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         quizDirectionBtn.textContent = esToKo ? "ES → KO" : "KO → ES";
         quizDirectionBtn.classList.toggle("active", !esToKo);
       }
+      if(quizNormalBtn) quizNormalBtn.classList.toggle("active", !quizAudioSlow);
+      if(quizSlowBtn) quizSlowBtn.classList.toggle("active", quizAudioSlow);
+      if(quizSlowRateSlider) quizSlowRateSlider.style.display = quizAudioSlow ? "inline-block" : "none";
+      if(quizSpeakBtn){
+        quizSpeakBtn.style.display = isListenMode ? "none" : "inline-flex";
+      }
       if(quizInlineSpeakBtn){
         quizInlineSpeakBtn.style.display = isListenMode ? "inline-flex" : "none";
       }
@@ -3815,8 +3851,9 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       if(!row) return;
       const isListenMode = quizModeType === "listen";
       const esToKo = quizDirection === "es-to-ko";
-      if(isListenMode) speak(row.coreano, "ko-KR");
-      else speak(esToKo ? row.español : row.coreano, esToKo ? "es-ES" : "ko-KR");
+      const rate = quizAudioSlow ? getTurtleRate("quizSlowRateSlider") : null;
+      if(isListenMode) speak(row.coreano, "ko-KR", rate);
+      else speak(esToKo ? row.español : row.coreano, esToKo ? "es-ES" : "ko-KR", rate);
     }
 
     quizSpeakBtn.addEventListener("click", playQuizPrompt);
@@ -3828,6 +3865,8 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       renderQuizCard();
     });
 
+    if(quizNormalBtn){ quizNormalBtn.addEventListener("click", () => { quizAudioSlow = false; renderQuizCard(); }); }
+    if(quizSlowBtn){ quizSlowBtn.addEventListener("click", () => { quizAudioSlow = true; renderQuizCard(); }); }
     if(quizDirectionBtn){ quizDirectionBtn.addEventListener("click", () => { quizDirection = quizDirection === "es-to-ko" ? "ko-to-es" : "es-to-ko"; renderQuizCard(); }); }
     if(quizShuffleBtn){ quizShuffleBtn.addEventListener("click", shuffleQuizDeck); }
     if(quizBoldBtn){ quizBoldBtn.addEventListener("click", () => { quizStyle.bold = !quizStyle.bold; applyQuizStyle(); }); }
@@ -4389,6 +4428,16 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     });
     if(mosaicFontUpBtn) mosaicFontUpBtn.addEventListener("click", () => {
       mosaicStyle.fontSize = clamp(mosaicStyle.fontSize + 2, 20, 56);
+      applyMosaicStyle();
+      renderMosaicGrid();
+    });
+    if(mosaicDensityLessBtn) mosaicDensityLessBtn.addEventListener("click", () => {
+      mosaicStyle.density = clamp(mosaicStyle.density - 1, 0, 2);
+      applyMosaicStyle();
+      renderMosaicGrid();
+    });
+    if(mosaicDensityMoreBtn) mosaicDensityMoreBtn.addEventListener("click", () => {
+      mosaicStyle.density = clamp(mosaicStyle.density + 1, 0, 2);
       applyMosaicStyle();
       renderMosaicGrid();
     });
