@@ -1695,6 +1695,37 @@
       white-space:pre-wrap;
     }
 
+  
+    .turtle-rate{
+      width:92px;
+      accent-color:var(--primary);
+      vertical-align:middle;
+    }
+    .mosaic-card{
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+    }
+    .mosaic-primary,
+    .mosaic-secondary{
+      width:100%;
+      text-align:center;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .mosaic-star-btn{
+      position:absolute;
+      top:10px; left:10px;
+      border:none; border-radius:10px;
+      background:var(--panel-2); color:var(--text); border:1px solid var(--line);
+      padding:6px 9px; cursor:pointer;
+    }
+    .mosaic-mini{
+      width:100%;
+      margin-top:12px;
+    }
+
   </style>
 </head>
 <body>
@@ -1980,6 +2011,7 @@
             <button class="small-btn" id="writeDirectionBtn">ES → KO</button>
             <button class="small-btn" id="writePlayBtn">🔊 Audio</button>
             <button class="small-btn" id="writePlaySlowBtn">🐢 Lento</button>
+            <input type="range" class="turtle-rate" id="writeSlowRateSlider" min="0.4" max="0.9" step="0.02" value="0.62" title="Velocidad tortuga">
             <button class="small-btn" id="writeShuffleBtn">🔀 Barajar</button>
             <button class="small-btn" id="writeBoldBtn">Negrita: No</button>
             <button class="small-btn" id="writeFontDownBtn">A−</button>
@@ -2107,6 +2139,7 @@
           <div class="mode-style-box">
             <button class="small-btn active" id="mosaicNormalBtn">🔊 Normal</button>
             <button class="small-btn" id="mosaicSlowBtn">🐢 Tortuga</button>
+            <input type="range" class="turtle-rate" id="mosaicSlowRateSlider" min="0.4" max="0.9" step="0.02" value="0.62" title="Velocidad tortuga">
             <button class="small-btn" id="mosaicToggleBtn">KO grande</button>
             <button class="small-btn" id="mosaicSortBtn">Orden: Excel</button>
             <button class="small-btn" id="mosaicBoldBtn">Negrita: No</button>
@@ -4017,6 +4050,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         const notes = String(row.Notas || "").trim();
         return `
           <article class="mosaic-card" data-row-id="${row.id}">
+            <button class="mosaic-star-btn" data-mosaic-star="${row.id}" title="Destacar">${starredWords.has(row.id) ? "⭐" : "☆"}</button>
             <button class="mosaic-edit-btn" data-mosaic-edit="${row.id}" title="Editar">✏️</button>
             <div class="mosaic-primary">${escapeHtml(primary)}</div>
             <div class="mosaic-secondary">${escapeHtml(secondary)}</div>
@@ -4033,13 +4067,23 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
           if(e.target.closest("[data-mosaic-edit]")) return;
           const id = Number(card.dataset.rowId);
           const row = mosaicData.find(r => Number(r.id) === id);
-          if(row) speak(row.coreano, "ko-KR", mosaicAudioSlow ? 0.62 : null);
+          if(row) speak(row.coreano, "ko-KR", mosaicAudioSlow ? getTurtleRate("mosaicSlowRateSlider") : null);
         });
       });
       mosaicGrid.querySelectorAll("[data-mosaic-edit]").forEach(btn => {
         btn.addEventListener("click", (e) => {
           e.stopPropagation();
           openEditRow(Number(btn.dataset.mosaicEdit));
+        });
+      });
+      mosaicGrid.querySelectorAll("[data-mosaic-star]").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const row = mosaicData.find(r => Number(r.id) === Number(btn.dataset.mosaicStar));
+          if(row){
+            toggleStar(row);
+            renderMosaicGrid();
+          }
         });
       });
     }
@@ -4298,6 +4342,13 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       refreshAppBtn.addEventListener('click', refreshAppNow);
     }
 
+
+
+    function getTurtleRate(inputId, fallback = 0.62){
+      const el = document.getElementById(inputId);
+      const value = Number(el?.value);
+      return Number.isFinite(value) ? value : fallback;
+    }
 
     document.querySelectorAll("[data-hangul-audio]").forEach(btn => {
       btn.addEventListener("click", () => {
