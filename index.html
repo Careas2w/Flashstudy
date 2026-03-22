@@ -1045,7 +1045,7 @@
       font-size:34px;
       font-weight:900;
       line-height:1.2;
-      color:var(--quiz-text);
+      color:var(--text);
       word-break:break-word;
     }
 
@@ -1055,6 +1055,38 @@
       font-size:18px;
       font-weight:800;
       border-radius:16px;
+    }
+
+    .handwrite-check-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+
+    .handwrite-check-btn{
+      flex:1 1 220px;
+      min-height:54px;
+      border:none;
+      border-radius:16px;
+      color:#fff;
+      font-size:20px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:var(--shadow);
+    }
+
+    .handwrite-check-btn.good{
+      background:var(--good);
+    }
+
+    .handwrite-check-btn.bad{
+      background:var(--bad);
+    }
+
+    .handwrite-check-btn:disabled{
+      opacity:.55;
+      cursor:not-allowed;
     }
 
     .quiz-shell, .mix-shell{
@@ -2150,6 +2182,10 @@
             <div class="handwrite-tip">Dibuja con el ratón o con el dedo dentro del recuadro.</div>
           </div>
         </div>
+        <div class="handwrite-check-actions">
+          <button class="handwrite-check-btn good" id="handwriteMarkGoodBtn" type="button">✓ Está bien</button>
+          <button class="handwrite-check-btn bad" id="handwriteMarkBadBtn" type="button">✗ Está mal</button>
+        </div>
       </div>
 
       <div class="study-bottom">
@@ -2510,6 +2546,8 @@
     const handwriteNextBtn = document.getElementById("handwriteNextBtn");
     const handwriteSolution = document.getElementById("handwriteSolution");
     const handwriteShowSolutionBtn = document.getElementById("handwriteShowSolutionBtn");
+    const handwriteMarkGoodBtn = document.getElementById("handwriteMarkGoodBtn");
+    const handwriteMarkBadBtn = document.getElementById("handwriteMarkBadBtn");
     const handwriteStarBtn = document.getElementById("handwriteStarBtn");
     const handwriteDirectionBtn = document.getElementById("handwriteDirectionBtn");
     const handwritePlayBtn = document.getElementById("handwritePlayBtn");
@@ -3843,6 +3881,8 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     if(handwriteShuffleBtn) handwriteShuffleBtn.addEventListener("click", () => { handwriteData = shuffleArray(handwriteData); handwriteIndex = 0; renderHandwriteCard(); });
     if(handwriteClearBtn) handwriteClearBtn.addEventListener("click", clearHandwriteCanvas);
     if(handwriteShowSolutionBtn) handwriteShowSolutionBtn.addEventListener("click", showHandwriteSolution);
+    if(handwriteMarkGoodBtn) handwriteMarkGoodBtn.addEventListener("click", () => markHandwriteAnswer(true));
+    if(handwriteMarkBadBtn) handwriteMarkBadBtn.addEventListener("click", () => markHandwriteAnswer(false));
     if(handwritePrevBtn) handwritePrevBtn.addEventListener("click", prevHandwriteCard);
     if(handwriteNextBtn) handwriteNextBtn.addEventListener("click", nextHandwriteCard);
     if(handwriteStarBtn) handwriteStarBtn.addEventListener("click", () => { const row = handwriteData[handwriteIndex]; toggleStar(row); renderHandwriteCard(); });
@@ -3958,6 +3998,19 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       if(handwriteShowSolutionBtn) handwriteShowSolutionBtn.textContent = 'Solución visible';
     }
 
+    function markHandwriteAnswer(isGood){
+      if(!handwriteData.length) return;
+      const row = handwriteData[handwriteIndex];
+      if(!row) return;
+      handwriteAnswered.set(row.id, isGood);
+      if(handwriteResult){
+        handwriteResult.textContent = isGood ? 'Marcada como correcta' : 'Marcada como incorrecta';
+        handwriteResult.className = `write-result handwrite-result-top ${isGood ? 'good' : 'bad'}`;
+      }
+      if(handwriteMarkGoodBtn) handwriteMarkGoodBtn.disabled = isGood;
+      if(handwriteMarkBadBtn) handwriteMarkBadBtn.disabled = !isGood;
+    }
+
     function renderHandwriteCard(){
       buildHandwriteDeck();
       if(!handwriteData.length){
@@ -3987,7 +4040,10 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       handwriteSolutionVisible = false;
       if(handwriteSolution) handwriteSolution.textContent = '';
       if(handwriteShowSolutionBtn) handwriteShowSolutionBtn.textContent = 'Mostrar solución';
+      const markedValue = handwriteAnswered.get(row.id);
       handwriteStarBtn.textContent = starredWords.has(row.id) ? '⭐' : '☆';
+      if(handwriteMarkGoodBtn) handwriteMarkGoodBtn.disabled = markedValue === true;
+      if(handwriteMarkBadBtn) handwriteMarkBadBtn.disabled = markedValue === false;
       handwritePrevBtn.disabled = handwriteIndex === 0;
       handwriteNextBtn.disabled = false;
       handwriteNextBtn.textContent = handwriteIndex >= handwriteData.length - 1 ? '✅ Finalizar' : 'Siguiente →';
@@ -4003,7 +4059,8 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
 
     function finishHandwriteMode(){
       const total = handwriteData.length || 0;
-      const percent = total ? 100 : 0;
+      const correct = Array.from(handwriteAnswered.values()).filter(Boolean).length;
+      const percent = total ? Math.round((correct / total) * 100) : 0;
       closeHandwriteMode();
       showCelebration('Escribir a mano', percent);
     }
