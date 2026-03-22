@@ -1027,6 +1027,15 @@
     .write-result.good{ color:var(--good); }
     .write-result.bad{ color:var(--bad); }
 
+    .handwrite-result-top{
+      min-height:34px;
+      margin:0 0 14px;
+      font-size:24px;
+      line-height:1.3;
+      font-weight:800;
+      text-align:center;
+    }
+
     .quiz-shell, .mix-shell{
       width:min(960px,100%);
       background:var(--quiz-bg);
@@ -2109,6 +2118,7 @@
       <div class="write-card">
         <div class="write-label" id="handwriteLabel">Escribe en coreano</div>
         <div class="write-prompt" id="handwritePrompt">—</div>
+        <div class="write-result handwrite-result-top" id="handwriteResult"></div>
         <div class="handwrite-canvas-wrap">
           <canvas class="handwrite-canvas" id="handwriteCanvas"></canvas>
           <div class="handwrite-tools">
@@ -2116,7 +2126,6 @@
             <button class="small-btn" id="handwriteRecognizedBtn" type="button">Texto detectado: —</button>
           </div>
         </div>
-        <div class="write-result" id="handwriteResult"></div>
       </div>
 
       <div class="study-bottom">
@@ -3902,6 +3911,30 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         .toLowerCase();
     }
 
+    function collapseRepeatedChars(s){
+      return String(s || '').replace(/(.)\1{1,}/g, '$1');
+    }
+
+    function decomposeHangulToJamo(text){
+      const CHO = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+      const JUNG = ['ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅘ','ㅙ','ㅚ','ㅛ','ㅜ','ㅝ','ㅞ','ㅟ','ㅠ','ㅡ','ㅢ','ㅣ'];
+      const JONG = ['', 'ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+      let out = '';
+      for(const ch of String(text || '')){
+        const code = ch.charCodeAt(0);
+        if(code >= 0xAC00 && code <= 0xD7A3){
+          const syllableIndex = code - 0xAC00;
+          const cho = Math.floor(syllableIndex / 588);
+          const jung = Math.floor((syllableIndex % 588) / 28);
+          const jong = syllableIndex % 28;
+          out += CHO[cho] + JUNG[jung] + (JONG[jong] || '');
+        }else if(/[ㄱ-ㅎㅏ-ㅣa-z0-9]/i.test(ch)){
+          out += ch.toLowerCase();
+        }
+      }
+      return out;
+    }
+
     function levenshteinDistance(a, b){
       const s = String(a || '');
       const t = String(b || '');
@@ -3933,22 +3966,31 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     }
 
     function isHandwriteMatch(recognized, correct){
-      const looseRecognized = normalizeRecognitionLoose(recognized);
-      const looseCorrect = normalizeRecognitionLoose(correct);
+      const looseRecognized = collapseRepeatedChars(normalizeRecognitionLoose(recognized));
+      const looseCorrect = collapseRepeatedChars(normalizeRecognitionLoose(correct));
       if(!looseRecognized || !looseCorrect) return false;
       if(normalizeAnswer(recognized) === normalizeAnswer(correct)) return true;
       if(looseRecognized === looseCorrect) return true;
       if(looseRecognized.includes(looseCorrect) || looseCorrect.includes(looseRecognized)){
-        return Math.min(looseRecognized.length, looseCorrect.length) >= 2;
+        return Math.min(looseRecognized.length, looseCorrect.length) >= 1;
       }
       const similarity = getStringSimilarity(looseRecognized, looseCorrect);
       const isKorean = /[가-힣]/.test(looseCorrect);
       if(isKorean){
-        const distance = levenshteinDistance(looseRecognized, looseCorrect);
-        if(looseCorrect.length <= 3) return distance <= 1;
-        return similarity >= 0.6 || distance <= 1;
+        const recognizedJamo = decomposeHangulToJamo(looseRecognized);
+        const correctJamo = decomposeHangulToJamo(looseCorrect);
+        const jamoSimilarity = getStringSimilarity(recognizedJamo, correctJamo);
+        const syllableDistance = levenshteinDistance(looseRecognized, looseCorrect);
+        const jamoDistance = levenshteinDistance(recognizedJamo, correctJamo);
+        if(recognizedJamo && correctJamo){
+          if(recognizedJamo === correctJamo) return true;
+          if(recognizedJamo.includes(correctJamo) || correctJamo.includes(recognizedJamo)) return true;
+        }
+        if(looseCorrect.length <= 2) return syllableDistance <= 1 || jamoDistance <= 2 || jamoSimilarity >= 0.5;
+        if(looseCorrect.length <= 4) return syllableDistance <= 1 || jamoDistance <= 3 || jamoSimilarity >= 0.56 || similarity >= 0.52;
+        return syllableDistance <= 2 || jamoDistance <= 4 || jamoSimilarity >= 0.6 || similarity >= 0.58;
       }
-      return similarity >= 0.72;
+      return similarity >= 0.66;
     }
 
     function createHandwriteOCRCanvas(){
@@ -3965,7 +4007,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         for(let x = 0; x < w; x++){
           const i = (y * w + x) * 4;
           const diff = Math.abs(data[i] - bg[0]) + Math.abs(data[i + 1] - bg[1]) + Math.abs(data[i + 2] - bg[2]);
-          if(diff > 70){
+          if(diff > 55){
             if(x < minX) minX = x;
             if(y < minY) minY = y;
             if(x > maxX) maxX = x;
@@ -3974,30 +4016,73 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         }
       }
       if(maxX < 0 || maxY < 0) return handwriteCanvas;
-      const pad = Math.max(24, Math.round(Math.max(w, h) * 0.06));
+      const pad = Math.max(34, Math.round(Math.max(w, h) * 0.08));
       minX = Math.max(0, minX - pad);
       minY = Math.max(0, minY - pad);
       maxX = Math.min(w - 1, maxX + pad);
       maxY = Math.min(h - 1, maxY + pad);
       const cropW = Math.max(1, maxX - minX + 1);
       const cropH = Math.max(1, maxY - minY + 1);
-      const scale = 2;
+      const size = Math.max(cropW, cropH);
+      const scale = 3;
       const out = document.createElement('canvas');
-      out.width = cropW * scale;
-      out.height = cropH * scale;
+      out.width = size * scale;
+      out.height = size * scale;
       const outCtx = out.getContext('2d', { willReadFrequently:true });
       outCtx.fillStyle = '#ffffff';
       outCtx.fillRect(0, 0, out.width, out.height);
-      outCtx.drawImage(handwriteCanvas, minX, minY, cropW, cropH, 0, 0, out.width, out.height);
+      const dx = Math.round(((size - cropW) / 2) * scale);
+      const dy = Math.round(((size - cropH) / 2) * scale);
+      outCtx.drawImage(handwriteCanvas, minX, minY, cropW, cropH, dx, dy, cropW * scale, cropH * scale);
       const outImg = outCtx.getImageData(0, 0, out.width, out.height);
       const px = outImg.data;
       for(let i = 0; i < px.length; i += 4){
         const lum = (px[i] * 0.299) + (px[i + 1] * 0.587) + (px[i + 2] * 0.114);
-        const value = lum < 215 ? 0 : 255;
+        const value = lum < 225 ? 0 : 255;
         px[i] = value;
         px[i + 1] = value;
         px[i + 2] = value;
         px[i + 3] = 255;
+      }
+      outCtx.putImageData(outImg, 0, 0);
+      return out;
+    }
+
+    function createDilatedOCRCanvas(sourceCanvas, radius = 1){
+      if(!sourceCanvas || radius <= 0) return sourceCanvas;
+      const ctx = sourceCanvas.getContext('2d', { willReadFrequently:true });
+      if(!ctx) return sourceCanvas;
+      const img = ctx.getImageData(0, 0, sourceCanvas.width, sourceCanvas.height);
+      const src = img.data;
+      const out = document.createElement('canvas');
+      out.width = sourceCanvas.width;
+      out.height = sourceCanvas.height;
+      const outCtx = out.getContext('2d', { willReadFrequently:true });
+      const outImg = outCtx.createImageData(out.width, out.height);
+      const dst = outImg.data;
+      for(let i = 0; i < dst.length; i += 4){
+        dst[i] = 255;
+        dst[i + 1] = 255;
+        dst[i + 2] = 255;
+        dst[i + 3] = 255;
+      }
+      const w = sourceCanvas.width;
+      const h = sourceCanvas.height;
+      for(let y = 0; y < h; y++){
+        for(let x = 0; x < w; x++){
+          const i = (y * w + x) * 4;
+          if(src[i] < 128){
+            for(let yy = Math.max(0, y - radius); yy <= Math.min(h - 1, y + radius); yy++){
+              for(let xx = Math.max(0, x - radius); xx <= Math.min(w - 1, x + radius); xx++){
+                const j = (yy * w + xx) * 4;
+                dst[j] = 0;
+                dst[j + 1] = 0;
+                dst[j + 2] = 0;
+                dst[j + 3] = 255;
+              }
+            }
+          }
+        }
       }
       outCtx.putImageData(outImg, 0, 0);
       return out;
@@ -4008,27 +4093,39 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       if(!(window.Tesseract && typeof window.Tesseract.recognize === 'function')){
         throw new Error('ocr-unavailable');
       }
-      const sourceCanvas = createHandwriteOCRCanvas() || handwriteCanvas;
+      const baseCanvas = createHandwriteOCRCanvas() || handwriteCanvas;
+      const sourceCanvases = [
+        baseCanvas,
+        createDilatedOCRCanvas(baseCanvas, 1),
+        createDilatedOCRCanvas(baseCanvas, 2)
+      ].filter(Boolean);
       const isKorean = /[가-힣]/.test(String(expectedText || ''));
       const lang = isKorean ? 'kor+eng' : 'spa+eng';
       const configs = [
         { tessedit_pageseg_mode: 7 },
         { tessedit_pageseg_mode: 13 },
+        { tessedit_pageseg_mode: 8 },
         { tessedit_pageseg_mode: 6 }
       ];
       const candidates = [];
-      for(const config of configs){
-        try{
-          const { data } = await window.Tesseract.recognize(sourceCanvas, lang, config);
-          const text = String(data && data.text || '').trim();
-          if(text) candidates.push(text);
-        }catch(err){
-          console.warn('OCR intento fallido', err);
+      for(const sourceCanvas of sourceCanvases){
+        for(const config of configs){
+          try{
+            const { data } = await window.Tesseract.recognize(sourceCanvas, lang, config);
+            const text = collapseRepeatedChars(String(data && data.text || '').trim());
+            if(text) candidates.push(text);
+          }catch(err){
+            console.warn('OCR intento fallido', err);
+          }
         }
       }
       if(!candidates.length) return '';
       if(!expectedText) return candidates[0];
-      return candidates.sort((a,b) => getStringSimilarity(b, expectedText) - getStringSimilarity(a, expectedText))[0];
+      return candidates.sort((a,b) => {
+        const aScore = Math.max(getStringSimilarity(a, expectedText), getStringSimilarity(decomposeHangulToJamo(a), decomposeHangulToJamo(expectedText)));
+        const bScore = Math.max(getStringSimilarity(b, expectedText), getStringSimilarity(decomposeHangulToJamo(b), decomposeHangulToJamo(expectedText)));
+        return bScore - aScore;
+      })[0];
     }
 
     function openHandwriteMode(source = null){
