@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hangukeo-mal-v8';
+const CACHE_NAME = 'hangukeo-mal-v7';
 const ASSETS = [
   './',
   './index.html',

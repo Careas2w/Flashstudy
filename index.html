@@ -1026,69 +1026,6 @@
     .write-result.good{ color:var(--good); }
     .write-result.bad{ color:var(--bad); }
 
-    .handwrite-result-top{
-      display:none;
-    }
-
-    .handwrite-canvas-head{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:14px;
-      margin:0 0 12px;
-      flex-wrap:wrap;
-    }
-
-    .handwrite-solution{
-      flex:1 1 280px;
-      min-height:42px;
-      font-size:34px;
-      font-weight:900;
-      line-height:1.2;
-      color:var(--text);
-      word-break:break-word;
-    }
-
-    .handwrite-show-btn{
-      min-width:220px;
-      padding:12px 18px;
-      font-size:18px;
-      font-weight:800;
-      border-radius:16px;
-    }
-
-    .handwrite-check-actions{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-top:14px;
-    }
-
-    .handwrite-check-btn{
-      flex:1 1 220px;
-      min-height:54px;
-      border:none;
-      border-radius:16px;
-      color:#fff;
-      font-size:20px;
-      font-weight:900;
-      cursor:pointer;
-      box-shadow:var(--shadow);
-    }
-
-    .handwrite-check-btn.good{
-      background:var(--good);
-    }
-
-    .handwrite-check-btn.bad{
-      background:var(--bad);
-    }
-
-    .handwrite-check-btn:disabled{
-      opacity:.55;
-      cursor:not-allowed;
-    }
-
     .quiz-shell, .mix-shell{
       width:min(960px,100%);
       background:var(--quiz-bg);
@@ -1709,8 +1646,6 @@
       display:flex;
       flex-direction:column;
       gap:10px;
-      align-items:center;
-      text-align:center;
     }
     .mosaic-card:hover{transform:translateY(-1px);}
     .mosaic-edit-btn{
@@ -1721,37 +1656,29 @@
       padding:6px 9px; cursor:pointer;
     }
     .mosaic-primary{
-      width:100%;
       font-size:var(--mosaic-primary-size, 34px);
       font-weight:var(--mosaic-font-weight, 500);
       line-height:1.08;
       margin-top:10px;
       word-break:break-word;
-      text-align:center;
     }
     .mosaic-secondary{
-      width:100%;
       font-size:calc(var(--mosaic-primary-size, 34px) * .48);
       font-weight:var(--mosaic-font-weight, 500);
       line-height:1.15;
       color:var(--muted);
       word-break:break-word;
-      text-align:center;
     }
     .mosaic-mini{
-      width:100%;
       margin-top:auto;
       display:grid;
       gap:8px;
-      text-align:center;
     }
     .mosaic-mini-box{
-      width:100%;
       background:var(--panel-2);
       border:1px solid var(--line);
       border-radius:12px;
       padding:8px 10px;
-      text-align:center;
     }
     .mosaic-mini-label{
       font-size:10px;
@@ -1813,6 +1740,35 @@
     .handwrite-tip{
       font-size:12px;
       color:var(--muted);
+    }
+    .handwrite-toolbar-top{
+      display:flex;
+      justify-content:flex-end;
+      margin:8px 0 10px;
+    }
+    .handwrite-solution-btn{
+      min-width:220px;
+      font-size:18px;
+      padding:14px 18px;
+    }
+    .handwrite-solution-text{
+      min-height:48px;
+      font-size:30px;
+      font-weight:800;
+      text-align:center;
+      color:inherit;
+      margin-bottom:12px;
+      display:none;
+    }
+    .handwrite-good-btn{
+      background:var(--good);
+      color:#fff;
+      border-color:transparent;
+    }
+    .handwrite-bad-btn{
+      background:var(--bad);
+      color:#fff;
+      border-color:transparent;
     }
     @media (max-width:620px){
       .handwrite-canvas-wrap{ min-height:280px; }
@@ -2171,27 +2127,25 @@
       <div class="write-card">
         <div class="write-label" id="handwriteLabel">Escribe en coreano</div>
         <div class="write-prompt" id="handwritePrompt">—</div>
-        <div class="write-result handwrite-result-top" id="handwriteResult"></div>
-        <div class="handwrite-canvas-head">
-          <div class="handwrite-solution" id="handwriteSolution"></div>
-          <button class="action-btn handwrite-show-btn" id="handwriteShowSolutionBtn" type="button">Mostrar solución</button>
+        <div class="handwrite-toolbar-top">
+          <button class="action-btn handwrite-solution-btn" id="toggleHandwriteSolutionBtn" type="button">Mostrar solución</button>
         </div>
+        <div class="write-result handwrite-solution-text" id="handwriteResult"></div>
         <div class="handwrite-canvas-wrap">
           <canvas class="handwrite-canvas" id="handwriteCanvas"></canvas>
           <div class="handwrite-tools">
             <div class="handwrite-tip">Dibuja con el ratón o con el dedo dentro del recuadro.</div>
+            <button class="small-btn" id="handwriteClearBtn" type="button">Borrar</button>
           </div>
-        </div>
-        <div class="handwrite-check-actions">
-          <button class="handwrite-check-btn good" id="handwriteMarkGoodBtn" type="button">✓ Está bien</button>
-          <button class="handwrite-check-btn bad" id="handwriteMarkBadBtn" type="button">✗ Está mal</button>
         </div>
       </div>
 
       <div class="study-bottom">
         <div class="study-group">
           <button class="action-btn secondary" id="handwritePrevBtn">← Anterior</button>
-                    <button class="action-btn secondary" id="handwriteNextBtn">Siguiente →</button>
+          <button class="action-btn handwrite-good-btn" id="markHandwriteGoodBtn">맞아요!</button>
+          <button class="action-btn handwrite-bad-btn" id="markHandwriteBadBtn">틀려요!</button>
+          <button class="action-btn secondary" id="handwriteNextBtn">Siguiente →</button>
         </div>
       </div>
     </div>
@@ -2419,7 +2373,7 @@
     let handwriteData = [];
     let handwriteIndex = 0;
     let handwriteAnswered = new Map();
-    let handwriteSolutionVisible = false;
+    let handwriteLastRecognized = "";
 
     let quizData = [];
     let quizIndex = 0;
@@ -2542,12 +2496,11 @@
     const handwritePrompt = document.getElementById("handwritePrompt");
     const handwriteCanvas = document.getElementById("handwriteCanvas");
     const handwriteResult = document.getElementById("handwriteResult");
+    const toggleHandwriteSolutionBtn = document.getElementById("toggleHandwriteSolutionBtn");
+    const markHandwriteGoodBtn = document.getElementById("markHandwriteGoodBtn");
+    const markHandwriteBadBtn = document.getElementById("markHandwriteBadBtn");
     const handwritePrevBtn = document.getElementById("handwritePrevBtn");
     const handwriteNextBtn = document.getElementById("handwriteNextBtn");
-    const handwriteSolution = document.getElementById("handwriteSolution");
-    const handwriteShowSolutionBtn = document.getElementById("handwriteShowSolutionBtn");
-    const handwriteMarkGoodBtn = document.getElementById("handwriteMarkGoodBtn");
-    const handwriteMarkBadBtn = document.getElementById("handwriteMarkBadBtn");
     const handwriteStarBtn = document.getElementById("handwriteStarBtn");
     const handwriteDirectionBtn = document.getElementById("handwriteDirectionBtn");
     const handwritePlayBtn = document.getElementById("handwritePlayBtn");
@@ -3880,9 +3833,9 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     if(handwritePlaySlowBtn) handwritePlaySlowBtn.addEventListener("click", () => { const row = handwriteData[handwriteIndex]; if(row) speak(row.coreano, "ko-KR", SLOW_AUDIO_RATE); });
     if(handwriteShuffleBtn) handwriteShuffleBtn.addEventListener("click", () => { handwriteData = shuffleArray(handwriteData); handwriteIndex = 0; renderHandwriteCard(); });
     if(handwriteClearBtn) handwriteClearBtn.addEventListener("click", clearHandwriteCanvas);
-    if(handwriteShowSolutionBtn) handwriteShowSolutionBtn.addEventListener("click", showHandwriteSolution);
-    if(handwriteMarkGoodBtn) handwriteMarkGoodBtn.addEventListener("click", () => markHandwriteAnswer(true));
-    if(handwriteMarkBadBtn) handwriteMarkBadBtn.addEventListener("click", () => markHandwriteAnswer(false));
+    if(toggleHandwriteSolutionBtn) toggleHandwriteSolutionBtn.addEventListener("click", toggleHandwriteSolution);
+    if(markHandwriteGoodBtn) markHandwriteGoodBtn.addEventListener("click", () => markHandwriteAnswer(true));
+    if(markHandwriteBadBtn) markHandwriteBadBtn.addEventListener("click", () => markHandwriteAnswer(false));
     if(handwritePrevBtn) handwritePrevBtn.addEventListener("click", prevHandwriteCard);
     if(handwriteNextBtn) handwriteNextBtn.addEventListener("click", nextHandwriteCard);
     if(handwriteStarBtn) handwriteStarBtn.addEventListener("click", () => { const row = handwriteData[handwriteIndex]; toggleStar(row); renderHandwriteCard(); });
@@ -3926,6 +3879,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       handwriteCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--panel').trim() || '#fff';
       handwriteCtx.fillRect(0, 0, handwriteCanvas.width / dpr, handwriteCanvas.height / dpr);
       handwriteLastPoint = null;
+      handwriteLastRecognized = '';
     }
 
     function getCanvasPoint(event){
@@ -3963,6 +3917,23 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       if(handwriteCanvas){ try{ handwriteCanvas.releasePointerCapture(event.pointerId); }catch{} }
     }
 
+    function normalizeRecognitionLoose(s){
+      return String(s || '')
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .replace(/[^a-zA-Z0-9가-힣]/g, '')
+        .toLowerCase();
+    }
+
+    async function recognizeHandwriteText(){
+      if(!handwriteCanvas) return '';
+      if(!(window.Tesseract && typeof window.Tesseract.recognize === 'function')){
+        throw new Error('ocr-unavailable');
+      }
+      const { data } = await window.Tesseract.recognize(handwriteCanvas, 'kor+spa+eng');
+      return String(data && data.text || '').trim();
+    }
+
     function openHandwriteMode(source = null){
       currentPracticeSource = source;
       handwriteIndex = 0;
@@ -3982,33 +3953,10 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     function closeHandwriteMode(){
       handwriteOverlay.classList.remove('open');
       handwriteResult.textContent = '';
-      handwriteResult.className = 'write-result';
-      handwriteSolutionVisible = false;
-      if(handwriteSolution) handwriteSolution.textContent = '';
-      if(handwriteShowSolutionBtn) handwriteShowSolutionBtn.textContent = 'Mostrar solución';
+      handwriteResult.className = 'write-result handwrite-solution-text';
+      handwriteResult.style.display = 'none';
+      if(toggleHandwriteSolutionBtn) toggleHandwriteSolutionBtn.textContent = 'Mostrar solución';
       currentPracticeSource = null;
-    }
-
-    function showHandwriteSolution(){
-      if(!handwriteData.length) return;
-      const row = handwriteData[handwriteIndex];
-      const correct = String(writeDirection === 'es-to-ko' ? row.coreano : row.español || '—');
-      handwriteSolutionVisible = true;
-      if(handwriteSolution) handwriteSolution.textContent = correct;
-      if(handwriteShowSolutionBtn) handwriteShowSolutionBtn.textContent = 'Solución visible';
-    }
-
-    function markHandwriteAnswer(isGood){
-      if(!handwriteData.length) return;
-      const row = handwriteData[handwriteIndex];
-      if(!row) return;
-      handwriteAnswered.set(row.id, isGood);
-      if(handwriteResult){
-        handwriteResult.textContent = isGood ? 'Marcada como correcta' : 'Marcada como incorrecta';
-        handwriteResult.className = `write-result handwrite-result-top ${isGood ? 'good' : 'bad'}`;
-      }
-      if(handwriteMarkGoodBtn) handwriteMarkGoodBtn.disabled = isGood;
-      if(handwriteMarkBadBtn) handwriteMarkBadBtn.disabled = !isGood;
     }
 
     function renderHandwriteCard(){
@@ -4017,6 +3965,8 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         handwritePrompt.textContent = 'No hay palabras';
         handwriteStats.textContent = '0 / 0';
         handwriteResult.textContent = '';
+        handwriteResult.style.display = 'none';
+        if(toggleHandwriteSolutionBtn) toggleHandwriteSolutionBtn.textContent = 'Mostrar solución';
         handwriteStarBtn.textContent = '☆';
         handwritePrevBtn.disabled = true;
         handwriteNextBtn.disabled = true;
@@ -4036,19 +3986,40 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       }
       handwriteStats.textContent = `${handwriteIndex + 1} / ${handwriteData.length}`;
       handwriteResult.textContent = '';
-      handwriteResult.className = 'write-result handwrite-result-top';
-      handwriteSolutionVisible = false;
-      if(handwriteSolution) handwriteSolution.textContent = '';
-      if(handwriteShowSolutionBtn) handwriteShowSolutionBtn.textContent = 'Mostrar solución';
-      const markedValue = handwriteAnswered.get(row.id);
+      handwriteResult.className = 'write-result handwrite-solution-text';
+      handwriteResult.style.display = 'none';
+      if(toggleHandwriteSolutionBtn) toggleHandwriteSolutionBtn.textContent = 'Mostrar solución';
       handwriteStarBtn.textContent = starredWords.has(row.id) ? '⭐' : '☆';
-      if(handwriteMarkGoodBtn) handwriteMarkGoodBtn.disabled = markedValue === true;
-      if(handwriteMarkBadBtn) handwriteMarkBadBtn.disabled = markedValue === false;
       handwritePrevBtn.disabled = handwriteIndex === 0;
       handwriteNextBtn.disabled = false;
       handwriteNextBtn.textContent = handwriteIndex >= handwriteData.length - 1 ? '✅ Finalizar' : 'Siguiente →';
       updateProgress(handwriteProgressFill, handwriteProgressText, handwriteIndex, handwriteData.length);
       clearHandwriteCanvas();
+    }
+
+    function toggleHandwriteSolution(){
+      if(!handwriteData.length) return;
+      const row = handwriteData[handwriteIndex];
+      const esToKo = writeDirection === 'es-to-ko';
+      const solution = (esToKo ? row.coreano : row.español) || '—';
+      const isVisible = handwriteResult.style.display === 'block';
+      handwriteResult.textContent = solution;
+      handwriteResult.style.display = isVisible ? 'none' : 'block';
+      if(toggleHandwriteSolutionBtn) toggleHandwriteSolutionBtn.textContent = isVisible ? 'Mostrar solución' : 'Ocultar solución';
+    }
+
+    function markHandwriteAnswer(isGood){
+      if(!handwriteData.length) return;
+      const row = handwriteData[handwriteIndex];
+      if(!row) return;
+      if(isGood){
+        wrongWords.delete(row.id);
+      }else{
+        wrongWords.add(row.id);
+      }
+      saveWrongWords();
+      handwriteAnswered.set(row.id, isGood ? 'good' : 'bad');
+      nextHandwriteCard();
     }
 
     function prevHandwriteCard(){
@@ -4059,7 +4030,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
 
     function finishHandwriteMode(){
       const total = handwriteData.length || 0;
-      const correct = Array.from(handwriteAnswered.values()).filter(Boolean).length;
+      const correct = [...handwriteAnswered.values()].filter(Boolean).length;
       const percent = total ? Math.round((correct / total) * 100) : 0;
       closeHandwriteMode();
       showCelebration('Escribir a mano', percent);
@@ -4796,7 +4767,18 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
 
 
     renderDictResults();
-  </script>
+  
+function toggleSolution() {
+  const el = document.getElementById('solutionText');
+  if (!el) return;
+  if (el.style.display === 'none' || el.style.display === '') {
+    el.style.display = 'block';
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+</script>
 
 <script>
   if ('serviceWorker' in navigator) {
@@ -4806,6 +4788,17 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       });
     });
   }
+
+function toggleSolution() {
+  const el = document.getElementById('solutionText');
+  if (!el) return;
+  if (el.style.display === 'none' || el.style.display === '') {
+    el.style.display = 'block';
+  } else {
+    el.style.display = 'none';
+  }
+}
+
 </script>
 
 </body>
