@@ -1028,12 +1028,30 @@
     .write-result.bad{ color:var(--bad); }
 
     .handwrite-result-top{
-      min-height:34px;
-      margin:0 0 14px;
-      font-size:24px;
-      line-height:1.3;
+      min-height:42px;
+      margin:0 0 12px;
+      font-size:30px;
+      line-height:1.28;
       font-weight:800;
       text-align:center;
+    }
+
+    .handwrite-canvas-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin:0 0 10px;
+      flex-wrap:wrap;
+    }
+
+    .handwrite-solution{
+      flex:1 1 280px;
+      min-height:34px;
+      font-size:24px;
+      font-weight:800;
+      line-height:1.25;
+      color:var(--quiz-muted);
     }
 
     .quiz-shell, .mix-shell{
@@ -2119,6 +2137,10 @@
         <div class="write-label" id="handwriteLabel">Escribe en coreano</div>
         <div class="write-prompt" id="handwritePrompt">—</div>
         <div class="write-result handwrite-result-top" id="handwriteResult"></div>
+        <div class="handwrite-canvas-head">
+          <div class="handwrite-solution" id="handwriteSolution"></div>
+          <button class="small-btn" id="handwriteShowSolutionBtn" type="button">👁 Mostrar solución</button>
+        </div>
         <div class="handwrite-canvas-wrap">
           <canvas class="handwrite-canvas" id="handwriteCanvas"></canvas>
           <div class="handwrite-tools">
@@ -2362,6 +2384,9 @@
     let handwriteAnswered = new Map();
     let handwriteLastRecognized = "";
     let handwriteBusy = false;
+    let handwriteSolutionVisible = false;
+    let handwriteOCRWorker = null;
+    let handwriteOCRLang = '';
 
     let quizData = [];
     let quizIndex = 0;
@@ -2487,6 +2512,8 @@
     const handwritePrevBtn = document.getElementById("handwritePrevBtn");
     const handwriteNextBtn = document.getElementById("handwriteNextBtn");
     const checkHandwriteBtn = document.getElementById("checkHandwriteBtn");
+    const handwriteSolution = document.getElementById("handwriteSolution");
+    const handwriteShowSolutionBtn = document.getElementById("handwriteShowSolutionBtn");
     const handwriteStarBtn = document.getElementById("handwriteStarBtn");
     const handwriteDirectionBtn = document.getElementById("handwriteDirectionBtn");
     const handwritePlayBtn = document.getElementById("handwritePlayBtn");
@@ -3985,12 +4012,13 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         if(recognizedJamo && correctJamo){
           if(recognizedJamo === correctJamo) return true;
           if(recognizedJamo.includes(correctJamo) || correctJamo.includes(recognizedJamo)) return true;
+          if(correctJamo.length >= 2 && recognizedJamo.slice(0, Math.min(3, recognizedJamo.length)) === correctJamo.slice(0, Math.min(3, correctJamo.length))) return true;
         }
-        if(looseCorrect.length <= 2) return syllableDistance <= 1 || jamoDistance <= 2 || jamoSimilarity >= 0.5;
-        if(looseCorrect.length <= 4) return syllableDistance <= 1 || jamoDistance <= 3 || jamoSimilarity >= 0.56 || similarity >= 0.52;
-        return syllableDistance <= 2 || jamoDistance <= 4 || jamoSimilarity >= 0.6 || similarity >= 0.58;
+        if(looseCorrect.length <= 2) return syllableDistance <= 1 || jamoDistance <= 3 || jamoSimilarity >= 0.42 || similarity >= 0.42;
+        if(looseCorrect.length <= 4) return syllableDistance <= 2 || jamoDistance <= 4 || jamoSimilarity >= 0.46 || similarity >= 0.44;
+        return syllableDistance <= 2 || jamoDistance <= 5 || jamoSimilarity >= 0.5 || similarity >= 0.48;
       }
-      return similarity >= 0.66;
+      return similarity >= 0.56;
     }
 
     function createHandwriteOCRCanvas(){
@@ -4048,6 +4076,18 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       return out;
     }
 
+    function hasHandwriteInk(sourceCanvas){
+      if(!sourceCanvas) return false;
+      const ctx = sourceCanvas.getContext('2d', { willReadFrequently:true });
+      if(!ctx) return true;
+      const img = ctx.getImageData(0, 0, sourceCanvas.width, sourceCanvas.height).data;
+      let dark = 0;
+      for(let i = 0; i < img.length; i += 4){
+        if(img[i] < 170) dark++;
+      }
+      return dark > Math.max(150, Math.round((sourceCanvas.width * sourceCanvas.height) * 0.0025));
+    }
+
     function createDilatedOCRCanvas(sourceCanvas, radius = 1){
       if(!sourceCanvas || radius <= 0) return sourceCanvas;
       const ctx = sourceCanvas.getContext('2d', { willReadFrequently:true });
@@ -4088,35 +4128,47 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       return out;
     }
 
-    async function recognizeHandwriteText(expectedText = ''){
-      if(!handwriteCanvas) return '';
-      if(!(window.Tesseract && typeof window.Tesseract.recognize === 'function')){
+    async function getHandwriteOCRWorker(lang){
+      if(!(window.Tesseract && typeof window.Tesseract.createWorker === 'function')){
         throw new Error('ocr-unavailable');
       }
+      if(handwriteOCRWorker && handwriteOCRLang === lang) return handwriteOCRWorker;
+      if(handwriteOCRWorker){
+        try{ await handwriteOCRWorker.terminate(); }catch{}
+        handwriteOCRWorker = null;
+      }
+      handwriteOCRWorker = await window.Tesseract.createWorker(lang, 1, { logger: () => {} });
+      handwriteOCRLang = lang;
+      return handwriteOCRWorker;
+    }
+
+    async function recognizeHandwriteText(expectedText = ''){
+      if(!handwriteCanvas) return '';
       const baseCanvas = createHandwriteOCRCanvas() || handwriteCanvas;
-      const sourceCanvases = [
-        baseCanvas,
-        createDilatedOCRCanvas(baseCanvas, 1),
-        createDilatedOCRCanvas(baseCanvas, 2)
-      ].filter(Boolean);
+      if(!hasHandwriteInk(baseCanvas)) return '';
       const isKorean = /[가-힣]/.test(String(expectedText || ''));
       const lang = isKorean ? 'kor+eng' : 'spa+eng';
-      const configs = [
-        { tessedit_pageseg_mode: 7 },
-        { tessedit_pageseg_mode: 13 },
-        { tessedit_pageseg_mode: 8 },
-        { tessedit_pageseg_mode: 6 }
-      ];
+      const worker = await getHandwriteOCRWorker(lang);
+      const canvases = [
+        createDilatedOCRCanvas(baseCanvas, 2),
+        baseCanvas
+      ].filter(Boolean);
       const candidates = [];
-      for(const sourceCanvas of sourceCanvases){
-        for(const config of configs){
-          try{
-            const { data } = await window.Tesseract.recognize(sourceCanvas, lang, config);
-            const text = collapseRepeatedChars(String(data && data.text || '').trim());
-            if(text) candidates.push(text);
-          }catch(err){
-            console.warn('OCR intento fallido', err);
-          }
+      const configs = [
+        { tessedit_pageseg_mode: 8 },
+        { tessedit_pageseg_mode: 7 }
+      ];
+      for(let i = 0; i < canvases.length; i++){
+        const sourceCanvas = canvases[i];
+        const config = configs[i] || configs[0];
+        try{
+          await worker.setParameters(config);
+          const { data } = await worker.recognize(sourceCanvas);
+          const text = collapseRepeatedChars(String(data && data.text || '').trim());
+          if(text) candidates.push(text);
+          if(text && (!expectedText || isHandwriteMatch(text, expectedText))) return text;
+        }catch(err){
+          console.warn('OCR intento fallido', err);
         }
       }
       if(!candidates.length) return '';
@@ -4149,7 +4201,19 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       handwriteResult.textContent = '';
       handwriteResult.className = 'write-result';
       handwriteBusy = false;
+      handwriteSolutionVisible = false;
+      if(handwriteSolution) handwriteSolution.textContent = '';
+      if(handwriteShowSolutionBtn) handwriteShowSolutionBtn.textContent = '👁 Mostrar solución';
       currentPracticeSource = null;
+    }
+
+    function toggleHandwriteSolution(){
+      if(!handwriteData.length) return;
+      const row = handwriteData[handwriteIndex];
+      const correct = String(writeDirection === 'es-to-ko' ? row.coreano : row.español || '—');
+      handwriteSolutionVisible = !handwriteSolutionVisible;
+      if(handwriteSolution) handwriteSolution.textContent = handwriteSolutionVisible ? `Solución: ${correct}` : '';
+      if(handwriteShowSolutionBtn) handwriteShowSolutionBtn.textContent = handwriteSolutionVisible ? '🙈 Ocultar solución' : '👁 Mostrar solución';
     }
 
     function renderHandwriteCard(){
@@ -4177,7 +4241,10 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       }
       handwriteStats.textContent = `${handwriteIndex + 1} / ${handwriteData.length}`;
       handwriteResult.textContent = '';
-      handwriteResult.className = 'write-result';
+      handwriteResult.className = 'write-result handwrite-result-top';
+      handwriteSolutionVisible = false;
+      if(handwriteSolution) handwriteSolution.textContent = '';
+      if(handwriteShowSolutionBtn) handwriteShowSolutionBtn.textContent = '👁 Mostrar solución';
       handwriteStarBtn.textContent = starredWords.has(row.id) ? '⭐' : '☆';
       handwritePrevBtn.disabled = handwriteIndex === 0;
       handwriteNextBtn.disabled = false;
@@ -4192,7 +4259,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       handwriteBusy = true;
       checkHandwriteBtn.disabled = true;
       handwriteResult.textContent = '⏳ Reconociendo escritura...';
-      handwriteResult.className = 'write-result';
+      handwriteResult.className = 'write-result handwrite-result-top';
       try{
         const correct = String(writeDirection === 'es-to-ko' ? row.coreano : row.español);
         const recognized = await recognizeHandwriteText(correct);
@@ -4203,18 +4270,18 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         if(ok){
           wrongWords.delete(row.id);
           handwriteResult.textContent = '✅ Correcto';
-          handwriteResult.className = 'write-result good';
+          handwriteResult.className = 'write-result handwrite-result-top good';
         }else{
           wrongWords.add(row.id);
           handwriteResult.textContent = `❌ Incorrecto · Detectado: ${recognized || '—'} · Correcto: ${correct}`;
-          handwriteResult.className = 'write-result bad';
+          handwriteResult.className = 'write-result handwrite-result-top bad';
         }
         persistLists();
         renderCards();
       }catch(err){
         console.warn('No se pudo reconocer la escritura a mano:', err);
-        handwriteResult.textContent = '⚠️ No se pudo reconocer la escritura. Prueba a escribir dentro del recuadro, separando mejor los trazos.';
-        handwriteResult.className = 'write-result bad';
+        handwriteResult.textContent = '⚠️ No se pudo reconocer la escritura. Prueba con un trazo algo más grande dentro del recuadro.';
+        handwriteResult.className = 'write-result handwrite-result-top bad';
       }finally{
         handwriteBusy = false;
         checkHandwriteBtn.disabled = false;
