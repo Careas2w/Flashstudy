@@ -19,6 +19,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png" />
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <style>
     :root{
       --bg:#0f1020;
@@ -62,7 +63,7 @@
       --quiz-font-size:28px;
       --quiz-option-size:18px;
       --quiz-font-weight:800;
-      --mix-font-size:20px;
+      --mix-font-size:24px;
       --mix-font-weight:700;
     }
 
@@ -1695,6 +1696,57 @@
       white-space:pre-wrap;
     }
 
+    .mosaic-star-btn{
+      position:absolute;
+      top:10px; left:10px;
+      border:none; border-radius:10px;
+      background:var(--panel-2); color:var(--text); border:1px solid var(--line);
+      padding:6px 9px; cursor:pointer;
+    }
+    .mosaic-star-btn.active{
+      background:var(--primary);
+      color:#fff;
+      border-color:transparent;
+    }
+    .mosaic-card.has-star{
+      box-shadow:0 0 0 1px color-mix(in oklab, var(--primary) 65%, transparent), var(--shadow);
+    }
+
+    .handwrite-canvas-wrap{
+      width:100%;
+      min-height:320px;
+      border-radius:18px;
+      border:1px dashed var(--line);
+      background:linear-gradient(180deg, color-mix(in oklab, var(--panel) 96%, white 4%), color-mix(in oklab, var(--panel-2) 86%, white 14%));
+      padding:12px;
+    }
+    .handwrite-canvas{
+      width:100%;
+      height:320px;
+      display:block;
+      border-radius:14px;
+      background:color-mix(in oklab, var(--panel) 98%, white 2%);
+      border:1px solid var(--line);
+      touch-action:none;
+      cursor:crosshair;
+    }
+    .handwrite-tools{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
+      align-items:center;
+    }
+    .handwrite-tip{
+      font-size:12px;
+      color:var(--muted);
+    }
+    @media (max-width:620px){
+      .handwrite-canvas-wrap{ min-height:280px; }
+      .handwrite-canvas{ height:280px; }
+    }
+
   </style>
 </head>
 <body>
@@ -1832,6 +1884,7 @@
           <button class="mode-btn active" id="normalAudioBtn">▶ Normal</button>
           <button class="mode-btn" id="flashcardsBtn">📚 Flashcards</button>
           <button class="mode-btn" id="writeBtn">✍ Escritura</button>
+          <button class="mode-btn" id="handwriteBtn">🖍️ Escribir a mano</button>
           <button class="mode-btn" id="quizBtn">🧩 Multiple</button>
           <button class="mode-btn" id="listenBtn">👂 Escuchar</button>
           <button class="mode-btn" id="mosaicBtn">🧱 Mosaico</button>
@@ -1842,6 +1895,7 @@
             <div class="dropdown-menu">
               <button class="dropdown-item" data-practice-list="wrong" data-mode="flashcards">Flashcards</button>
                             <button class="dropdown-item" data-practice-list="wrong" data-mode="write">Escritura</button>
+              <button class="dropdown-item" data-practice-list="wrong" data-mode="handwrite">Escribir a mano</button>
               <button class="dropdown-item" data-practice-list="wrong" data-mode="quiz">Multiple</button>
               <button class="dropdown-item" data-practice-list="wrong" data-mode="listen">Escuchar</button>
               <button class="dropdown-item" data-practice-list="wrong" data-mode="mosaic">Mosaico</button>
@@ -1856,6 +1910,7 @@
             <div class="dropdown-menu">
               <button class="dropdown-item" data-practice-list="star" data-mode="flashcards">Flashcards</button>
                             <button class="dropdown-item" data-practice-list="star" data-mode="write">Escritura</button>
+              <button class="dropdown-item" data-practice-list="star" data-mode="handwrite">Escribir a mano</button>
               <button class="dropdown-item" data-practice-list="star" data-mode="quiz">Multiple</button>
               <button class="dropdown-item" data-practice-list="star" data-mode="listen">Escuchar</button>
               <button class="dropdown-item" data-practice-list="star" data-mode="mosaic">Mosaico</button>
@@ -2009,6 +2064,56 @@
           <button class="action-btn secondary" id="writePrevBtn">← Anterior</button>
           <button class="action-btn" id="checkWriteBtn">Comprobar</button>
           <button class="action-btn secondary" id="writeNextBtn">Siguiente →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ESCRITURA A MANO -->
+  <div class="overlay" id="handwriteOverlay">
+    <div class="write-wrap">
+      <div class="modal-top">
+        <div>
+          <div class="modal-title">Modo escribir a mano</div>
+          <div class="modal-stats" id="handwriteStats">0 / 0</div>
+        </div>
+        <div class="study-group">
+          <div class="mode-style-box">
+            <button class="small-btn" id="handwriteDirectionBtn">ES → KO</button>
+            <button class="small-btn" id="handwritePlayBtn">🔊 Audio</button>
+            <button class="small-btn" id="handwritePlaySlowBtn">🐢 Lento</button>
+            <button class="small-btn" id="handwriteShuffleBtn">🔀 Barajar</button>
+            <button class="small-btn" id="handwriteClearBtn">🧽 Borrar</button>
+          </div>
+          <button class="icon-btn" id="handwriteStarBtn">☆</button>
+          <button class="icon-btn" id="closeHandwriteBtn">✕</button>
+        </div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="handwriteProgressFill"></div></div>
+        <div class="progress-text" id="handwriteProgressText">0%</div>
+      </div>
+
+      <div class="write-card">
+        <div class="write-label" id="handwriteLabel">Escribe en coreano</div>
+        <div class="write-prompt" id="handwritePrompt">—</div>
+        <div class="handwrite-canvas-wrap">
+          <canvas class="handwrite-canvas" id="handwriteCanvas"></canvas>
+          <div class="handwrite-tools">
+            <div class="handwrite-tip">Dibuja con el ratón o con el dedo dentro del recuadro.</div>
+            <button class="small-btn" id="handwriteRecognizedBtn" type="button">Texto detectado: —</button>
+          </div>
+        </div>
+        <div class="write-result" id="handwriteResult"></div>
+      </div>
+
+      <div class="study-bottom">
+        <div class="study-group">
+          <button class="action-btn secondary" id="handwritePrevBtn">← Anterior</button>
+          <button class="action-btn" id="checkHandwriteBtn">Comprobar</button>
+          <button class="action-btn secondary" id="handwriteNextBtn">Siguiente →</button>
         </div>
       </div>
     </div>
@@ -2210,7 +2315,7 @@
     let flashStyle = { fontSize: 62, bold: false };
     let writeStyle = { fontSize: 30, bold: false };
     let quizStyle = { fontSize: 28, bold: false };
-    let mixStyle = { fontSize: 22, bold: false };
+    let mixStyle = { fontSize: 24, bold: false };
     let mosaicStyle = { fontSize: 34, bold: false };
     let mosaicData = [];
     let mosaicPrimaryMode = "ko";
@@ -2232,6 +2337,12 @@
 
     let writeData = [];
     let writeIndex = 0;
+
+    let handwriteData = [];
+    let handwriteIndex = 0;
+    let handwriteAnswered = new Map();
+    let handwriteLastRecognized = "";
+    let handwriteBusy = false;
 
     let quizData = [];
     let quizIndex = 0;
@@ -2280,6 +2391,7 @@
     const normalAudioBtn = document.getElementById("normalAudioBtn");
     const flashcardsBtn = document.getElementById("flashcardsBtn");
     const writeBtn = document.getElementById("writeBtn");
+    const handwriteBtn = document.getElementById("handwriteBtn");
     const quizBtn = document.getElementById("quizBtn");
     const listenBtn = document.getElementById("listenBtn");
     const mosaicBtn = document.getElementById("mosaicBtn");
@@ -2294,6 +2406,7 @@
 
     const studyOverlay = document.getElementById("studyOverlay");
     const writeOverlay = document.getElementById("writeOverlay");
+    const handwriteOverlay = document.getElementById("handwriteOverlay");
     const quizOverlay = document.getElementById("quizOverlay");
     const mixOverlay = document.getElementById("mixOverlay");
     const mosaicOverlay = document.getElementById("mosaicOverlay");
@@ -2346,6 +2459,25 @@
     const closeWriteBtn = document.getElementById("closeWriteBtn");
     const writeProgressFill = document.getElementById("writeProgressFill");
     const writeProgressText = document.getElementById("writeProgressText");
+
+    const handwriteStats = document.getElementById("handwriteStats");
+    const handwriteLabel = document.getElementById("handwriteLabel");
+    const handwritePrompt = document.getElementById("handwritePrompt");
+    const handwriteCanvas = document.getElementById("handwriteCanvas");
+    const handwriteResult = document.getElementById("handwriteResult");
+    const handwritePrevBtn = document.getElementById("handwritePrevBtn");
+    const handwriteNextBtn = document.getElementById("handwriteNextBtn");
+    const checkHandwriteBtn = document.getElementById("checkHandwriteBtn");
+    const handwriteStarBtn = document.getElementById("handwriteStarBtn");
+    const handwriteDirectionBtn = document.getElementById("handwriteDirectionBtn");
+    const handwritePlayBtn = document.getElementById("handwritePlayBtn");
+    const handwritePlaySlowBtn = document.getElementById("handwritePlaySlowBtn");
+    const handwriteShuffleBtn = document.getElementById("handwriteShuffleBtn");
+    const handwriteClearBtn = document.getElementById("handwriteClearBtn");
+    const handwriteRecognizedBtn = document.getElementById("handwriteRecognizedBtn");
+    const closeHandwriteBtn = document.getElementById("closeHandwriteBtn");
+    const handwriteProgressFill = document.getElementById("handwriteProgressFill");
+    const handwriteProgressText = document.getElementById("handwriteProgressText");
 
     const quizCounter = document.getElementById("quizCounter");
     const quizPromptLabel = document.getElementById("quizPromptLabel");
@@ -3653,6 +3785,239 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     if(writeFontUpBtn){ writeFontUpBtn.addEventListener("click", () => { writeStyle.fontSize = clamp(writeStyle.fontSize + 2, 20, 56); applyWriteStyle(); }); }
     closeWriteBtn.addEventListener("click", closeWriteMode);
 
+
+    if(handwriteCanvas){
+      handwriteCanvas.addEventListener('pointerdown', startHandwriteStroke);
+      handwriteCanvas.addEventListener('pointermove', moveHandwriteStroke);
+      handwriteCanvas.addEventListener('pointerup', endHandwriteStroke);
+      handwriteCanvas.addEventListener('pointercancel', endHandwriteStroke);
+      handwriteCanvas.addEventListener('pointerleave', endHandwriteStroke);
+    }
+    if(handwriteBtn) handwriteBtn.addEventListener("click", () => openHandwriteMode());
+    if(closeHandwriteBtn) closeHandwriteBtn.addEventListener("click", closeHandwriteMode);
+    if(handwriteOverlay) handwriteOverlay.addEventListener("click", e => { if(e.target === handwriteOverlay) closeHandwriteMode(); });
+    if(handwriteDirectionBtn) handwriteDirectionBtn.addEventListener("click", () => { writeDirection = writeDirection === "es-to-ko" ? "ko-to-es" : "es-to-ko"; renderWriteCard(); renderHandwriteCard(); });
+    if(handwritePlayBtn) handwritePlayBtn.addEventListener("click", () => { const row = handwriteData[handwriteIndex]; if(row) speak(row.coreano, "ko-KR", NORMAL_AUDIO_RATE); });
+    if(handwritePlaySlowBtn) handwritePlaySlowBtn.addEventListener("click", () => { const row = handwriteData[handwriteIndex]; if(row) speak(row.coreano, "ko-KR", SLOW_AUDIO_RATE); });
+    if(handwriteShuffleBtn) handwriteShuffleBtn.addEventListener("click", () => { handwriteData = shuffleArray(handwriteData); handwriteIndex = 0; renderHandwriteCard(); });
+    if(handwriteClearBtn) handwriteClearBtn.addEventListener("click", clearHandwriteCanvas);
+    if(checkHandwriteBtn) checkHandwriteBtn.addEventListener("click", checkHandwrite);
+    if(handwritePrevBtn) handwritePrevBtn.addEventListener("click", prevHandwriteCard);
+    if(handwriteNextBtn) handwriteNextBtn.addEventListener("click", nextHandwriteCard);
+    if(handwriteStarBtn) handwriteStarBtn.addEventListener("click", () => { const row = handwriteData[handwriteIndex]; toggleStar(row); renderHandwriteCard(); });
+    window.addEventListener('resize', () => { if(handwriteOverlay && handwriteOverlay.classList.contains('open')){ setupHandwriteCanvas(); } });
+
+    /* ---------- escritura a mano ---------- */
+    let handwriteCtx = null;
+    let handwriteIsDrawing = false;
+    let handwriteLastPoint = null;
+
+    function buildHandwriteDeck(){
+      handwriteData = getRowsFromSource(currentPracticeSource);
+      if(handwriteIndex >= handwriteData.length) handwriteIndex = Math.max(0, handwriteData.length - 1);
+    }
+
+    function setupHandwriteCanvas(){
+      if(!handwriteCanvas) return;
+      const rect = handwriteCanvas.getBoundingClientRect();
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      const width = Math.max(320, Math.round(rect.width || handwriteCanvas.clientWidth || 640));
+      const height = Math.max(280, Math.round(rect.height || handwriteCanvas.clientHeight || 320));
+      handwriteCanvas.width = Math.round(width * dpr);
+      handwriteCanvas.height = Math.round(height * dpr);
+      handwriteCtx = handwriteCanvas.getContext('2d');
+      handwriteCtx.setTransform(1,0,0,1,0,0);
+      handwriteCtx.scale(dpr, dpr);
+      handwriteCtx.lineCap = 'round';
+      handwriteCtx.lineJoin = 'round';
+      handwriteCtx.lineWidth = Math.max(8, Math.round(width * 0.016));
+      handwriteCtx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#111';
+      clearHandwriteCanvas();
+    }
+
+    function clearHandwriteCanvas(){
+      if(!handwriteCanvas || !handwriteCtx) return;
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      handwriteCtx.save();
+      handwriteCtx.setTransform(1,0,0,1,0,0);
+      handwriteCtx.clearRect(0, 0, handwriteCanvas.width, handwriteCanvas.height);
+      handwriteCtx.restore();
+      handwriteCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--panel').trim() || '#fff';
+      handwriteCtx.fillRect(0, 0, handwriteCanvas.width / dpr, handwriteCanvas.height / dpr);
+      handwriteLastPoint = null;
+      handwriteLastRecognized = '';
+      if(handwriteRecognizedBtn) handwriteRecognizedBtn.textContent = 'Texto detectado: —';
+    }
+
+    function getCanvasPoint(event){
+      const rect = handwriteCanvas.getBoundingClientRect();
+      return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    }
+
+    function startHandwriteStroke(event){
+      if(!handwriteCanvas || !handwriteCtx) return;
+      handwriteIsDrawing = true;
+      const point = getCanvasPoint(event);
+      handwriteLastPoint = point;
+      handwriteCtx.beginPath();
+      handwriteCtx.moveTo(point.x, point.y);
+      handwriteCtx.lineTo(point.x + 0.01, point.y + 0.01);
+      handwriteCtx.stroke();
+      try{ handwriteCanvas.setPointerCapture(event.pointerId); }catch{}
+      event.preventDefault();
+    }
+
+    function moveHandwriteStroke(event){
+      if(!handwriteIsDrawing || !handwriteCtx || !handwriteLastPoint) return;
+      const point = getCanvasPoint(event);
+      handwriteCtx.beginPath();
+      handwriteCtx.moveTo(handwriteLastPoint.x, handwriteLastPoint.y);
+      handwriteCtx.lineTo(point.x, point.y);
+      handwriteCtx.stroke();
+      handwriteLastPoint = point;
+      event.preventDefault();
+    }
+
+    function endHandwriteStroke(event){
+      handwriteIsDrawing = false;
+      handwriteLastPoint = null;
+      if(handwriteCanvas){ try{ handwriteCanvas.releasePointerCapture(event.pointerId); }catch{} }
+    }
+
+    function normalizeRecognitionLoose(s){
+      return String(s || '')
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .replace(/[^a-zA-Z0-9가-힣]/g, '')
+        .toLowerCase();
+    }
+
+    async function recognizeHandwriteText(){
+      if(!handwriteCanvas) return '';
+      if(!(window.Tesseract && typeof window.Tesseract.recognize === 'function')){
+        throw new Error('ocr-unavailable');
+      }
+      const { data } = await window.Tesseract.recognize(handwriteCanvas, 'kor+spa+eng');
+      return String(data && data.text || '').trim();
+    }
+
+    function openHandwriteMode(source = null){
+      currentPracticeSource = source;
+      handwriteIndex = 0;
+      handwriteAnswered = new Map();
+      buildHandwriteDeck();
+      if(!handwriteData.length){
+        alert('No hay tarjetas disponibles para practicar.');
+        return;
+      }
+      handwriteOverlay.classList.add('open');
+      requestAnimationFrame(() => {
+        setupHandwriteCanvas();
+        renderHandwriteCard();
+      });
+    }
+
+    function closeHandwriteMode(){
+      handwriteOverlay.classList.remove('open');
+      handwriteResult.textContent = '';
+      handwriteResult.className = 'write-result';
+      handwriteBusy = false;
+      currentPracticeSource = null;
+    }
+
+    function renderHandwriteCard(){
+      buildHandwriteDeck();
+      if(!handwriteData.length){
+        handwritePrompt.textContent = 'No hay palabras';
+        handwriteStats.textContent = '0 / 0';
+        handwriteResult.textContent = '';
+        handwriteStarBtn.textContent = '☆';
+        handwritePrevBtn.disabled = true;
+        handwriteNextBtn.disabled = true;
+        handwriteNextBtn.textContent = 'Siguiente →';
+        updateProgress(handwriteProgressFill, handwriteProgressText, 0, 0);
+        clearHandwriteCanvas();
+        return;
+      }
+
+      const row = handwriteData[handwriteIndex];
+      const esToKo = writeDirection === 'es-to-ko';
+      if(handwriteLabel) handwriteLabel.textContent = esToKo ? 'Escribe en coreano' : 'Escribe en español';
+      handwritePrompt.textContent = esToKo ? (row.español || '—') : (row.coreano || '—');
+      if(handwriteDirectionBtn){
+        handwriteDirectionBtn.textContent = esToKo ? 'ES → KO' : 'KO → ES';
+        handwriteDirectionBtn.classList.toggle('active', !esToKo);
+      }
+      handwriteStats.textContent = `${handwriteIndex + 1} / ${handwriteData.length}`;
+      handwriteResult.textContent = '';
+      handwriteResult.className = 'write-result';
+      handwriteStarBtn.textContent = starredWords.has(row.id) ? '⭐' : '☆';
+      handwritePrevBtn.disabled = handwriteIndex === 0;
+      handwriteNextBtn.disabled = false;
+      handwriteNextBtn.textContent = handwriteIndex >= handwriteData.length - 1 ? '✅ Finalizar' : 'Siguiente →';
+      updateProgress(handwriteProgressFill, handwriteProgressText, handwriteIndex, handwriteData.length);
+      clearHandwriteCanvas();
+    }
+
+    async function checkHandwrite(){
+      if(!handwriteData.length || handwriteBusy) return;
+      const row = handwriteData[handwriteIndex];
+      handwriteBusy = true;
+      checkHandwriteBtn.disabled = true;
+      handwriteResult.textContent = '⏳ Reconociendo escritura...';
+      handwriteResult.className = 'write-result';
+      try{
+        const recognized = await recognizeHandwriteText();
+        handwriteLastRecognized = recognized;
+        if(handwriteRecognizedBtn) handwriteRecognizedBtn.textContent = `Texto detectado: ${recognized || '—'}`;
+        const correct = String(writeDirection === 'es-to-ko' ? row.coreano : row.español);
+        const ok = !!recognized && (normalizeAnswer(recognized) === normalizeAnswer(correct) || normalizeRecognitionLoose(recognized) === normalizeRecognitionLoose(correct));
+        handwriteAnswered.set(row.id, ok);
+        if(ok){
+          wrongWords.delete(row.id);
+          handwriteResult.textContent = '✅ Correcto';
+          handwriteResult.className = 'write-result good';
+        }else{
+          wrongWords.add(row.id);
+          handwriteResult.textContent = `❌ Incorrecto · Detectado: ${recognized || '—'} · Correcto: ${correct}`;
+          handwriteResult.className = 'write-result bad';
+        }
+        persistLists();
+        renderCards();
+      }catch(err){
+        console.warn('No se pudo reconocer la escritura a mano:', err);
+        handwriteResult.textContent = '⚠️ No se pudo reconocer la escritura. Prueba a escribir más grande o más centrado.';
+        handwriteResult.className = 'write-result bad';
+      }finally{
+        handwriteBusy = false;
+        checkHandwriteBtn.disabled = false;
+      }
+    }
+
+    function prevHandwriteCard(){
+      if(!handwriteData.length || handwriteIndex === 0) return;
+      handwriteIndex--;
+      renderHandwriteCard();
+    }
+
+    function finishHandwriteMode(){
+      const total = handwriteData.length || 0;
+      const correct = [...handwriteAnswered.values()].filter(Boolean).length;
+      const percent = total ? Math.round((correct / total) * 100) : 0;
+      closeHandwriteMode();
+      showCelebration('Escribir a mano', percent);
+    }
+
+    function nextHandwriteCard(){
+      if(!handwriteData.length) return;
+      if(handwriteIndex >= handwriteData.length - 1){
+        finishHandwriteMode();
+        return;
+      }
+      handwriteIndex++;
+      renderHandwriteCard();
+    }
+
     /* ---------- multiple ---------- */
     function buildQuizDeck(){
       quizData = getRowsFromSource(currentPracticeSource);
@@ -4036,7 +4401,8 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         const pron = String(row.Pronunciación || "").trim();
         const notes = String(row.Notas || "").trim();
         return `
-          <article class="mosaic-card" data-row-id="${row.id}">
+          <article class="mosaic-card ${starredWords.has(row.id) ? "has-star" : ""}" data-row-id="${row.id}">
+            <button class="mosaic-star-btn ${starredWords.has(row.id) ? "active" : ""}" data-mosaic-star="${row.id}" title="Añadir o quitar estrella">${starredWords.has(row.id) ? "⭐" : "☆"}</button>
             <button class="mosaic-edit-btn" data-mosaic-edit="${row.id}" title="Editar">✏️</button>
             <div class="mosaic-primary">${escapeHtml(primary)}</div>
             <div class="mosaic-secondary">${escapeHtml(secondary)}</div>
@@ -4054,6 +4420,14 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
           const id = Number(card.dataset.rowId);
           const row = mosaicData.find(r => Number(r.id) === id);
           if(row) speak(row.coreano, "ko-KR", mosaicAudioSlow ? SLOW_AUDIO_RATE : NORMAL_AUDIO_RATE);
+        });
+      });
+      mosaicGrid.querySelectorAll("[data-mosaic-star]").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const row = mosaicData.find(r => Number(r.id) === Number(btn.dataset.mosaicStar));
+          toggleStar(row);
+          renderMosaicGrid();
         });
       });
       mosaicGrid.querySelectorAll("[data-mosaic-edit]").forEach(btn => {
@@ -4190,6 +4564,7 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
 
         if(mode === "flashcards") openStudyMode(listType, "flashcards");
         if(mode === "write") openWriteMode(listType);
+        if(mode === "handwrite") openHandwriteMode(listType);
         if(mode === "quiz") openQuizMode(listType);
         if(mode === "listen") openListenMode(listType);
         if(mode === "mosaic") openMosaicMode(listType);
