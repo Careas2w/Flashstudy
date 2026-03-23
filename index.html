@@ -1646,6 +1646,8 @@
       display:flex;
       flex-direction:column;
       gap:10px;
+      text-align:center;
+      align-items:center;
     }
     .mosaic-card:hover{transform:translateY(-1px);}
     .mosaic-edit-btn{
@@ -1661,6 +1663,8 @@
       line-height:1.08;
       margin-top:10px;
       word-break:break-word;
+      text-align:center;
+      width:100%;
     }
     .mosaic-secondary{
       font-size:calc(var(--mosaic-primary-size, 34px) * .48);
@@ -1668,11 +1672,14 @@
       line-height:1.15;
       color:var(--muted);
       word-break:break-word;
+      text-align:center;
+      width:100%;
     }
     .mosaic-mini{
       margin-top:auto;
       display:grid;
       gap:8px;
+      width:100%;
     }
     .mosaic-mini-box{
       background:var(--panel-2);
@@ -1693,6 +1700,7 @@
       line-height:1.2;
       word-break:break-word;
       white-space:pre-wrap;
+      text-align:center;
     }
 
     .mosaic-star-btn{
@@ -1755,10 +1763,12 @@
       min-height:48px;
       font-size:30px;
       font-weight:800;
-      text-align:center;
+      text-align:right;
       color:inherit;
-      margin-bottom:12px;
+      margin:0 0 12px auto;
       display:none;
+      width:100%;
+      padding-right:4px;
     }
     .handwrite-good-btn{
       background:var(--good);
@@ -2135,7 +2145,7 @@
           <canvas class="handwrite-canvas" id="handwriteCanvas"></canvas>
           <div class="handwrite-tools">
             <div class="handwrite-tip">Dibuja con el ratón o con el dedo dentro del recuadro.</div>
-            <button class="small-btn" id="handwriteClearBtn" type="button">Borrar</button>
+            <button class="small-btn" id="handwriteClearBtn" type="button">🧽 Borrar</button>
           </div>
         </div>
       </div>
