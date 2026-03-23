@@ -1751,8 +1751,11 @@
     }
     .handwrite-toolbar-top{
       display:flex;
-      justify-content:flex-end;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:8px;
       margin:8px 0 10px;
+      min-height:0;
     }
     .handwrite-solution-btn{
       min-width:220px;
@@ -1760,15 +1763,18 @@
       padding:14px 18px;
     }
     .handwrite-solution-text{
-      min-height:48px;
+      min-height:0;
       font-size:30px;
       font-weight:800;
       text-align:right;
       color:inherit;
-      margin:0 0 12px auto;
+      margin:0;
       display:none;
-      width:100%;
-      padding-right:4px;
+      width:auto;
+      max-width:100%;
+      padding:0;
+      line-height:1.2;
+      align-self:flex-end;
     }
     .handwrite-good-btn{
       background:var(--good);
@@ -2138,14 +2144,14 @@
         <div class="write-label" id="handwriteLabel">Escribe en coreano</div>
         <div class="write-prompt" id="handwritePrompt">—</div>
         <div class="handwrite-toolbar-top">
+          <div class="write-result handwrite-solution-text" id="handwriteResult"></div>
           <button class="action-btn handwrite-solution-btn" id="toggleHandwriteSolutionBtn" type="button">Mostrar solución</button>
         </div>
-        <div class="write-result handwrite-solution-text" id="handwriteResult"></div>
         <div class="handwrite-canvas-wrap">
           <canvas class="handwrite-canvas" id="handwriteCanvas"></canvas>
           <div class="handwrite-tools">
             <div class="handwrite-tip">Dibuja con el ratón o con el dedo dentro del recuadro.</div>
-            <button class="small-btn" id="handwriteClearBtn" type="button">🧽 Borrar</button>
+            <button class="small-btn" id="handwriteClearBtn" type="button" onclick="clearHandwriteCanvas()">🧽 Borrar</button>
           </div>
         </div>
       </div>
@@ -2153,8 +2159,8 @@
       <div class="study-bottom">
         <div class="study-group">
           <button class="action-btn secondary" id="handwritePrevBtn">← Anterior</button>
-          <button class="action-btn handwrite-good-btn" id="markHandwriteGoodBtn">맞아요!</button>
-          <button class="action-btn handwrite-bad-btn" id="markHandwriteBadBtn">틀려요!</button>
+          <button class="action-btn handwrite-good-btn" id="markHandwriteGoodBtn">참이에요</button>
+          <button class="action-btn handwrite-bad-btn" id="markHandwriteBadBtn">거짓이에요</button>
           <button class="action-btn secondary" id="handwriteNextBtn">Siguiente →</button>
         </div>
       </div>
@@ -3880,16 +3886,19 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     }
 
     function clearHandwriteCanvas(){
-      if(!handwriteCanvas || !handwriteCtx) return;
+      if(!handwriteCanvas) return;
       const dpr = Math.max(1, window.devicePixelRatio || 1);
-      handwriteCtx.save();
+      if(!handwriteCtx){
+        handwriteCtx = handwriteCanvas.getContext('2d');
+      }
       handwriteCtx.setTransform(1,0,0,1,0,0);
       handwriteCtx.clearRect(0, 0, handwriteCanvas.width, handwriteCanvas.height);
-      handwriteCtx.restore();
+      handwriteCtx.scale(dpr, dpr);
       handwriteCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--panel').trim() || '#fff';
       handwriteCtx.fillRect(0, 0, handwriteCanvas.width / dpr, handwriteCanvas.height / dpr);
+      handwriteIsDrawing = false;
       handwriteLastPoint = null;
-      handwriteLastRecognized = '';
+      if(typeof handwriteLastRecognized !== 'undefined') handwriteLastRecognized = '';
     }
 
     function getCanvasPoint(event){
