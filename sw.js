@@ -1,4 +1,4 @@
-const CACHE_NAME = 'korean-flashstudy-v11';
+const CACHE_NAME = 'korean-flashstudy-v12';
 const ASSETS = [
   './',
   './index.html',
