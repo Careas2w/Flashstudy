@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flashcards Coreano Pro</title>
+  <title>Korean Flashstudy</title>
   <meta name="description" content="App web para estudiar vocabulario coreano con flashcards, escritura, múltiple, pairs, diccionario y tablas editables." />
 
   <meta name="theme-color" content="#8b5cf6" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Flashcards Coreano" />
+  <meta name="apple-mobile-web-app-title" content="Korean Flashstudy" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="application-name" content="Flashcards Coreano" />
+  <meta name="application-name" content="Korean Flashstudy" />
   <meta name="format-detection" content="telephone=no" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
@@ -1759,8 +1759,43 @@
     }
     .handwrite-solution-btn{
       min-width:220px;
+      min-height:84px;
       font-size:18px;
+      padding:0;
+      perspective:1000px;
+      overflow:hidden;
+      background:transparent;
+    }
+    .handwrite-solution-btn .solution-flip{
+      position:relative;
+      width:100%;
+      min-height:84px;
+      transform-style:preserve-3d;
+      transition:transform .45s ease;
+    }
+    .handwrite-solution-btn.is-flipped .solution-flip{
+      transform:rotateY(180deg);
+    }
+    .handwrite-solution-btn .solution-face{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
       padding:14px 18px;
+      backface-visibility:hidden;
+      border-radius:inherit;
+      background:linear-gradient(180deg, color-mix(in oklab, var(--panel) 95%, white 5%) 0%, color-mix(in oklab, var(--panel-2) 35%, var(--panel) 65%) 100%);
+      color:var(--text);
+      font-weight:800;
+      line-height:1.15;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+    .handwrite-solution-btn .solution-face.back{
+      transform:rotateY(180deg);
+      font-size:26px;
     }
     .handwrite-solution-text{
       min-height:0;
@@ -1797,7 +1832,7 @@
   <div class="layout">
     <aside class="sidebar">
       <div class="sidebar-top">
-        <div class="brand-wrap"><div class="brand-badge">🇰🇷</div><div><div class="title">Flashcards Coreano</div><div class="brand-subtitle">한국어 말</div></div></div>
+        <div class="brand-wrap"><div class="brand-badge">🇰🇷</div><div><div class="title">Korean Flashstudy</div><div class="brand-subtitle">한국어 말</div></div></div>
         <div class="study-group">
           <button class="icon-btn" id="paletteBtn" title="Cambiar colores">🎨</button>
           <button class="icon-btn" id="themeBtn" title="Cambiar tema">☀</button>
@@ -1894,7 +1929,7 @@
 
       <details class="dict-card dict-collapsible" id="dictCard">
         <summary class="dict-summary">
-          <div class="nav-head-title">Diccionario</div>
+          <div class="nav-head-title">한국어 말</div>
           <span class="dict-toggle-icon">⌄</span>
         </summary>
         <div class="dict-body">
@@ -1913,8 +1948,7 @@
     <main class="main">
       <div class="hero-banner">
         <div>
-          <div class="hero-eyebrow">한국어 말</div>
-          <h1>Korean is fun</h1>
+          <div class="hero-eyebrow">한국어 공부는 재밌어</div>
           
         </div>
         
@@ -1927,11 +1961,11 @@
           <button class="mode-btn" id="slowAudioBtn">🐢 Lento</button>
           <button class="mode-btn active" id="normalAudioBtn">▶ Normal</button>
           <button class="mode-btn" id="flashcardsBtn">📚 Flashcards</button>
+          <button class="mode-btn" id="mosaicBtn">🧱 Mosaico</button>
           <button class="mode-btn" id="writeBtn">✍ Escritura</button>
           <button class="mode-btn" id="handwriteBtn">🖍️ Escribir a mano</button>
           <button class="mode-btn" id="quizBtn">🧩 Multiple</button>
           <button class="mode-btn" id="listenBtn">👂 Escuchar</button>
-          <button class="mode-btn" id="mosaicBtn">🧱 Mosaico</button>
           <button class="mode-btn" id="mixBtn">🔗 Pairs</button>
 
           <div class="dropdown" id="wrongPracticeDropdown">
@@ -2144,8 +2178,13 @@
         <div class="write-label" id="handwriteLabel">Escribe en coreano</div>
         <div class="write-prompt" id="handwritePrompt">—</div>
         <div class="handwrite-toolbar-top">
-          <div class="write-result handwrite-solution-text" id="handwriteResult"></div>
-          <button class="action-btn handwrite-solution-btn" id="toggleHandwriteSolutionBtn" type="button">Mostrar solución</button>
+          <div class="write-result handwrite-solution-text" id="handwriteResult" aria-hidden="true"></div>
+          <button class="action-btn handwrite-solution-btn" id="toggleHandwriteSolutionBtn" type="button" aria-label="Mostrar solución">
+            <span class="solution-flip">
+              <span class="solution-face front">Mostrar solución</span>
+              <span class="solution-face back" id="handwriteSolutionBack">—</span>
+            </span>
+          </button>
         </div>
         <div class="handwrite-canvas-wrap">
           <canvas class="handwrite-canvas" id="handwriteCanvas"></canvas>
@@ -3628,6 +3667,20 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       speak(frontIsKo ? row.español : row.coreano, frontIsKo ? "es-ES" : "ko-KR");
     });
 
+    studyPlayFrontSlow.addEventListener("click", () => {
+      const row = studyData[studyIndex];
+      if(!row) return;
+      const frontIsKo = studyFrontMode === "ko";
+      speak(frontIsKo ? row.coreano : row.español, frontIsKo ? "ko-KR" : "es-ES", SLOW_AUDIO_RATE);
+    });
+
+    studyPlayBackSlow.addEventListener("click", () => {
+      const row = studyData[studyIndex];
+      if(!row) return;
+      const frontIsKo = studyFrontMode === "ko";
+      speak(frontIsKo ? row.español : row.coreano, frontIsKo ? "es-ES" : "ko-KR", SLOW_AUDIO_RATE);
+    });
+
     studyFlipBtn.addEventListener("click", () => studyInner.classList.toggle("flip"));
     studyFlipBtnBack.addEventListener("click", () => studyInner.classList.toggle("flip"));
     studyInner.addEventListener("click", e => {
@@ -3827,6 +3880,13 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         speak(writeDirection === "es-to-ko" ? row.coreano : row.español, writeDirection === "es-to-ko" ? "ko-KR" : "es-ES");
       });
     }
+    if(writePlaySlowBtn){
+      writePlaySlowBtn.addEventListener("click", () => {
+        const row = writeData[writeIndex];
+        if(!row) return;
+        speak(writeDirection === "es-to-ko" ? row.coreano : row.español, writeDirection === "es-to-ko" ? "ko-KR" : "es-ES", SLOW_AUDIO_RATE);
+      });
+    }
     if(writeShuffleBtn){ writeShuffleBtn.addEventListener("click", shuffleWriteDeck); }
     if(writeBoldBtn){ writeBoldBtn.addEventListener("click", () => { writeStyle.bold = !writeStyle.bold; applyWriteStyle(); }); }
     if(writeFontDownBtn){ writeFontDownBtn.addEventListener("click", () => { writeStyle.fontSize = clamp(writeStyle.fontSize - 2, 20, 56); applyWriteStyle(); }); }
@@ -3974,7 +4034,11 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       handwriteResult.textContent = '';
       handwriteResult.className = 'write-result handwrite-solution-text';
       handwriteResult.style.display = 'none';
-      if(toggleHandwriteSolutionBtn) toggleHandwriteSolutionBtn.textContent = 'Mostrar solución';
+      if(handwriteSolutionBack) handwriteSolutionBack.textContent = '—';
+      if(toggleHandwriteSolutionBtn){
+        toggleHandwriteSolutionBtn.classList.remove('is-flipped');
+        toggleHandwriteSolutionBtn.setAttribute('aria-label', 'Mostrar solución');
+      }
       currentPracticeSource = null;
     }
 
@@ -3985,7 +4049,11 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         handwriteStats.textContent = '0 / 0';
         handwriteResult.textContent = '';
         handwriteResult.style.display = 'none';
-        if(toggleHandwriteSolutionBtn) toggleHandwriteSolutionBtn.textContent = 'Mostrar solución';
+        if(handwriteSolutionBack) handwriteSolutionBack.textContent = '—';
+        if(toggleHandwriteSolutionBtn){
+          toggleHandwriteSolutionBtn.classList.remove('is-flipped');
+          toggleHandwriteSolutionBtn.setAttribute('aria-label', 'Mostrar solución');
+        }
         handwriteStarBtn.textContent = '☆';
         handwritePrevBtn.disabled = true;
         handwriteNextBtn.disabled = true;
@@ -4007,7 +4075,11 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       handwriteResult.textContent = '';
       handwriteResult.className = 'write-result handwrite-solution-text';
       handwriteResult.style.display = 'none';
-      if(toggleHandwriteSolutionBtn) toggleHandwriteSolutionBtn.textContent = 'Mostrar solución';
+      if(handwriteSolutionBack) handwriteSolutionBack.textContent = '—';
+      if(toggleHandwriteSolutionBtn){
+        toggleHandwriteSolutionBtn.classList.remove('is-flipped');
+        toggleHandwriteSolutionBtn.setAttribute('aria-label', 'Mostrar solución');
+      }
       handwriteStarBtn.textContent = starredWords.has(row.id) ? '⭐' : '☆';
       handwritePrevBtn.disabled = handwriteIndex === 0;
       handwriteNextBtn.disabled = false;
@@ -4021,10 +4093,16 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       const row = handwriteData[handwriteIndex];
       const esToKo = writeDirection === 'es-to-ko';
       const solution = (esToKo ? row.coreano : row.español) || '—';
-      const isVisible = handwriteResult.style.display === 'block';
-      handwriteResult.textContent = solution;
-      handwriteResult.style.display = isVisible ? 'none' : 'block';
-      if(toggleHandwriteSolutionBtn) toggleHandwriteSolutionBtn.textContent = isVisible ? 'Mostrar solución' : 'Ocultar solución';
+      const isVisible = toggleHandwriteSolutionBtn?.classList.contains('is-flipped');
+      if(handwriteResult){
+        handwriteResult.textContent = solution;
+        handwriteResult.style.display = 'none';
+      }
+      if(handwriteSolutionBack) handwriteSolutionBack.textContent = solution;
+      if(toggleHandwriteSolutionBtn){
+        toggleHandwriteSolutionBtn.classList.toggle('is-flipped', !isVisible);
+        toggleHandwriteSolutionBtn.setAttribute('aria-label', isVisible ? 'Mostrar solución' : 'Ocultar solución');
+      }
     }
 
     function markHandwriteAnswer(isGood){
